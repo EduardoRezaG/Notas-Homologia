@@ -1,0 +1,5225 @@
+\documentclass[11pt,openany]{book}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+\usepackage[font=small]{caption}
+\usepackage{amssymb,amsmath,amsthm,amsfonts,cancel}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{tikz-cd}
+\usetikzlibrary{babel}
+\usepackage{todonotes}
+\usepackage{mathabx}
+\usepackage[all]{xy}
+%\usepackage{setspace}
+%\usepackage{times}
+%\usepackage{float}
+%\usepackage{wrapfig}
+%\usepackage[table,xcdraw]{xcolor}
+%\usepackage{algorithm}
+%\usepackage{algpseudocode}
+%\usepackage[colorinlistoftodos]{todonotes}
+
+\NeedsTeXFormat{LaTeX2e}
+%\ProvidesPackage{quiver}[2021/01/11 quiver]
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathmorphing}
+
+\tikzset{curve/.style={settings={#1},to path={(\tikztostart)
+    .. controls ($(\tikztostart)!\pv{pos}!(\tikztotarget)!\pv{height}!270:(\mtikztotarget)$)
+    and ($(\tikztostart)!1-\pv{pos}!(\tikztotarget)!\pv{height}!270:(\tikztotarget)$)
+    .. (\tikztotarget)\tikztonodes}},
+    settings/.code={\tikzset{quiver/.cd,#1}
+        \def\pv##1{\pgfkeysvalueof{/tikz/quiver/##1}}},
+    quiver/.cd,pos/.initial=0.35,height/.initial=0}
+
+\tikzset{tail reversed/.code={\pgfsetarrowsstart{tikzcd to}}}
+\tikzset{2tail/.code={\pgfsetarrowsstart{Implies[reversed]}}}
+\tikzset{2tail reversed/.code={\pgfsetarrowsstart{Implies}}}
+\tikzset{no body/.style={/tikz/dash pattern=on 0 off 1mm}}
+
+\DeclareMathOperator\Img{Img}
+\DeclareMathOperator\Ker{Ker}
+\DeclareMathOperator\Coim{Coim}
+\DeclareMathOperator\Coker{Coker}
+\DeclareMathOperator\Ann{Ann}
+\renewcommand\Im\Img
+\newcommand\Coeq{\mathrm{Coeq}}  
+\renewcommand\ker\Ker
+\newcommand{\Mod}{\mathrm{M\acute{o}d}}
+\newcommand{\Supp}{\mathrm{Supp}}
+\newcommand{\Com}{\mathrm{Com}}
+\newcommand{\Hom}{\mathrm{Hom}}
+\newcommand{\Tor}{\mathrm{Tor}}
+\newcommand{\tor}{\mathrm{tor}}
+\newcommand{\Ext}{\mathrm{Ext}}
+\newcommand{\SEC}{\mathrm{SEC}}
+\newcommand{\Ab}{\mathrm{Ab}}
+\newcommand{\Psh}{\mathrm{Psh}}
+\newcommand\<\langle
+\renewcommand\>\rangle
+\newcommand\ol\overline
+
+\newcommand{\SE}{\mathrm{SE}}
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\U}{\mathcal{U}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\G}{\mathcal{G}}
+\newcommand{\bul}{{\scalebox{0.6}{$\bullet$}}}
+\newcommand\C{\mathbb{C}}
+\newcommand\R{\mathbb{R}}
+\newcommand\Z{\mathbb{Z}}
+\newcommand{\ds}{\text{-}}
+\newcommand{\from}{\leftarrow}
+\newcommand{\repi}{\twoheadrightarrow}
+\newcommand{\rmono}{\hookrightarrow}
+\newcommand{\xto}{\xrightarrow}
+\newcommand{\xfrom}{\xleftarrow}
+\renewcommand{\epsilon}{\varepsilon}
+\let\cal\mathcal
+\newcommand\colim\varinjlim
+\newcommand\m{\mathfrak{m}}
+\newcommand\maxSpec{\mathrm{maxSpec}}
+\newcommand\homotopy[4]{\ar[from=#1,to=#2,"\rotatebox{#3}{\scalebox{#4}{$\sim$}}",phantom]}
+\newcommand\cart[4]{\ar[from=#1,to=#2,"\rotatebox{#3}{\scalebox{#4}{$\ulcorner$}}" description,phantom,very near end]}
+
+%\spanishdecimal{.}
+\newtheorem{theorem}{Teorema}
+\newtheorem{definition}{Definición}
+\newtheorem{corollary}[theorem]{Corolario}
+\newtheorem{proposition}[theorem]{Proposición}
+\newtheorem{prop}[theorem]{Proposición}
+\newtheorem{lemma}[theorem]{Lema}
+\newtheorem{example}{Ejemplo} 
+\newtheorem{remark}{Observación} 
+
+\author{Lorena M. Noh Canul}
+\date{Noviembre 2021}
+\title{Introducción al álgebra homológica}
+\textwidth=6.5in
+\textheight=8.0in
+\oddsidemargin=0in
+\evensidemargin=0in
+\begin{document}
+\begin{titlepage}	
+	\begin{center}
+		\vspace*{-1in}	
+		%\begin{LARGE}
+		UNIVERSIDAD DE GUADALAJARA\\
+		\vspace*{0.15in}
+		CENTRO UNIVERSITARIO DE CIENCIAS EXACTAS E INGENIERÍAS\\
+		\vspace*{0.15in}
+		DIVISIÓN DE CIENCIAS BÁSICAS\\
+		%\end{LARGE}
+		\vspace*{0.5in}
+		\begin{figure}[htb]
+			\begin{center}
+				\includegraphics[width=5cm]{logo_udg_negro.png}
+			\end{center}
+		\end{figure}
+		\begin{Large}
+			\textbf{Introducción al álgebra homológica}\\
+			\vspace*{0.3in}
+			\vspace*{0.15in}
+			Lorena M. Noh Canul\\
+			Alejandro Vázquez Aceves\\
+			Jorge Alfredo Álvarez Contreras\\
+			\vspace*{0.15in}
+			\vspace*{0.15in}
+		\end{Large}
+		\vspace*{0.3in}
+		%\rule{80mm}{0.1mm}\\
+		\vspace*{0.15in}
+		\begin{Large}
+			Notas del curso de: \\
+			Dr. Luis Ángel Zaldívar Corichi \\
+		\end{Large}
+	\end{center}
+	\vspace*{0.3in}
+	\begin{flushright}
+		Guadalajara, Jalisco, Noviembre, 2021
+	\end{flushright}
+\end{titlepage} 
+%\chapter*{Agradecimientos} 
+%\addcontentsline{toc}{chapter}{Agradecimientos} % si queremos que aparezca en el índice
+\listoftodos
+\tableofcontents
+
+\chapter{Complejos de cadenas en \texorpdfstring{$R$-$\Mod$}{RMod}}
+
+\section{La categoría de complejos}
+
+\begin{definition}[Complejo]
+Un \textbf{complejo de cadenas} (o simplemente un complejo)
+en $R$-$\Mod$ es una pareja $(C_\bul,d_\bul)$
+donde $C_\bul=(C_n)_{n\in\mathbb{Z}}$ es una sucesión de objetos
+en $R$-$\Mod$ y
+$d_\bul=(d_{n}:C_n\rightarrow C_{n-1})_{n\in\mathbb{Z}}$
+es una sucesión de morfismos, llamados diferenciales,
+que satisfacen $d_nd_{n+1}=0$ para toda $n\in\mathbb{Z}$
+\end{definition}
+
+Notemos que la condición $d_nd_{n+1}=0$ es equivalente a
+$$ \textup{Im}(d_{n+1})\subseteq \textup{Ker}(d_n). $$
+
+\begin{definition}[Exactitud]
+Decimos que un complejo $C_\bul$
+\[
+    \cdots\to C_{n+1}\xto{d_{n+1}}
+    C_{n}\xto{d_n}
+    C_{n-1}\xto{d_{n-1}}
+    C_{n-2}\to\cdots
+\]
+es exacto en grado $n$ si $\Ker d_n = \Im d_{n+1}$ o,
+equivalentemente, si $\Coim d_n = \Coker d_{n+1}$
+
+También decimos que el complejo $C_\bul$ es exacto,
+o bien, una sucesión exacta,
+si es exacto en grado $n$ para todo $n\in\Z$.
+\end{definition}
+
+\begin{definition}[Morfismo de complejos]
+Sean $(C_\bul,d_\bul)$, $(C_\bul',\delta_\bul)$ dos compejos.
+Un morfismo
+$$f_\bul: (C_\bul,d_\bul)\rightarrow (C_\bul',\delta_\bul) $$
+es una sucesión de morfismos en $R$-$\Mod$
+$$(f_n':C_n\rightarrow C_n')_{n\in\mathbb{Z}} $$
+tal que el siguiente diagrama 
+$$\begin{tikzcd}
+	\cdots & {C_{n+1}} & {C_n} & {C_{n-1}} & {C_{n-2}} & \cdots \\
+	\cdots & {C'_{n+1}} & {C_n'} & {C_{n-1}'} & {C_{n-2}} & \cdots
+	\ar[from=1-1, to=1-2]
+	\ar["{d_{n+1}}", from=1-2, to=1-3]
+	\ar["{d_n}", from=1-3, to=1-4]
+	\ar["{d_{n-1}}", from=1-4, to=1-5]
+	\ar[from=1-5, to=1-6]
+	\ar[from=1-2, to=2-2]
+	\ar["{\delta_{n+1}}"', from=2-2, to=2-3]
+	\ar["{\delta_{n}}"', from=2-3, to=2-4]
+	\ar["{\delta_{n-1}}"', from=2-4, to=2-5]
+	\ar[from=1-3, to=2-3]
+	\ar[from=1-4, to=2-4]
+	\ar[from=1-5, to=2-5]
+	\ar[from=2-1, to=2-2]
+	\ar[from=2-5, to=2-6]
+\end{tikzcd}$$
+conmuta en $R$-$\Mod$ (o en una categoría abstracta $\mu$).
+\end{definition}
+
+Así obtenemos la categoría de complejos sobre $\mu$, a la cual denotamos por $\Com(\mu)$.
+Si $\mu=R$-$\Mod$, entonces $\-$ escribimos
+$\Com(R)=\Com(R\text{-}\Mod)$.
+
+\begin{example}[Módulos como complejos]
+Fijemos $A\in R$-$\Mod$ y $k\in\mathbb{Z}$.
+Definimos el complejo $\rho^k(A)$ cuyo $k$-ésimo t\'ermino es $A$
+y las diferenciales son cero
+$$\begin{tikzcd}
+\cdots \ar[r] & 0 \ar[r] & A \ar[r] & 0 \ar[r] & \cdots
+\end{tikzcd}$$
+a este complejo se le llama el \textit{complejo $k$-centrado en $A$}. \\
+Además, si $A,B$ son $R$-módulos, los morfismos de complejos
+$\rho^k(A)\to\rho^k(B)$ están en correspondencia uno a uno con
+los morfismos de $R$-módulos $A\to B$.
+\end{example}
+
+\begin{example}[Morfismos como complejos]
+Sea $f:A\rightarrow B$. Definimos el complejo $\Sigma^k(f)$
+cuyo $k$-ésimo diferencial es $f$ y todos los demás diferenciales son cero.
+En particular $\Sigma^k(f)_k=A$ y $\Sigma^k(f)_{k-1}=B$.
+$$
+\begin{tikzcd}
+\cdots \ar[r] & 0 \ar[r] & A \ar[r, "f"] & B \ar[r] & 0 \ar[r] & \cdots
+\end{tikzcd}
+$$
+\end{example}
+
+\begin{example}[Sucesiones exactas como complejos]
+Recordemos que una sucesión de morfismos y módulos
+\[ 0\to A\xto f B\xto g C\to 0 \]
+es exacta cuando $f$ es inyectiva, $g$ es suprayectiva y $\Ker g=\Im g$.
+En este caso, el diagrama
+$$
+\begin{tikzcd}
+\cdots \ar[r]
+& 0 \ar[r]
+& 0 \ar[r]
+& A \ar[r, "f"]
+& B \ar[r, "g"]
+& C \ar[r]
+& 0 \ar[r]
+& 0 \ar[r]
+&\cdots
+\end{tikzcd}
+$$
+es un complejo exacto.
+\end{example}
+
+\begin{definition}[Resoluciones]
+Si $M$ es un módulo, una \textbf{resolución proyectiva} de $M$
+es un complejo $P_M$
+$$
+\begin{tikzcd}
+P_M : \cdots \ar[r] & P_3 \ar[r, "d_3"] & P_2 \ar[r, "d_2"] & P_1 \ar[r, "d_1"] & P_0 \ar[r] & 0
+\end{tikzcd}
+$$
+donde cada $P_i$ es proyectivo,
+junto con un morfismo $\epsilon:P_0\to M$, tales que la sucesión
+$$
+\begin{tikzcd}
+\cdots \ar[r] & P_3 \ar[r, "d_3"] & P_2 \ar[r, "d_2"] & P_1 \ar[r, "d_1"] & P_0 \ar[r, "\varepsilon"] & M \ar[r] & 0
+\end{tikzcd}
+$$
+es exacta. En particular, $\epsilon$ debe ser suprayectivo.
+
+Si cada $P_i$ es libre, decimos que $(P_M,\epsilon)$
+es una resolución libre de $M$.
+Si cada $P_i$ es plano, decimos que
+$(P_M,\epsilon)$ es una resolución plana de $M$.
+Así,
+$$
+ \begin{tikzcd}
+\textup{ Resolución libre} \ar[r, Rightarrow] & \textup{Resolución proyectiva} \ar[r, Rightarrow] & \textup{Resolución plana}.
+\end{tikzcd}
+$$
+\end{definition}
+Supongamos que $(P_M,\epsilon)$ es una resolución de un módulo $M$.
+Si solo tenemos el complejo $P_M$, podemos recuperar el morfismo
+$\epsilon:P_0\to M$ como el conúcleo de $d_1$, ya que la exactitud de
+$P_1\xto{d_1} P_0\xto{\epsilon} M\to 0$ implica que existe un único isomorfismo
+$\Coker(d_1)\to M$ que hace conmutar el diagrama
+\[
+\begin{tikzcd}
+    \cdots \ar[r]
+    & P_2 \ar[r, "d_2"]
+    & P_1 \ar[r, "d_1"]
+    & P_0 \ar[r] \ar[d, "\varepsilon"']
+    & \Coker(d_1) \ar[r] \ar[dl,bend left=15,"\simeq"]
+    & 0 \\
+    &&& M \ar[d] \\
+    &&& 0
+\end{tikzcd}
+\]
+En particular, si $M\neq 0$, entonces el complejo $P_M$ no es exacto en $P_0$,
+ya que $\Coim(P_0\to 0)=0$, mientras que $\Coker(P_1\xto{d_1}P_0)=M$.
+
+\begin{proposition}
+Todo módulo tiene una resolución proyectiva.
+\end{proposition}
+\begin{proof}
+Si $M$ es proyectivo entonces se cumple trivialmente. Por tanto, supongamos que $M$ no es proyectivo, así existe un $F_0$ libre tal que
+$$
+\begin{tikzcd}
+0 \ar[r] & K_1 \ar[r, "\iota_1"] & F_0 \ar[r, "\varepsilon"] & M \ar[r] & 0
+\end{tikzcd}
+$$
+donde $K_1=\ker(\varepsilon)$. Recordemos que 
+$$
+ \begin{tikzcd}
+\textup{Libre} \ar[r, Rightarrow] & \textup{Proyectivo} \ar[r, Rightarrow] & \textup{Plano}
+\end{tikzcd}
+ $$
+ Así, si $K_1$ es libre el resultado queda demostrado. De lo contrario, lo cubrimos con un libre $F_1$, es decir, existe $\varepsilon_1:F_1\rightarrow K_1$ tal que 
+ donde $K_2=\ker(\varepsilon_1)$.
+ $$
+ \begin{tikzcd}
+0 \ar[r] & K_2 \ar[r, "\iota_2"] & F_1 \ar[r, "\varepsilon_1"] & K_1 \ar[r] & 0
+\end{tikzcd}
+ $$
+ Repitiendo este proceso, para cada $n$ obtenemos una
+ sucesión exacta corta
+ $$
+ \begin{tikzcd}
+0 \ar[r] & K_{n+1} \ar[r, "\iota_{n+1}"] & F_n \ar[r, "\varepsilon_n"] & K_n \ar[r] & 0
+\end{tikzcd}
+ $$
+ Así, uniendo las sucesiones tenemos
+ $$
+ \begin{tikzcd}[column sep=10]
+& & 0 \ar[dr] & & 0 & & 0 \ar[dr] & & 0 & \\
+& & & K_3 \ar[ur] \ar[dr] & & & & K_1 \ar[dr, "\iota_1"] \ar[ur] & & \\
+\dots \ar[rr] & & F_3 \ar[ur] \ar[rr] & & F_2 \ar[rr] \ar[dr] && F_1 \ar[rr] \ar[ru] && F_0 \ar[rd, "\varepsilon"] \\
+& K_3 \ar[ur] & & & & K_2 \ar[dr] \ar[ur] & & & & M \ar[rd] \\
+0 \ar[ur] & & & & 0 \ar[ur] & & 0 & & & & 0
+\end{tikzcd}
+ $$
+ Notemos que 
+ $$ \Im(d_1)=K_1=\ker(\varepsilon),$$
+ $$\ker(d_1)=\ker(\varepsilon_1)= K_2, $$
+ lo que prueba que la sucesión
+ \[
+    \begin{tikzcd}
+    \cdots \ar[r] & F_3 \ar[r] & F_2 \ar[r] & F_1 \ar[r] & F_0 \ar[r] & M \ar[r] & 0
+    \end{tikzcd}
+\]
+ es exacta en el primer nivel y así tenemos la resolución proyectiva.
+ \end{proof}
+ 
+\begin{definition}
+Una \textbf{resolución inyectiva} de un módulo $M$ es una sucesión exacta 
+$$
+E_M: \quad \begin{tikzcd}
+0 \ar[r] & M \ar[r, "\delta"] & E^0  \ar[r, "d^0"] & E^1 \ar[r, "d^1"] & \cdots
+\end{tikzcd}
+$$
+donde cada $E^i$ es inyectivo. 
+\end{definition}
+La resolución omitida 
+$$
+\begin{tikzcd}
+0 \ar[r] & E^0  \ar[r, "d^0"] & E^1 \ar[r, "d^1"] & \cdots
+\end{tikzcd}
+$$
+es tal que, ya que $\textup{Im}(d^1)=\ker(d^0)=M$, entonces no perdemos información, nuevamente
+$$
+\begin{tikzcd}
+0 \ar[r] \ar[rd] & E^0 \ar[r, "d^0"]  & E^1  \ar[r, "d^1"] & E^2 \ar[r] & \cdots \\
+                       & M=\ker(d^0) \ar[u] &                       &               &       
+\end{tikzcd}
+$$
+y así tenemos el siguiente resultado: 
+
+\begin{proposition}
+Todo módulo tiene resolución inyectiva
+\end{proposition}
+\begin{proof}
+Si $M$ es inyectivo se cumple trivialmente. De lo contrario, existe $\eta_0:M\rightarrow E$ tal que
+$$
+\begin{tikzcd}
+0 \ar[r] & M \ar[r, "\eta_0"] & E^0 \ar[r, "\delta"] & \Coker(\eta_0) \ar[r] & 0
+\end{tikzcd}
+$$
+de aquí
+$$
+\begin{tikzcd}[column sep = 10]
+             &  &              &  &                           &                                     & 0 \ar[rd]              &                                     & 0              &  &        \\
+             &  &              &  &                           &                                     &                           & \Coker(\eta_1) \ar[ru] \ar[rd] &                &  &        \\
+0 \ar[rr] &  & M \ar[rr] &  & E^0 \ar[rr] \ar[rd] &                                     & E^1 \ar[ru] \ar[rr] &                                     & E^2 \ar[rr] &  & \cdots \\
+             &  &              &  &                           & \Coker(\eta_0) \ar[ru, "\eta_1"'] &                           &                                     &                &  &        \\
+             &  &              &  & 0 \ar[ru]              &                                     &                           &                                     &                &  &       
+\end{tikzcd}
+$$
+lo que prueba que la sucesión es exacta. 
+\end{proof}
+
+Notemos que, dado un complejo
+$$
+C_\bul:\quad
+\begin{tikzcd}
+    \cdots \ar[r]
+    & C_{n-1} \ar[r]
+    & C_n \ar[r]
+    & C_{n-1} \ar[r]
+    & \cdots
+\end{tikzcd}
+$$
+y un funtor aditivo covariante 
+$$
+F:R\textup{-}\Mod\rightarrow R\textup{-}\Mod
+$$
+la sucesión de módulos y morfismos
+$$
+FC_\bul:\quad
+\begin{tikzcd}
+    \cdots \ar[r]
+    & FC_{n-1} \ar[r]
+    & FC_n \ar[r]
+    & FC_{n-1} \ar[r]
+    & \cdots
+\end{tikzcd}
+$$
+sigue siendo un complejo.
+Si $P_M$ es una resolución proyectiva de un módulo $M$
+tenemos que $F P_{M}$ es un complejo, pero no es necesariamente
+exacto.
+Por ejemplo, $\Hom (-,-)$ no preserva la exactitud.
+En el caso de que $F$ sea contravariante entonces solo hacemos un cambio en los índices de la resolución y lo que obtenemos es similar. 
+
+\begin{definition}
+Un complejo $C_\bul$ es \textbf{positivo} si $C_n=0$ para toda $n<0$. 
+
+Un complejo  $C_\bul$ es \textbf{negativo} si $C_n=0$ para toda $n>0$.
+\end{definition}
+Denotamos por $\Com_{\geq 0}(R)$ a los complejos positivos y por $\Com^{\leq 0}(R)$ a los complejos negativos.
+\begin{definition}
+Dado un complejo 
+$$
+\begin{tikzcd}
+\cdots \ar[r] & C_{n+1} \ar[r, "d_{n+1}"] & C_n \ar[r, "d_n"] & C_{n-1} \ar[r] & \cdots
+\end{tikzcd}
+$$
+definimos:
+\begin{itemize}
+    \item \textbf{$n$-cadenas:} $C_n$,
+    \item \textbf{$n$-ciclos:} $Z_n(C_\bul)=\Ker{d_n}$,
+    \item \textbf{$n$-fronteras:} $B_n(C_\bul)=\Img{d_{n+1}}$.
+\end{itemize}
+\end{definition}
+Notemos que de la condición 
+$$d_nd_{n+1}=0 $$
+tenemos que 
+$$B_n(C_\bul) \subseteq Z_{n}(C_\bul)$$
+y el complejo es exacto en grado $n$ si esta contención es una igualdad.
+Para medir la falta de exactitud en grado $n$, podemos formar el cociente.
+Tenemos la siguiente definición.
+\begin{definition}
+Si $C_\bul$ es un complejo en $\Com(R)$, para $n\in \mathbb{Z}$ su  \textbf{$n$-ésima homología} es 
+$$H_n(C_\bul)=\frac{Z_n(C_\bul)}{B_n(C_\bul)},$$
+y a los elementos de $H_n(C_\bul)$ se les llama \textbf{clases de homología}, y las detonamos por $[z]$.
+\end{definition}
+Así, para cada $n$, un complejo
+$C_\bul\in \Com(R)$
+tiene asociadas dos sucesiones exactas cortas
+$$
+\begin{tikzcd}
+0 \ar[r] & Z_n(C_\bul) \ar[r] & C_n \ar[r] & B_{n-1}(C_\bul) \ar[r] & 0
+\end{tikzcd}
+$$
+$$
+\begin{tikzcd}
+0 \ar[r] & B_n(C_\bul) \ar[r] & Z_n(C_\bul) \ar[r] & H_n(C_\bul) \ar[r] & 0.
+\end{tikzcd}
+$$
+Éstas encajan en el diagrama
+\[
+% https://tikzcd.yichuanshen.de/
+\begin{tikzcd}[column sep = 10,row sep=25]
+& & & & 0 \ar[rd] & 0 & & & & & \\
+& & & 0 \ar[r] & B_{n} \ar[ru] \ar[r] & Z_n \ar[r] \ar[rd] & H_n \ar[r] & 0 & & & \rotatebox{80}{$\ddots$} \\
+ \cdots \ar[rd] \ar[rrr] & & & C_{n+1} \ar[ru] \ar[rrr] & & & C_n \ar[rd] \ar[rrr] & & & C_{n-1} \ar[r] \ar[ru] & \cdots \\
+0 \ar[r] & B_{n+1} \ar[r] \ar[rd] & Z_{n+1} \ar[ru] \ar[r] & H_{n+1} \ar[r] & 0 & & 0 \ar[r] & B_{n-1} \ar[rd] \ar[r] & Z_{n-1} \ar[ru] \ar[r] & H_{n-1} \ar[r] & 0 \\
+& 0 \ar[ru] & 0 & & & & & 0 \ar[ru] & 0 & &       
+\end{tikzcd}
+\]
+\begin{example}[La homología de un morfismo]
+\label{exam:homologia-ker-coker}
+Como todo morfismo define un complejo $\Sigma^n(f)$ entonces para $n=1$, tenemos
+$$
+\Sigma{}^1(f):\quad \begin{tikzcd}
+\cdots \ar[r] & 0 \ar[r, " d_2"] & A \ar[r, "f"] & B \ar[r," d_0"] & 0 \ar[r] & \cdots
+\end{tikzcd}
+$$
+de donde podemos notar que $\Img{d_2}=0$ y como $d_0=0$, entonces $\Ker{d_0}=B$, y de aquí 
+\begin{align*}
+H_1(\Sigma^1(f)) &= \Ker{f} \\
+H_0(\Sigma^1(f)) &= B/\Img{ f} =\Coker(f).
+\end{align*}
+Por lo tanto, 
+\begin{equation*}
+H_n(\Sigma^1(f)) = \left\lbrace
+\begin{array}{ll}
+\Ker{f} & n=1\\
+\Coker f & n=0\\
+0 & \textup{en otro caso}
+\end{array}
+\right.
+\end{equation*}
+\end{example}
+\section{La funtorialidad de la homología}
+Para cada $n$, la construcción $H_n$ convierte
+un complejo $C_\bul$ en un objeto $H_n(C_\bul)$ de $\cal A$.
+Ahora veremos que cada $H_n$ es un funtor
+$\Com(\cal A)\to\cal A$.
+Es decir, dado un morfismo de complejos
+$f_\bul:C_\bul\to C'_\bul$,
+tenemos un morfismo $H_nf_\bul : H_n(C_\bul)\to H_n(C'_\bul)$
+y esta asignación $f_\bul\mapsto H_nf_\bul$ respeta
+composiciones e identidades.
+
+Recordemos que un morfismo $f_\bul$ de complejos
+$$f_\bul:(C_\bul,d_\bul) \rightarrow (C_\bul',d_\bul') $$ 
+consiste en morfismos $(f_n)$ en cada nivel
+$n\in \mathbb{Z}$,
+tales que cada cuadrado del
+siguiente diagrama es conmutativo
+$$
+\begin{tikzcd}
+\cdots \ar[r] & C_{n+1} \ar[r, "d_{n+1}"] \ar[d, "f_{n+1}"'] & C_n \ar[r, "d_{n}"] \ar[d, "f_{n}"'] & C_{n-1} \ar[r] \ar[d, "f_{n-1}"'] & \cdots \\
+\cdots \ar[r] & C_{n+1}' \ar[r, "d_{n+1}'"'] & C_n' \ar[r, "d_{n}'"'] & C_{n-1}' \ar[r] & \cdots \\
+\end{tikzcd}
+$$
+Queremos producir un morfismo $H_n\to H'_n$,
+para lo cual primero obtendremos un morfismo $Z_n\to H'_n$
+y veremos que se factoriza a través de $Z_n\to H_n$.
+
+Tomemos un $n$-ciclo $z\in Z_n\subseteq C_n$.
+Así $f_nz\in C_n'$ y $d_n'f_nz\in C_{n-1}'$, pero como el diagrama conmuta, entonces
+\[
+    d_n'f_nz = f_{n-1}d_nz = 0,
+\]
+ya que $d_nz=0$.
+En otras palabras, si $z\in Z_n$, entonces $f_nz\in Z'_n$.
+Es decir, el morfismo compuesto $Z_n\rmono C_n\xto{f_n}C'_n$
+se factoriza a través de la inclusión $Z'_n\rmono C'_n$.
+Así, obtenemos el diagrama
+\[
+    \begin{tikzcd}
+        C_n \ar[r,"f_n"] & C'_n \\
+        Z_n \ar[u,hook] \ar[r]
+            & Z'_n \ar[u,hook] \ar[r]
+            & H'_n.
+    \end{tikzcd}
+\]
+donde la flecha compuesta $Z_n\to Z'_n\to H'_n$
+manda $z\mapsto [f_nz]$.
+Par ver que esta flecha pasa al cociente $H_n$,
+basta ver que su núcleo contiene a $B_n=B_n(C_\bul)$.
+Dado $d_{n+1}x\in B_n$ (con $x\in C_{n+1}$),
+al aplicar la flecha $Z_n\to H'_n$ obtenemos
+\[
+     [f_nd_{n+1}x] = [d'_{n+1}f_{n+1}x] = 0
+\]
+pues $d'_{n+1}f_{n+1}x\in B'_n$.
+Así, en efecto tenemos un paso al cociente,
+al cual llamamos $H_nf$.
+\[
+    \begin{tikzcd}
+        C_n \ar[r,"f_n"] & C'_n \\
+        Z_n \ar[u,hook] \ar[r] \ar[d,two heads]
+            & Z'_n \ar[u,hook] \ar[r]
+                & H'_n \\
+        H_n \ar[urr,bend right=15,dotted,"H_nf"'] 
+    \end{tikzcd}
+\]
+
+Por lo tanto, 
+$H_n:\Com(R)\rightarrow R\textup{-}\Mod$
+es un funtor, veamos: 
+\begin{itemize}
+    \item $H_n(1)=1$ es obvio.
+    \item Tomemos $(C_\bul,d_\bul),\quad (C_\bul',d_\bul'), \quad (C_\bul'',d_\bul'')\in \Com(R)$ tal que
+    \[
+    \begin{tikzcd}
+        {(C_\bul,d_{\cdot})} \ar[r, "f_\bul"] \ar[rr, "(fg)_\bul"', bend right] & {(C_\bul',d_{\cdot}')} \ar[r, "g_\bul"] & {(C_\bul'',d_{\cdot}'')}
+        \end{tikzcd}
+    \]
+    \begin{eqnarray*}
+        H_n(gf)[z] &= & [(gf)_n(z)]\\
+        & = & [g_n(f_n(z))]\\
+         & = & H_n(g)[f_n(z)]\\
+         & = & H_n(g)H_n(f)[z]
+    \end{eqnarray*}
+Más aún, $H_n$ es un funtor aditivo, ya que
+\begin{eqnarray*}
+H_n(g+f)[z] &= & [(g_n+f_n)(z)]\\
+& = & [f_n(z)+g_n(z)]\\
+& = & [f_n(z)]+[g_n(z)]\\
+ & = & H_n(f)[z]+H_n(g)[z]
+\end{eqnarray*}
+\end{itemize}
+Denotamos por $f^*$ ó $f_*$ a $H_n(f)$, dependiendo de si estamos hablando de cohomología u homología.
+
+\section{Sucesión exacta larga de Homología}
+
+Arriba probamos que cada $H_n$ es un funtor
+$\Com(\cal A)\to\cal A$,
+para lo cual vimos la acción de $H_n$ en complejos y en morfismos
+de complejos.
+En particular, al aplicar cada funtor $H_n$
+a una sucesión exacta corta en $\Com(\cal A)$
+\[
+    0\to C'_\bul\to C_\bul\to C''_\bul\to 0
+\]
+obtenemos sucesiones en $\cal A$
+\[
+\begin{tikzcd}
+0 \ar[r] &
+H_{n+1}(C'_\bul) \ar[r]
+& H_{n+1}(C_\bul) \ar[r]
+& H_{n+1}(C''_\bul) \ar[r] & 0
+\\
+0 \ar[r] &
+H_{n}(C'_\bul) \ar[r]
+& H_{n}(C_\bul) \ar[r]
+& H_{n}(C''_\bul)  \ar[r] & 0
+\\
+0 \ar[r] &
+H_{n-1}(C'_\bul) \ar[r]
+& H_{n-1}(C_\bul) \ar[r]
+& H_{n-1}(C''_\bul) \ar[r] & 0
+\end{tikzcd}
+\]
+pero estas no son exactas, en general.
+Sin embargo, nuestro objetivo ahora es ver que
+todas estas encajan en una sola sucesión exacta larga.
+\[
+\begin{tikzcd}
+& \cdots \ar[r]
+& H_{n+2}(C''_\bul) \ar[dll]
+\\
+H_{n+1}(C'_\bul) \ar[r]
+& H_{n+1}(C_\bul) \ar[r]
+& H_{n+1}(C''_\bul) \ar[dll]
+\\
+H_{n}(C'_\bul) \ar[r]
+& H_{n}(C_\bul) \ar[r]
+& H_{n}(C''_\bul)  \ar[dll]
+\\
+H_{n-1}(C'_\bul) \ar[r]
+& H_{n-1}(C_\bul) \ar[r]
+& H_{n-1}(C''_\bul) \ar[dll]
+\\
+H_{n-2}(C'_\bul) \ar[r]
+& \cdots
+\end{tikzcd}
+\]
+Esta construcción le asigna, a cada sucesión exacta corta
+en $\Com(\cal A)$, una sucesión exacta (larga) en $\cal A$.
+Después veremos que esta asignación se extiende a un funtor
+$\SEC(\Com\cal A)\to\SE(\cal A)$,
+donde $\SEC(\cal A)$ y $\SE(\cal A)$
+denotan las categorías de sucesiones
+exactas cortas y sucesiones exactas en $\cal A$, respectivamente.
+
+Lo primero que haremos será construir
+los morfismos que aparecen
+diagonalmente en el diagrama de arriba.
+A cada uno de estos morfismos
+se les llama ``morfismo de conexión''.
+
+\begin{proposition}[Descripción del morfismo de conexión]
+Sea
+$$
+\begin{tikzcd}
+0 \ar[r] & C_\bul' \ar[r, "\iota"] & C_\bul \ar[r, "\rho"] & C_\bul'' \ar[r] & 0
+\end{tikzcd}
+$$
+una sucesión exacta corta en $\Com(R)$.
+Entonces para toda $n\in\mathbb{Z}$ tenemos un morfismo
+\begin{eqnarray*}
+\partial_n:H_n(C_\bul'') &\rightarrow & H_{n-1}(C_\bul')\\
+\textup{$[z_n'']$} & \rightarrow & [\iota^{-1}_{n-1}d_n\rho_n^{-1}z_n'']
+\end{eqnarray*}
+\end{proposition}
+\begin{proof}
+Consideremos el siguiente diagrama
+$$
+\begin{tikzcd}
+& {} \ar[d]
+& {} \ar[d]
+& {} \ar[d]
+& \\
+0 \ar[r]
+& C_{n+1}' \ar[r, "\iota_{n+1}"] \ar[d, "d_{n+1}'"]
+& C_{n+1} \ar[r, "\rho_{n+1}"] \ar[d, "d_{n+1}"]
+& C_{n+1}'' \ar[r] \ar[d, "d_{n+1}''"]
+& 0 \\
+0 \ar[r]
+& C_n' \ar[r, "\iota_{n}"] \ar[d, "d_n'"]
+& C_n \ar[r, "\rho_{n}"] \ar[d, "d_n"]
+& C_n'' \ar[r] \ar[d, "d_n''"]
+& 0 \\
+0 \ar[r] & C_{n-1}' \ar[r, "\iota_{n-1}"] \ar[d] 
+& C_{n-1} \ar[r, "\rho_{n-1}"] \ar[d] 
+& C_{n-1}'' \ar[r] \ar[d] 
+& 0 \\
+& {}
+& {}
+& {}
+&  
+\end{tikzcd}
+$$
+Tomemos $z \in Z_n(C_\bul'')\subseteq C_n''$ como $\rho_n$ es sobreyectiva, entonces existe $c\in C_n$ tal que $\rho_n(c)=z$. Aplicando el diferencial y por la conmutatividad del diagrama tenemos 
+\begin{eqnarray*}
+\rho_{n-1}d_n c & = & d_n''\rho_n c \\
+& = & d_n''z\\
+& = & 0
+\end{eqnarray*}
+por lo tanto, $d_n c\in \Ker{\rho_{n-1}}=\Img{\iota_{n-1}}$;
+así existe $c'\in C_{n-1} '$ tal que 
+$$\iota_{n-1}c' = d_n c $$
+y $c'$ es único ya que $\iota_{n-1}$ es inyectiva. 
+
+Así, 
+$$c'= \iota_{n-1}^{-1}d_nc = \iota_{n-1}^{-1}d_n\rho_n^{-1}z.$$
+Ahora probemos que $\partial_n$ está bien definida y es un morfismo. Llamemos $c\in C_n$ tal que $\rho_nc=z$ un \textit{levantamiento}. Y demostremos que es único. Tomemos $\check{c}\in C_n$ tal que $\rho_n\check{c}=z$ así 
+$$\check{c}-c\in \Ker{\rho_n}=\Img{\iota_n} $$
+por tanto, existe $u'\in C_n'$ tal que 
+$$\iota_nu'=\check{c}-c $$
+como los cuadros conmutan, entonces 
+\begin{eqnarray*}
+\iota_{n-1}d_n'u' & = & d_n\iota_nu' \\
+& = & d_n(\check{c}-c)\\
+& = & d_n\check{c}-d_nc.
+\end{eqnarray*}
+Por tanto, 
+$$ \iota_{n-1}^{-1}(d_n\check{c}-d_nc)=d_n'u'\in B_{n-1}(C_\bul')=\Img{d_n}$$
+entonces tomando el módulo en homología concluimos que determinan la misma clase y, por tanto, está bien definida. Así $\partial$ no depende del levantamiento.
+
+Ahora, tomemos 
+\begin{eqnarray*}
+Z_n(C_\bul'')&\rightarrow& C_{n-1}'/B_{n-1}(C_\bul')\\
+z_n'' & \mapsto & [c_{n-1}']
+\end{eqnarray*}
+que está bien definida por lo anterior. 
+Más aún, sean $z'',z\in Z_n(C_\bul'')$ tales que 
+$$\rho_nc'=z'' $$
+$$\rho_nc_1 =z$$
+nos fijamos en 
+\begin{eqnarray*}
+\rho_nc'+\rho_nc_1& = & z''+z\\
+\rho_n(c'+c_1) & = & z''+z
+\end{eqnarray*}
+y como el levamiento es único, entonces 
+$$z+z''\mapsto [c'+c_1]=[c']+[c_1].$$
+Ahora, mostremos de $\iota_{n-1}c'=d_nc'$ que $c'$ es un ciclo único. Así, 
+$$d_{n-1}\iota_{n-1}c'=\iota_{n-2}d_{n-1}'c' $$
+por un lado tenemos que $d_{n-1}\iota_{n-1}c'=0$, por tanto, $d_{n-1}'c'=0$, ya que $\iota_{n-2}$ es inyectiva.
+Por tanto $c'$ es un ciclo y 
+$$B_n''\subseteq Z''_n\rightarrow Z_{n-1}'/B_{n-1}' $$
+ahora tomemos $z''=d_{n+1}c''\in B_n''$ tal que $c''\in C_{n+1}''$ y $\rho_{n+1}u=c''$ con $u\in C_{n+1}$
+de donde
+\begin{eqnarray*}
+\rho_nd_{n+1}u & = & d_{n+1}''\rho_{n+1}u \\
+& = & d_{n+1}'' c'' \\
+& = & z''
+\end{eqnarray*}
+como $\partial(z'')$ no depende del levantamiento elegimos $d_{n+1}u$ tal que 
+$$\rho_nd_{n+1}u=z''\in B_{n}(C'') $$
+entonces 
+\begin{eqnarray*}
+\partial[z] & = & [\iota_{n-1}\underline{d_nd_{n+1}}u]\\
+& = & [0],
+\end{eqnarray*}
+es decir, tenemos un paso al cociente
+$$
+\begin{tikzcd}
+Z_n'' \ar[r] \ar[d]                             & H_{n-1}(C_\bul) \\
+Z_n''/B_n''=H_n(C_\bul'') \ar[ru, "\partial"', bend right] &            
+\end{tikzcd}
+$$
+\end{proof}
+\begin{definition}
+La familia $(\partial_n:H_n(C_\bul'')\rightarrow H_{n-1}(C_\bul'))$ lleva por nombre \textbf{morfismo de conexión}.
+\end{definition}
+
+\begin{remark}
+La caza de elementos a través de un diagrama tiene la desventaja
+de que luego hay que revisar si las asignaciones obtenidas
+son morfismos bien definidos.
+A continuación, damos un ejemplo de una demostración del resultado
+anterior sin cazar elementos. En lugar de esto, cazamos propiedades
+universales, lo que nos garantiza que siempre tratamos con morfismos.
+\end{remark}
+\begin{proof}[Demostración con propiedades universales]
+Consideremos la preimagen $I_n=\rho_n^{-1}(Z''_n)$.
+Como las inclusiones $I_n\to C_n$ y $Z''_n\to C''_n$
+son monomorfismos, tenemos que
+$\Ker(I_n\to Z''_n)=\Ker(C_n\to C''_n)=C'_n$
+con inclusión dada por la restricción
+de $C'_n\xto{\iota_n}C_n$.
+Además, como $C_n\xto{\rho_n}C''_n$ es epi,
+entonces $I_n\to Z''_n$ también lo es.
+Por lo tanto, tenemos un diagrama con renglones exactos
+\[
+\begin{tikzcd}
+0 \ar[r]
+    & C'_n \ar[r] \ar[d,equal]
+    & I_n \ar[r] \ar[d,hook]
+    & Z''_n \ar[r] \ar[d,hook]
+    & 0 \\
+0 \ar[r]
+    & C'_n \ar[r,"\iota_n"] \ar[d,"d'_n"]
+    & C_n \ar[r,"\rho_n"] \ar[d,"d_n"]
+    & C''_n \ar[r] \ar[d,"d''_n"]
+    & 0 \\
+0 \ar[r]
+    & C'_{n-1} \ar[r,"\iota_{n-1}"]
+    & C_{n-1} \ar[r,"\rho_{n-1}"]
+    & C''_{n-1} \ar[r]
+    & 0
+\end{tikzcd}
+\]
+aunque solo la tercera columna es exacta,
+por lo cual la conmutatividad del diagrama
+nos dice que el morfismo
+\[
+\begin{tikzcd}[color=gray]
+0 \ar[r]
+    & C'_n \ar[r] \ar[d,equal]
+    & |[black]| I_n \ar[r] \ar[d,hook,color=black]
+    & Z''_n \ar[r] \ar[d,hook]
+    & 0 \\
+0 \ar[r]
+    & C'_n \ar[r] \ar[d]
+    & |[black]|C_n \ar[r] \ar[d,color=black,"d_n"]
+    & C''_n \ar[r] \ar[d,"d''_n"]
+    & 0 \\
+0 \ar[r]
+    & C'_{n-1} \ar[r]
+    & |[black]|C_{n-1} \ar[r,"\rho_{n-1}",color=black]
+    & |[black]|C''_{n-1} \ar[r]
+    & 0
+\end{tikzcd}
+\]
+es cero, así que $C_{n-1}\from C_n\from I_n$ se factoriza
+de manera única a través de $\iota_{n-1}$
+(por la flecha intermitente en el siguiente diagrama).
+De nuevo por conmutatividad, el morfismo
+\[
+\begin{tikzcd}[color=gray]
+0 \ar[r]
+& C'_n \ar[r] \ar[d,equal]
+& |[black]| I_n \ar[r] \ar[d,hook]
+& Z''_n \ar[r] \ar[d,hook]
+& 0 \\
+0 \ar[r]
+& C'_n \ar[r] \ar[d]
+& C_n \ar[r] \ar[d,"d_n"]
+& C''_n \ar[r] \ar[d]
+& 0 \\
+0 \ar[r]
+& |[black]|C'_{n-1}
+\ar[r]
+\ar[from=uur,crossing over,dashed,color=black]
+\ar[d,color=black,"d'_{n-1}"]
+& C_{n-1} \ar[r] \ar[d,"d_{n-1}"]
+& C''_{n-1} \ar[r]
+& 0 \\
+0 \ar[r]
+& |[black]| C'_{n-2} \ar[r,color=black,"\iota_{n-2}"]
+& |[black]| C_{n-2}
+\end{tikzcd}
+\]
+es cero.
+Como $\iota_{n-2}$ es mono, esto implica que
+$C'_{n-2}\xfrom{d'_{n-1}} C'_{n-1}\dashleftarrow I_n$ es cero.
+Luego, $C'_{n-1}\dashleftarrow I_n$ se factoriza de manera única
+a través de $Z'_{n-1}=\Ker(d'_{n-1})$.
+Así, tenemos el siguiente diagrama conmutativo
+con diagonales exactas.
+Por conmutatividad, los caminos resaltados
+son iguales:
+\[
+% https://tikzcd.yichuanshen.de
+\begin{tikzcd}
+[
+row sep={4em,between origins},
+column sep={5em,between origins},
+color=gray
+]
+& 0 \ar[dr] \\
+& 0 \arrow[rd]
+& |[black]| C'_n
+\ar[dr,color=black] \ar[d,equal,color=black]
+&&& \\
+0 \arrow[rd]
+& |[black]| Z'_{n-1} \ar[d,hook,color=black]
+%\ar[from=ur,crossing over,dashed]
+& |[black]| C'_n
+\arrow[rd,color=black]
+\arrow[ld,color=black,"d'_n"',very near start]
+& |[black]| I_n
+\ar[ll,bend left,crossing over, squiggly,color=black]
+\ar[dll,dashed,bend left,crossing over]
+\arrow[d,hook] \arrow[rd]
+&& \\
+& |[black]| C'_{n-1} \arrow[rd,color=black,"\iota_{n-1}"']
+&& C_{n} \arrow[rd] \arrow[ld]
+& Z''_n \arrow[d,hook] \ar[dr]
+& \\
+&& |[color=black]| C_{n-1} \arrow[rd]
+&& C''_{n} \arrow[rd] \arrow[ld]
+& 0 \\
+&&& C''_{n-1} \arrow[dr] && 0 \\
+&&&& 0.
+\end{tikzcd}
+\]
+Cancelando el mono $\iota_{n-1}$, vemos que
+la composición $C'_n\to I_n\rightsquigarrow Z'_{n-1}$
+es $C'_n\xto{d'_n}C'_{n-1}$.
+Así, factorizando $d'_n$ a través de $B'_{n-1}$ y $Z'_{n-1}$,
+vemos que los dos caminos marcados
+en el siguiente diagrama son iguales.
+\[
+% https://tikzcd.yichuanshen.de
+\begin{tikzcd}[color=gray]
+0 \ar[r]
+& |[black]| C'_n
+\ar[r,color=black] \ar[d,two heads,color=black]
+\ar[ddr,"d'_n"',controls={+(-2,-1.5) and +(-2.5,0)}]
+& |[black]| I_n \ar[r] \ar[d,squiggly,color=black] 
+& Z''_n \ar[r]
+& 0
+\\
+0 \ar[r,crossing over]
+& |[black]| B'_{n-1} \ar[r,color=black] 
+& |[black]| Z'_{n-1} \ar[r] \ar[d,hook,color=black]
+& H'_{n-1} \ar[r] 
+& 0 \\
+&& |[black]| C'_{n-1}.
+\end{tikzcd}
+\]
+Cancelando el mono $Z'_{n-1}\rmono C'_{n-1}$,
+obtenemos la conmutatividad del cuadrado y,
+como los renglones son exactos, el diagrama
+se puede completar de manera única
+con un morfismo $Z''_n\to H'_{n-1}$.
+Para obtener el morfismo deseado $H''_n\to H'_{n-1}$,
+basta ver que el morfismo recién obtendo $Z''_n\to H'_{n-1}$
+anula a $B''_n$ y aplicar un paso al cociente $H''_n=Z''_n/B''_n$.
+Para esto, consideremos el grado $n+1$.
+Factorizando el diferencial $d''_{n+1}:C''_{n+1}\to C''_n$
+como $C''_{n+1}\to B''_n\to Z''_n\to C''_n$,
+tenemos el siguiente diagrama conmuativo.
+\[
+\begin{tikzcd}
+C_{n+1} \arrow[rr,"\rho_{n+1}"] \arrow[rdd, bend right,"d_{n+1}"']
+&& C''_{n+1} \arrow[rd, two heads]
+\\
+& I_n \arrow[r, two heads] \arrow[d, hook]
+\ar[dr,phantom,"\lrcorner" description,very near start]
+& Z''_n \arrow[d, hook]
+& B''_n \arrow[l, hook] \\
+& C_n \arrow[r, two heads,"\rho_n"']
+& C''_n
+\end{tikzcd}
+\]
+Como $I_n=\rho_n^{-1}(Z''_n)$,
+el cuadrado es un producto fibrado, así que el diagrama
+se puede completar con un morfismo $C_{n+1}\to I_n$.
+Ahora, por conmutatividad, la flecha
+\[
+\begin{tikzcd}[color=gray]
+& 0 \ar[dr] \\
+& 0 \arrow[rd]
+& C'_n \ar[dr] \ar[d,equal]
+& & & \\
+0 \arrow[rd]
+& |[black]| Z'_{n-1} \ar[d,hook,color=black]
+& C'_n \arrow[rd] \arrow[ld]
+& |[black]| I_n
+\ar[ll,bend left,crossing over, squiggly,color=black]
+\ar[dll,dashed,bend left,crossing over]
+\arrow[d,hook]
+& |[black]| C_{n+1} \ar[dr] \ar[dl] \ar[l,bend right=30,color=black]
+& B''_{n} \ar[dl,crossing over]  \\
+& |[black]| C'_{n-1} \arrow[rd,color=black]
+& & C_{n} \arrow[rd] \arrow[ld]
+& Z''_n \ar[from=ul,crossing over] \arrow[d,hook]
+& C''_{n+1} \ar[dl] \ar[dr] \ar[u,two heads] \\
+& & |[black]| C_{n-1} \arrow[rd]
+& & C''_{n} \arrow[rd] \arrow[ld]
+& 0 \ar[from=ul,crossing over] &[5mm] 0 \\
+& & & C''_{n-1} \arrow[rd] & & 0 \\
+& & & & 0 & \\
+\end{tikzcd}
+\]
+es cero.
+Cancelando los monos
+$Z'_{n-1}\rmono C'_{n-1}\rmono C_{n-1}$,
+se sigue que $(Z'_{n-1} \leftsquigarrow I_n\from C_{n+1}) = 0$.
+Luego, por conmutatividad, la flecha
+\[
+% https://tikzcd.yichuanshen.de
+\begin{tikzcd}[color=gray]
+&& |[black]| C_{n+1} \ar[r,color=black] \ar[dd]
+& |[black]| C''_{n+1} \ar[d,two heads,color=black] \ar[r]
+& 0 \\
+&&& |[black]| B''_{n} \ar[d,color=black] \\
+0 \ar[r]
+& C'_n \ar[r] \ar[d]
+& I_n \ar[r] \ar[d,squiggly] 
+& |[black]| Z''_n \ar[r] \ar[d,color=black]
+& 0
+\\
+0 \ar[r]
+& B'_{n-1} \ar[r] 
+& Z'_{n-1} \ar[r] 
+& |[black]| H'_{n-1} \ar[r] 
+& 0
+\end{tikzcd}
+\]
+es cero.
+Cancelando los epis $C_{n+1}\repi C''_{n+1}\repi B''_n$
+se sigue que $(B''_n\to Z''_n\to H'_{n-1})=0$,
+que es lo que queríamos.
+Por lo tanto, la flecha $Z''_n\to H'_{n-1}$ pasa al cociente $H''_n$:
+\[
+% https://tikzcd.yichuanshen.de
+\begin{tikzcd}
+B''_{n} \ar[d] \\
+Z''_n \ar[r] \ar[d] & H'_{n-1} \\
+H''_n \ar[ru,bend right,"\partial_n"]
+\end{tikzcd}
+\]
+y esta es la flecha buscada.
+
+También de esta descripción se puede observar
+que $\partial_n$ se calcula como
+$[z''_n]\mapsto [\iota_{n-1}^{-1}d_n\rho_n^{-1}z''_n]$
+\end{proof}
+
+Ahora veremos que el morfismo de conexión, en efecto,
+conecta las sucesiones dadas por cada funtor $H_n$
+para formar una sucesión exacta larga.
+
+\begin{theorem}
+\label{sucesionexactalarga}
+Si 
+$$
+\begin{tikzcd}
+0 \ar[r] & C_\bul' \ar[r, "\iota_\bul"] & C_\bul \ar[r, "\rho_\bul"] & C_\bul'' \ar[r] & 0
+\end{tikzcd}
+$$
+es una sucesión exacta corta en $\Com(R)$, entonces
+las sucesiones $H_n(C'_\bul)\to H_n(C_\bul)\to H_n(C''_\bul)$
+junto con los morfismos de conexión
+$\partial_n:H_n(C''_\bul)\to H_{n-1}(C'_\bul)$
+forman una sucesión exacta larga en $R$-$\Mod$ (o $\mu$)
+\[
+\begin{tikzcd}
+& \cdots \ar[r]
+& H_{n+2}(C''_\bul) \ar[dll]
+\\
+H_{n+1}(C'_\bul) \ar[r]
+& H_{n+1}(C_\bul) \ar[r]
+& H_{n+1}(C''_\bul) \ar[dll]
+\\
+H_{n}(C'_\bul) \ar[r]
+& H_{n}(C_\bul) \ar[r]
+& H_{n}(C''_\bul)  \ar[dll]
+\\
+H_{n-1}(C'_\bul) \ar[r]
+& H_{n-1}(C_\bul) \ar[r]
+& H_{n-1}(C''_\bul) \ar[dll]
+\\
+H_{n-2}(C'_\bul) \ar[r]
+& \cdots
+\end{tikzcd}
+\]
+\end{theorem}
+\begin{proof} Probemos la exactitud de la sucesi\'on en cada paso. 
+Primero veamos que $\Im \iota_* = \Ker \rho_*$.  Sabemos que $$\iota_*\rho_*=(\iota\rho)_*=0,$$ por lo que $$\Im \iota_*\subseteq \Ker \rho_*.$$ 
+Para probar la otra contenci\'on, notemos que si $\rho_*[z]=[\rho_n z]=0$ entonces 
+\begin{equation}
+    \rho_n z =d_{n+1}''c'' \qquad c''\in C_{n+1}'' 
+\label{1}
+\end{equation}
+y as\'i, por sobreyectividad de $\rho$, existe  $c\in C_{n+1}$ tal que 
+$$\rho_{n+1}c=c'', $$
+de \eqref{1} y de la conmutatividad del diagrama tenemos que 
+$$\rho_n z =d_{n+1}\rho_{n+1}c = \rho_nd_{n+1}c$$
+entonces 
+$$\rho_n(z-d_{n+1} c)=0 $$
+por lo tanto, 
+$$z-d_{n+1}c=0 \in\Ker\rho_n=\Im \iota_{n}.$$
+Por exactitud existe $c'\in C_{n}'$ con 
+$\iota_nc' =z-d_{n+1}c$. 
+Como $c'$ es un ciclo para 
+\begin{eqnarray*}
+d_n\iota_n c' & = & \iota_{n-1}d_n'c'=0\\
+d_n(z-d_{n+1}c) & = & d_nz-d_nd_{n+1}c\\ 
+& =&d_nz
+\end{eqnarray*}
+Ya que $z$ es un ciclo y $\iota$ es inyectivo, entonces 
+$$\iota_{n-1}d_nc'=0. $$
+Por lo tanto, $d_n'c'=0$ y $c'$ es un $n$-ciclo. Por lo tanto,  
+\begin{eqnarray*}
+\iota_*[c'] & = & [\iota_n c']\\
+ & = & [z-d_{n+1}c]\\
+ & = & [z]-[d_{n+1}c]\\
+ & = & [z] 
+\end{eqnarray*}
+Por lo tanto, $[z]\in \Im \iota_*$. 
+
+Veamos ahora que $\Im \rho_* =\Ker \partial$. Sea $\rho_*[c]=[\rho_nc]\in \Im \rho_*$ entonces $$\partial\rho_*[c]=[c'],$$ donde 
+$\iota_*c'=d_n\rho_n^{-1} \rho_n c $. Ya que se ha demostrado que esta f\'ormula no depende del levantamiento, entonces podemos elegir a $\rho_n^{-1}\rho_n c=c$ y as\'i $d_nc=0$ ya que $c$ es un ciclo, entonces 
+$$\iota_nc'=d_nc=0 $$
+por lo tanto, $c'=0$ y $\partial[\rho_n c]=0$. Luego, $\rho_*[c]\in \Ker \partial$
+
+
+Tomemos $\partial[z'']=[0]$ con el levantamiento correspondiente 
+$$z'=[\iota^{-1}d_n\rho_n^{-1}z'']\in B_n'(C_\bul') $$
+entonces
+$$z'= d_n'c' \qquad c'\in C_n' .$$
+Pero 
+\begin{equation}
+    \iota z' =\iota d_n'c'=d_{n}\iota c'
+    \label{1.2}
+\end{equation}
+y por otro lado, 
+$$\iota z' = \iota \iota^{-1}d_n\rho_n^{-1}z''=d_n\rho_n^{-1}z'' $$
+as\'i que sustituyendo en \eqref{1.2} tenemos 
+\begin{eqnarray*}
+d_n\rho_n^{-1}z''  & = & d_n\iota c'\\
+d_n(\rho_n^{-1}z''-\iota c') & = & 0
+\end{eqnarray*}
+y 
+$$\iota z' =\iota d_n' c' =d_n\iota c' = d_n\rho_n^{-1}z'' $$
+por lo tanto,  $\iota c' -\rho_n^{-1}z''$ es un ciclo y por exactitud de la sucesi\'on original 
+$$\rho_*[\rho_n^{-1}z'' -\iota c'] = \rho_*[\rho_n^{-1}z'']-\rho_*[\iota c']=[z'']. $$
+
+Finalmente, probemos $\Im\partial = \Ker \iota_*$. Para ver que $\Im\partial \subseteq \Ker \iota_*$, tenemos que 
+$$\iota_*\partial [z''] =[\iota_{n+1}z'] $$
+pero $\iota_nz' =d_{n+1}\rho_n^{-1}z'' \in B_n(C_\bul)$; por lo tanto, 
+$\iota_*\partial[z'']=0$.
+
+Para la otra contenci\'on, si $\iota_*[z']=0=[\iota_n z']$, entonces $\iota_n z'=d_{n+1}c$ para alg\'un $c\in d_{n+1}$. Ya que es una cadena, 
+\begin{eqnarray*}
+d_{n+1}''\rho_{n+1}c & = & \rho_n d_{n+1}c \\
+& = & \rho_n \iota_n z'' \\
+&= & 0,
+ \end{eqnarray*}
+ por exactitud. Por lo tanto, $\rho_{n+1}c$ es un ciclo. Pero 
+ \begin{eqnarray*}
+\partial[\rho_* c] & = & [\iota^{-1}d_{n+1}\rho_n\rho_n^{-1}c]\\
+& = & [\iota d_n c]\\
+& = & [\iota_n^{-1}\iota_n z']\\
+& = & [z'].
+\end{eqnarray*} 
+Lo que demuestra lo deseado.
+\end{proof}
+
+Lo anterior se suele expresar diciendo que el siguiente tri\'angulo es exacto: 
+$$\begin{tikzcd}[row sep = 50,column sep = 10]
+H_\bul(C_\bul') \ar[rr, "\iota_*"] &   & H_\bul (C_\bul) \ar[ld, "\rho_*"] \\ & H_\bul(C_\bul'') \ar[lu, "\partial_\bul"] &      
+\end{tikzcd}
+$$
+
+Esto completa la construcción que, a cada sucesión
+exacta corta en $\Com(\cal A)$, le asigna una sucesión
+exacta en $\cal A$.
+Antes de mostrar que esta asignación es funtorial,
+veremos dos resultados que se obtienen inmediatamente.
+
+\begin{corollary}[Lema de la serpiente]
+Dado el siguiente diagrama en $R\text{-}\Mod$
+$$ 
+\begin{tikzcd}
+0 \ar[r] & A' \ar[d, "f"] \ar[r] & A \ar[d, "g"] \ar[r] & A'' \ar[d, "h"] \ar[r] & 0 \\
+0 \ar[r] & B' \ar[r]                 & B \ar[r]                & B'' \ar[r]                  & 0
+\end{tikzcd}
+$$
+entonces existe una sucesi\'on exacta en $R$-$\Mod$
+$$ 
+\begin{tikzcd}
+0 \ar[r] & \Ker f \ar[r]    & \Ker g \ar[r]   & \Ker h \ar[lld] &   \\
+            & \Coker{f} \ar[r] & \Coker g \ar[r] & \Coker h \ar[r] & 0
+\end{tikzcd}
+$$
+\end{corollary}
+\begin{proof}
+Recordemos que $f,g$ y $h$ tienen asociados sus complejos
+correspondientes:
+\begin{align*}
+    \Sigma^1f &: \cdots\to 0\to A'\xrightarrow f B' \to 0\to \cdots \\
+    \Sigma^1g &: \cdots\to 0\to A\xrightarrow g B \to 0\to \cdots \\
+    \Sigma^1h &: \cdots\to 0\to A''\xrightarrow h B'' \to 0\to \cdots.
+\end{align*}
+Entonces notemos que el diagrama con renglones exactos
+\[
+\begin{tikzcd}
+0 \ar[r] & A' \ar[d, "f"] \ar[r] & A \ar[d, "g"] \ar[r] & A'' \ar[d, "h"] \ar[r] & 0 \\
+0 \ar[r] & B' \ar[r]                 & B \ar[r]                & B'' \ar[r]                  & 0
+\end{tikzcd}
+\]
+es una sucesión exacta corta entre estos complejos:
+\[
+    0\to \Sigma^1f \to \Sigma^1 g \to\Sigma^1 h \to 0.
+\]
+Por lo tanto, el teorema anterior nos da una
+sucesión exacta larga en homología:
+\[
+\begin{tikzcd}
+    &\cdots \ar[r] & H_2(\Sigma^1h)\ar[dll] \\
+    H_1(\Sigma^1 f) \ar[r]
+    &H_1(\Sigma^1 g) \ar[r]
+    &H_1(\Sigma^1 h) \ar[dll] \\
+    H_0(\Sigma^1 f) \ar[r]
+    &H_0(\Sigma^1 g) \ar[r]
+    &H_0(\Sigma^1 h) \ar[dll] \\
+    H_{-1}(\Sigma^1f) \ar[r] & \cdots,
+\end{tikzcd}
+\]
+es decir (ver el ejemplo \ref{exam:homologia-ker-coker})
+\[
+\begin{tikzcd}
+    &\cdots \ar[r] & 0 \ar[dll] \\
+    \Ker f \ar[r]
+    &\Ker g \ar[r]
+    &\Ker h \ar[dll] \\
+    \Coker f \ar[r]
+    &\Coker g \ar[r]
+    &\Coker h \ar[dll] \\
+    0 \ar[r] & \cdots,
+\end{tikzcd}
+\]
+que es la sucesión deseada.
+\end{proof}
+
+Podemos pensar en las sucesiones exactas cortas en $\cal B$
+como objetos de una categoría, donde los morfismos son diagramas
+\[
+    \begin{tikzcd}
+        0\ar[r]
+            & A' \ar[r] \ar[d]
+            & A \ar[r] \ar[d]
+            & A''\ar[r] \ar[d]
+        & 0
+        \\
+        0\ar[r]
+            & B' \ar[r]
+            & B \ar[r]
+            & B''\ar[r]
+        & 0.
+    \end{tikzcd}
+\]
+En otras palabras,
+ya que toda sucesión exacta corta es un complejo, la categoría
+$\SEC(\cal B)$ de sucesiones exactas cortas en $\cal B$
+es una subcategoría plena de $\Com(\cal B)$.
+Del mismo modo, podemos pensar en las sucesiones exactas
+(no necesariamente cortas) como otra subcategoría $\SE(\cal B)$
+de $\Com(\cal B)$.
+Así, tenemos inclusiones
+$\SEC(\cal B)\rmono\SE(\cal B)\rmono\Com(\cal B)$.
+
+Hasta ahora, dada una sucesión exacta corta en $\Com(\cal A)$,
+los funtores $H_n$ y los morfismos de conexión nos dan una
+sucesión exacta larga en $\cal A$.
+Ahora veremos que esta asignación se puede extender
+a un funtor $\SEC(\Com\cal A)\to\SE(\cal A)$.
+
+\begin{theorem}[Naturalidad del morfismo de conexión. Funtorialidad de la sucesión exacta larga]
+\label{naturalidad}
+Dado un diagrama en $\Com(R)$
+\[
+\begin{tikzcd}
+0 \ar[r]
+    & A'_\bul \ar[d, "f_\bul"] \ar[r,"i_\bul"]
+    & A_\bul \ar[d, "g_\bul"] \ar[r,"p_\bul"]
+    & A''_\bul \ar[d, "h_\bul"] \ar[r] & 0 \\
+0 \ar[r]
+    & B_\bul' \ar[r,"j_\bul"]                
+    & B_\bul \ar[r,"q_\bul"]               
+    & B''_\bul \ar[r]                 
+& 0
+\end{tikzcd}
+\]
+con renglones exactos, entonces el cuadrado en $R\ds\Mod$
+\[
+\begin{tikzcd}
+& H_n(A''_\bul) \ar[d, "h_*"] \ar[r,"\partial_n"]
+& H_{n-1}(A'_\bul) \ar[d, "f_*"]
+\\
+& H_n(B''_\bul) \ar[r,"\partial_n'"]
+& H_{n-1}(B_\bul').
+\end{tikzcd}
+\]
+es conmutativo. Esto significa que 
+los morfismos de conexión $\partial_n$
+dan una transformación natural entre los funtores
+$\SEC(\Com(\cal A))\to\cal A$
+que mandan una sucesión exacta corta de complejos
+$0\to A'_\bul\to A_\bul\to A''_\bul\to 0$
+a $H_n(A''_\bul)$ y a $H_{n-1}(A'_\bul)$.
+
+Por lo tanto,
+el diagrama entre las sucesiones exactas largas en homología
+\[
+\begin{tikzcd}
+\cdots \ar[r]
+& H_n(A'_\bul) \ar[d, "f_*"] \ar[r,"i_*"]
+& H_n(A_\bul) \ar[d, "g_*"] \ar[r,"p_*"]
+& H_n(A''_\bul) \ar[d, "h_*"] \ar[r,"\partial"]
+& H_{n-1}(A'_\bul) \ar[d, "f_*"] \ar[r]
+& \cdots \\
+\cdots \ar[r]
+& H_n(B_\bul') \ar[r,"j_*"] 
+& H_n(B_\bul) \ar[r,"q_*"]
+& H_n(B''_\bul) \ar[r,"\partial'"]
+& H_{n-1}(B_\bul') \ar[r]                
+& \cdots
+\end{tikzcd}
+\]
+es conmutativo, ya que el cuadrado izquierdo y el central conmutan
+por la funtorialidad de $H_n$.
+Esto significa que la construcción de la sucesión exacta larga en $R\ds\Mod$
+a partir de una sucesión exacta corta en $\Com(R)$ es funtorial.
+\end{theorem}
+\begin{proof}
+Consideremos el diagrama en grados $n$ y $n-1$:
+\[
+\begin{tikzcd}
+  & 0 \ar[rr]
+  && A'_n \ar[ld, "d'_n"'] \ar[dd, "f_n",near end] \ar[rr, "i_n"]
+  && A_n \ar[ld, "d_n"'] \ar[dd, "g_n",near end] \ar[rr, "p_n"]
+  && A''_n \ar[ld, "d''_n"'] \ar[dd, "h_n",near end] \ar[rr]
+  && 0 \\
+  0 \ar[rr]
+  && A'_{n-1}
+  && A_{n-1}
+  && A''_{n-1}
+  && 0 \\
+  & 0 \ar[rr]
+  && B'_n \ar[rr, "j_n"',near start] \ar[ld, "\delta'_n",near start]
+  && B_n \ar[rr, "q_n"',near start] \ar[ld, "\delta_n",near start]
+  && B''_n \ar[rr] \ar[ld, "\delta''_n",near start]
+  && 0 \\
+  0 \ar[rr]
+  && B'_{n-1} \ar[rr, "j_{n-1}"']
+  && B_{n-1} \ar[rr, "q_{n-1}"']
+  && B''_{n-1} \ar[rr]
+  && 0
+ \ar[from=2-3,to=2-5,"i_{n-1}",crossing over,near end]
+ \ar[from=2-5,to=2-7,"p_{n-1}",crossing over,near end]
+ \ar[from=2-7,to=2-9,crossing over]
+ \ar[from=2-3,to=4-3, "f_{n-1}",crossing over,near start]
+ \ar[from=2-5,to=4-5, "g_{n-1}",crossing over,near start]
+ \ar[from=2-7,to=4-7, "h_{n-1}",crossing over,near start]
+\end{tikzcd}
+\]
+Dado $[z'']\in H_n(A''_\bul)$ (donde $z''\in Z_n(A''_\bul)\subseteq A''_n$),
+debemos mostrar que $f_*\partial[z'']=\partial'h_*[z'']$.
+
+Por un lado, recordemos que $\partial[z'']$
+se define como $[i_{n-1}^{-1}d_na]$, donde $a\in A_n$ cumple $p_na=z''$.
+Así, $f_*\partial[z'']=f_*[i_{n-1}^{-1}d_na]=[f_{n-1}i_{n-1}^{-1}d_na]$.
+
+Similarmente, $\partial'h_*[z'']=\partial'[h_nz'']$ se define como
+$[j_{n-1}^{-1}\delta_nb]$, donde $b\in B_n$ cumple $q_nb=h_nz''$.
+Notando que $q_ng_na=h_np_na=h_nz''$, podemos tomar $b=g_na$.
+La situación se muestra en el siguiente diagrama.
+\[
+\begin{tikzcd}
+    &&
+    & a \arrow[ld, maps to] \arrow[rr, maps to] \arrow[dd, maps to]
+    && z'' \arrow[dd, maps to] \\
+    i_{n-1}^{-1}d_na \arrow[rr, maps to] \arrow[dd, maps to]
+    &
+    & d_na \arrow[dd, maps to] \\
+    &&
+    & g_na \arrow[ld, maps to] \arrow[rr,maps to]
+    && h_nz''
+    \\
+    j_{n-1}^{-1}\delta_ng_na \arrow[rr, maps to]
+    && \delta_ng_na
+\end{tikzcd}
+\]
+donde $j_{n-1}^{-1}\delta_ng_na=f_{n-1}i_{n-1}^{-1}d_na$ porque
+$j_{n-1}f_{n-1}=g_{n-1}i_{n-1}$. Por lo tanto
+\begin{align*}
+    f_*\partial[z'']
+    &= [f_{n-1}i_{n-1}^{-1}d_na] \\
+    &= [j_{n-1}^{-1}\delta_ng_na] \\
+    &= \partial'h_*[z''],
+\end{align*}
+finalizando la prueba.
+\end{proof}
+
+\section{Homotopía entre morfismos de complejos}
+
+\begin{definition}
+  Sean los complejos $C_\bul$ y $C_\bul'$, fijemos un entero $p\in\Z$ y sea una familia de morfismos  
+  \[\begin{tikzcd}
+    (C_n \ar[r, "s_n"] & C_{n+p}')_{n\in\Z}
+  \end{tikzcd}\]
+  entonces decimos que 
+  \begin{tikzcd}
+    C_\bul \ar[r, "s_\bul"] & C_\bul'
+  \end{tikzcd}
+  es un \emph{morfismo de grado $p$}.
+\end{definition}
+
+\begin{definition}
+  Sean dos morfismos de complejos
+  \begin{tikzcd}
+    C_\bul \ar[r, "f_\bul", shift left] \ar[r, "g_\bul"', shift right] & C_\bul'
+  \end{tikzcd}
+  , decimos que son \emph{homotópicos} si existe un morfismo \begin{tikzcd}
+    C_\bul \ar[r, "s_\bul"] & C_\bul'
+  \end{tikzcd}
+  de grado 1, tal que
+  \[
+    f_n-g_n=d'_{n+1}s_n+s_{n-1}d_n \text{ para todo } n\in\Z
+  \]
+  y escribimos $f_\bul\sim g_\bul$.
+\end{definition}
+
+Veamos un diagrama que ilustra de mejor manera los morfismos involucrados en la definición anterior. 
+\[ 
+    \begin{tikzcd}
+... \ar[r, "..."] & C_{n+1} \ar[r, "d_{n+1}"] \ar[d, shift left] \ar[d, "..."', shift right] \ar[ld, "..."'] & C_n \ar[r, "d_n"] \ar[d, "f_n", shift left] \ar[d, "g_n"', shift right] \ar[ld, "s_n"'] & C_{n-1} \ar[r, "..."] \ar[d, "...", shift left] \ar[d, shift right] \ar[ld, "s_{n-1}"] & ... \ar[ld, "..."] \\
+... \ar[r, "..."] & C_{n+1}' \ar[r, "d_{n+1}'"']                                                                      & C_n' \ar[r, "d_n'"']                                                                             & C_{n-1}' \ar[r, "..."]                                                                          & ...                  
+    \end{tikzcd}
+\]y recordemos que en general el diagrama no es conmutativo, solo se pide que satisfaga $$f_n-g_n=d'_{n+1}s_n+s_{n-1}d_n$$
+
+\begin{definition}
+  Decimos que un morfismo de complejos \begin{tikzcd}
+C_\bul \ar[r, "f_\bul"] & C_\bul'
+\end{tikzcd}
+es \emph{nulhomotópico} si 
+$$f_\bul\sim 0_\bul$$
+\end{definition}
+
+\begin{theorem}\label{teorema:morfismos-homotopos}
+  Sean 
+  \begin{tikzcd}
+    C_\bul \ar[r, "f_\bul", shift left] \ar[r, "g_\bul"', shift right] & C_\bul'
+  \end{tikzcd}
+  dos morfismos de complejos. Si $f_\bul\sim g_\bul$, entonces los morfismos inducidos en homología son iguales, e.i.
+  $$f_*=g_*:H_\bul(C_\bul)\to H_\bul(C_\bul')$$
+\end{theorem}
+\begin{proof}
+  Por la funtorialidad de la homología, tenemos los morfimos $f_*,g_*:H_n(C_\bul)\to H_n(C_\bul')$ para cada $n\in\Z$, entonces sea $[z]\in H_n(C_\bul)$, entonces $z\in Z_n(C_\bul)\subseteq C_n$. Luego, como tenemos que $f_\bul\sim g_\bul$, exsite un morfismo \begin{tikzcd}
+    C_\bul \ar[r, "s_\bul"] & C_\bul'
+  \end{tikzcd}
+  de grado 1, tal que $f_n-g_n=d'_{n+1}s_n+s_{n-1}d_n$, entonces tenemos que
+  \begin{eqnarray*}
+        f_nz-g_nz &=&  d'_{n+1}s_nz+s_{n-1}d_nz\\
+        &=& d'_{n+1}s_nz \in B_n(C_\bul')
+    \end{eqnarray*}
+    lo que significa que $f_*[z]-g_*[z]=[f_nz]-[g_nz]=[f_nz-g_nz]=[0]$ y por lo tanto  $f_*=g_*$
+\end{proof}
+
+\begin{definition}
+  Decimos que un complejo $C_\bul$ es \emph{contraíble} si el morfismo identidad es homotópico al morfismo cero, e.i. 
+  $$1_{C_\bul}\sim 0$$
+\end{definition}
+
+Aunque nos gustaría que fuera cierto, el teorema
+\ref{naturalidad} no es válido salvo homotopía, como lo muestra
+el siguiente ejemplo.
+\begin{example}
+    Sea $k$ un campo y consideremos
+    la sucesión exacta corta de complejos
+    \[
+      \begin{tikzcd}
+        & 0 \ar[r] & A_\bul \ar[r] & B_\bul \ar[r] & C_\bul \ar[r] & 0 \\
+        \text{grado} & & \vdots \ar[d] & \vdots \ar[d] & \vdots \ar[d] & \\
+        3 & 0\ar[r] & 0\ar[d]\ar[r] & 0\ar[d]\ar[r] & 0\ar[d]\ar[r] & 0 \\
+        2 & 0\ar[r] & 0\ar[d]\ar[r] & 0\ar[d]\ar[r] & 0\ar[d]\ar[r] & 0 \\
+        1 & 0\ar[r] & 0\ar[d]\ar[r] & k\ar[d,"1"]\ar[r,"1"] & k\ar[d]\ar[r] & 0 \\
+        0 & 0\ar[r] & k\ar[d]\ar[r,"1"] & k\ar[d]\ar[r] & 0\ar[d]\ar[r] & 0 \\
+        -1 & 0\ar[r] & 0\ar[d]\ar[r] & 0\ar[d]\ar[r] & 0\ar[d]\ar[r] & 0 \\
+        -2 & 0\ar[r] & 0\ar[d]\ar[r] & 0\ar[d]\ar[r] & 0\ar[d]\ar[r] & 0 \\
+        & & \vdots & \vdots & \vdots
+      \end{tikzcd}
+    \]
+    Entonces el primer cuadrado del diagrama
+    \[
+        \begin{tikzcd}
+        0 \ar[r]
+        & A_\bul \ar[r] \ar[d,"1"]
+        & B_\bul \ar[r] \ar[d,"1"]
+        & C_\bul \ar[r] \ar[d,"0"]
+        & 0
+        \\
+        0 \ar[r]
+        & A_\bul \ar[r]
+        & B_\bul \ar[r]
+        & C_\bul \ar[r]
+        & 0 \homotopy{2-3}{1-4}{45}{1.5}
+        \end{tikzcd}
+    \]
+    es conmutativo, pero el segundo solo es conmutativo salvo homotopia.
+    Sin embargo, el diagrama en homología
+    \[
+    \begin{tikzcd}
+        H_1(C_\bul) \ar[r,"\partial"] \ar[d,"0_*"'] & H_0(A_\bul) \ar[d,"1_*"] \\
+        H_1(C_\bul) \ar[r,"\partial'"'] & H_0(A_\bul)
+    \end{tikzcd}
+    \hspace{10mm}
+    es
+    \hspace{10mm}
+    \begin{tikzcd}
+        k \ar[r,"1"] \ar[d,"0"'] & k \ar[d,"1"] \\
+        k \ar[r,"1"'] & k,
+    \end{tikzcd}
+    \]
+    el cual no conmuta.
+\end{example}
+
+\chapter{Funtores derivados}
+\todo{SES 4}
+
+\begin{theorem}[Lema de comparación] \label{lema:comparacion}
+    Sea $\mathcal{A}$ una categoría abeliana, dado un morfismo  $A\overset{f}{\to}A'$, co consideremos el siguiente diagrama
+    \[\begin{tikzcd}
+    	{P_A:} \cdots& {P_2} & {P_1} & {P_0} & A & 0 \\
+    	{P_{A'}:} \cdots& {P'_2} & {P'_1} & {P'_0} & {A'} & 0
+    	\arrow[from=1-1, to=1-2]
+    	\arrow[from=1-5, to=1-6]
+    	\arrow["{d_2}", from=1-2, to=1-3]
+    	\arrow["{d_1}", from=1-3, to=1-4]
+    	\arrow["\varepsilon", from=1-4, to=1-5]
+    	\arrow["f"', from=1-5, to=2-5]
+    	\arrow["f_0"', from=1-4, to=2-4]
+    	\arrow[from=2-1, to=2-2]
+    	\arrow["{d'_2}"', from=2-2, to=2-3]
+    	\arrow["{d'_1}"', from=2-3, to=2-4]
+    	\arrow["{\varepsilon'}"', from=2-4, to=2-5]
+    	\arrow[from=2-5, to=2-6]
+    \end{tikzcd}\]
+    Si cada $P_n$ es proyectivo y $P_{A'}$ es un complejo exacto, entonces existe un morfismo de complejos $\tilde{f}:P_A\to P_{A'}$ único salvo homotopía, tal que
+\end{theorem}
+
+Y el dual.
+
+\section{Funtores derivados izquierdos}\label{fun-der-izq}
+Sea $T:\mathcal{A}\rightarrow \mathcal{C}$ un funtor covariante aditivo entre categorías abelianas donde $\mathcal{A}$ tiene suficientes proyectivos. Construiremos sus \textit{funtores derivados izquierdos} $L_nT:\mathcal{A}\rightarrow \mathcal{C}$. 
+
+Sea $A\in\mathcal{A}$, fijamos una resolución proyectiva;
+$$P_A : 
+\xymatrix{\ar[r] & P_2 \ar[r]^{d_2} &P_1 \ar[r]^{d_1} & P_0 \ar[r]^{\varepsilon} & A \ar[r] & 0 }
+$$
+recordemos que las resoluciones viven en la misma clase de homotopía por el lema de comparación. De aquí se deriva el complejo 
+$$TP_A: 
+\xymatrix{\ar[r] & TP_2 \ar[r] &TP_1 \ar[r] & TP_0 \ar[r] & TA \ar[r] & 0 }
+$$
+tomamos la homolog\'ia de $TP_A$ y as\'i 
+$$(L_nT)A=H_n(TP_A). $$
+Sea $f:A\rightarrow A'$ un morfismo y tomemos 
+$$
+\begin{tikzcd}
+\cdots \arrow[r] & P_2 \arrow[r] \arrow[d] & P_1 \arrow[r] \arrow[d] & P_0 \arrow[r] \arrow[d] & A \arrow[r] \arrow[d, "f"] & 0 \\
+\cdots \arrow[r] & TP_2 \arrow[r]          & T P_1 \arrow[r]         & TP_0 \arrow[r]          & A' \arrow[r]               & 0
+\end{tikzcd}
+$$
+entonces por el Lema de Comparación, tenemos un morfismo $\tilde{f}:P_A\rightarrow P_A'$ sobre $f$. Por lo tanto, definimos 
+$$(L_nT)f:(L_nT)A\rightarrow (L_nT)A' $$
+mediante 
+$$(L_nT)f=H_n(Tf)=(T\tilde{f})_{n*} ,$$
+para cada $n$. Es decir, 
+\begin{eqnarray*}
+(L_nT)f:H_n(TP_A) & \rightarrow  & H_n(TP_A') \\
+z+\Im{d_{n+1}} & \mapsto & (T\tilde{f})(z)+\Im Td_{n+1}'
+\end{eqnarray*}
+que es, 
+$$(L_nT)(f)[z] =[T\tilde{f}_nz] $$
+y as\'i tenemos una familia de funtores $(L_nT:\mathcal{A}\rightarrow \mathcal{C})_{n\in\mathbb{Z}}$. 
+
+Veamos ahora que no depende de la homotop\'ia:
+Para ello tomemos $h:P_A\rightarrow P_A'$ un morfismo sobre $f$ entonces $h\cong f$ por el Lema de Comparación, como se muestra en el siguiente diagrama
+$$
+\begin{tikzcd}
+\cdots \arrow[r] & P_2 \arrow[r] \arrow[d, "f_2", bend left] \arrow[d, "h_2"', bend right] & P_1 \arrow[r] \arrow[d, "f_1", bend left] \arrow[d, "h_1"', bend right] & P_0 \arrow[r] \arrow[d, "f_0", bend left] \arrow[d, "h_1"', bend right] \arrow[ld, "s_0" description, dotted] & A \arrow[r] \arrow[d, "f", bend left] \arrow[d, "h"', bend right] \arrow[ld, "s_1" description, dotted] & 0 \\
+\cdots \arrow[r] & P_2' \arrow[r]                                                          & P_1' \arrow[r]                                                          & P_0' \arrow[r]                                                                                                & A' \arrow[r]                                                                                            & 0
+\end{tikzcd}
+$$
+ya que 
+$$f_n-h_n=d_{n+1}'s_n+s_{n-1}d_n $$
+y al aplicarle $T$, tenemos
+$$Tf_n-Th_n=Td_{n+1}Ts_n+Ts_{n-1}Td_n $$
+donde $\tilde{s}_n=Ts_n$ para toda $n$, por lo tanto, 
+$$Th\cong T\tilde{f} \qquad \textup{y} \qquad L_nTh=L_nT\tilde{f}.$$
+Por otro lado, si $\mathcal{A}=R\textup{-}\Mod$, tomemos $r\in Z(R)$ un elemento en el centro de $R$, entonces
+$$\mu_r:M\rightarrow M \qquad \forall M\in R\textup{-}\Mod $$
+es un morfismo (multiplicar por $r$). 
+Un funtor aditivo, $T:R\textup{-}\Mod \rightarrow R\textup{-}\Mod $ preserva multiplicación si 
+$$T(\mu_r):TM\rightarrow TM $$
+es también multiplicar por $r$.
+\begin{proposition}
+Si $T:R\textup{-}\Mod\rightarrow R\textup{-}\Mod$ es un funtor aditivo y preserva multiplicaci\'on entonces 
+$$L_nT:R\textup{-}\Mod\rightarrow R\textup{-}\Mod $$
+también es aditivo y preserva multiplicación.
+\end{proposition}
+\begin{proof}
+    Tomemos una resolución proyectiva en $A$
+    $$P_A = 
+\xymatrix{\ar[r] & P_2 \ar[r]^{d_2} &P_1 \ar[r]^{d_1} & P_0 \ar[r]^{\varepsilon} & A \ar[r] & 0 }
+$$ 
+así, por el Lema de Comparación $\mu_0$ induce los morfismos $\mu_i$ que también son multiplicar por $r$:
+$$
+\begin{tikzcd}
+\cdots \arrow[r] & P_2 \arrow[r] \arrow[d, "\mu_2"'] & P_1 \arrow[r] \arrow[d, "\mu_1"'] & P_0 \arrow[r] \arrow[d, "\mu_0"'] & M \arrow[r] \arrow[d, "\mu_r"'] & 0 \\
+\cdots \arrow[r] & P_2 \arrow[r]                     & P_1 \arrow[r]                     & P_0 \arrow[r]                     & M \arrow[r]                     & 0
+\end{tikzcd}
+$$
+Esto quiere decir que 
+$$\mu_r\varepsilon = \varepsilon \mu_0 $$
+y as\'i $m_0(m)=r_m$ y es también multiplicar por $r$. Finalmente 
+$$M\cong P_0/\Ker\varepsilon $$
+$$\tilde{\mu}_r(m)= \tilde{\mu}_0(m) $$
+y como $T$ preserva multiplicaciones entonces queda demostrado.
+\end{proof}
+
+\begin{definition}
+Los funtores $(L_nT:\mathcal{A}\rightarrow \mathcal{C})_{n\in \mathbb{Z}}$ son llamados \textbf{funtores derivados izquierdos} de $T$. 
+\end{definition}
+
+\begin{proposition}
+Sea $T$ un funtor aditivo entonces 
+$$(L_nT)M =0 \qquad \forall n <0 \forall M .$$
+\end{proposition}
+\begin{proof}
+    Ya que los $n$-\'esimos t\'erminos de $P_A$ son cero, entonces $(L_nT)A=0$ cuando $n$ es negativo.
+\end{proof}
+Es por esta raz\'on que los funtores $L_nT$ son llamados funcores derivados \textit{izquierdos}.
+
+\begin{definition}
+Decimos que una categoría abeliana $\cal A$
+tiene suficientes proyectivos cuando, para todo $A\in\cal A$,
+existe un objeto proyectivo $P\in\cal A$ junto con un epimorfismo $P\to A$.
+\end{definition}
+
+Si una categoría abeliana $\cal A$ tiene suficientes
+proyectivos, entonces podemos escoger una resolución
+proyectiva para cada objeto y definir el funtor derivado
+de cualquier funtor aditivo con dominio $\cal A$.
+
+Pero ¿qué pasaría si escogiéramos resoluciones proyectivas distintas?
+¿cambiarían los valores del funtor derivado?
+Ahora veremos que la respuesta es no:
+los funtores derivados son naturalmente isomorfos.
+
+\begin{prop}
+Sea $\cal A$ una categoría abeliana con suficientes proyectivos.
+Supongamos que, para cada objeto $A$ de $\cal C$,
+tenemos dos resoluciones proyectivas $P_A$ y $\tilde P_A$.
+
+Entonces para cualquier funtor aditivo $T:\cal A\to\cal B$,
+las familias de morfismos de complejos
+$(P_A\to\tilde P_A\mid A\in\cal A)$ y $(\tilde P_A\to P_A\mid A\in\cal A)$
+dados por el lema de comparación inducen un isomorfismo natural entre
+los funtores derivados $L_nT$ y $\tilde L_nT$ con respecto a
+las familias de resoluciones proyectivas $P_A$ y $\tilde P_A$.
+\end{prop}
+\begin{proof}
+    Recordemos, de la sección \ref{fun-der-izq},
+    que dado un funtor aditivo $T:\cal A\to\cal B$,
+    sus funtores derivados izquierdos
+    $L_nT,\tilde L_nT:\cal A\to\cal B$
+    están dados en objetos como
+    \begin{align*}
+        L_nT(A) &= H_n(TP_A)
+        &
+        \text{y}
+        &
+        &
+        \tilde L_nT(A) &= H_n(T\tilde P_A).
+    \end{align*}
+    y en morfismos como
+    \[
+    \begin{tikzcd}
+        L_nT(A) = H_n(TP_A) \ar[d,"(TF)_*"]
+        & {} & {} & 
+        \tilde L_nT(A) = H_n(T\tilde P_A) \ar[d,"(T\tilde F)_*"] \\
+        L_nT(B) = H_n(TP_B)
+        & {} & {} & 
+        \tilde L_nT(B) = H_n(T\tilde P_B)
+    \end{tikzcd}
+    \]
+    donde $F:P_A\to P_B$ y $\tilde F:\tilde P_A\to\tilde P_B$
+    son los morfismos de complejos inducidos por $f$ gracias al
+    lema de comparación (lema \ref{lema:comparacion}).
+    En particular, $F$ y $\tilde F$ están sobre $f$. Es decir, los diagramas
+    \[
+    \begin{tikzcd}
+        P_A \ar[d,"F"']\ar[r] & A \ar[d,"f"]
+        &{}&
+            & \tilde P_A \ar[d,"\tilde F"']\ar[r] & A\ar[d,"f"] \\
+        \tilde P_B \ar[r] & B
+        &{}&
+            & P_B \ar[r] & B
+    \end{tikzcd}
+    \]
+    son conmutativos.
+    
+    Para ver la equivalencia $L_nT\simeq\tilde L_nT$,
+    primero construiremos una transformación natural
+    $L_nT\to\tilde L_nT$.
+    Usando de nuevo el lema de comparación, para cada objeto $A$
+    de $\cal A$ tenemos un morfismo de complejos
+    $\iota_A:P_A\to \tilde P_A$ sobre $\id_A$:
+    \[
+    \begin{tikzcd}
+        P_A \ar[d,"\iota_A"']\ar[r] & A \ar[d,"\id_A"] \\
+        \tilde P_A \ar[r] & A.
+    \end{tikzcd}
+    \]
+    Ahora, acomodando estos cuadrados en un cubo, obtenemos el siguiente
+    diagrama:
+    \[
+        % https://tikzcd.yichuanshen.de/
+        \begin{tikzcd}
+            & \tilde P_A \arrow[ld,"\tilde F"']
+                \arrow[from=rr,"\iota_A"'] \arrow[dd]
+                && P_A \arrow[dd] \arrow[ld,"F"] \\
+            \tilde P_B \arrow[dd]
+                \arrow[from=rr,crossing over,"\iota_B"',near start]
+                && P_B \\
+            & A \arrow[ld,"f"'] \arrow[from=rr,"\id_A",near end]
+            & & A \arrow[ld,"f"] \\
+            B \arrow[from=rr,"\id_B"] & &
+            B \ar[from=uu,crossing over]
+            \homotopy{1-2}{2-3}{-40}{2}
+        \end{tikzcd}
+    \]
+    Nótese que la base y las caras laterales del cubo conmutan,
+    pero la tapa del cubo no necesariamente conmuta.
+    Sin embargo, dado que ambos morfismos de complejos
+    $\tilde F\iota_A$ y $\iota_BF$
+    están sobre $f\id_A=f=\id_Bf$,
+    el lema de comparación nos da una homotopía
+    $(\tilde F\iota_A)\sim(\iota_BF)$.
+    Así, la tapa del cubo ``conmuta salvo homotopía'',
+    lo cual está indicado en el diagrama
+    de arriba con un $\sim$ dentro del cuadrado correspondiente.
+    
+    Ahora, al aplicar el funtor $T$, los cuadros conmutativos siguen
+    conmutando y la tapa sigue conmutando salvo homotopía:
+    \[
+        % https://tikzcd.yichuanshen.de/
+        \begin{tikzcd}
+            & T\tilde P_A \arrow[ld,"T\tilde F"']
+                \arrow[from=rr,"T\iota_A"'] \arrow[dd]
+                && TP_A \arrow[dd] \arrow[ld,"TF"] \\
+            T\tilde P_B \arrow[dd]
+                \arrow[from=rr,crossing over,"T\iota_B"',near start]
+                && TP_B \\
+            & TA \arrow[ld,"Tf"'] \arrow[from=rr,"T\id_A",near end]
+            & & TA \arrow[ld,"Tf"] \\
+            TB \arrow[from=rr,"T\id_B"] & &
+            TB \ar[from=uu,crossing over]
+            \homotopy{1-2}{2-3}{-40}{2}
+        \end{tikzcd}
+    \]
+    Como morfismos homótopos inducen el mismo morfismo en homología
+    (teorema \ref{teorema:morfismos-homotopos}),
+    al tomar homología en la tapa obtenemos un diagrama conmutativo
+    \[
+        \begin{tikzcd}
+            H_n(T\tilde P_A) \ar[d,"(T\tilde F)_*"']
+            & H_n(TP_A) \ar[l,"(T\iota_A)_*"'] \ar[d,"(TF)_*"] \\
+            H_n(T\tilde P_B) & H_n(TP_B) \ar[l,"(T\iota_B)_*"],
+        \end{tikzcd}
+    \]
+    es decir:
+    \[
+        \begin{tikzcd}
+            \tilde L_nTA \ar[d,"L_nTf"']
+            & L_nTA \ar[l,"(T\iota_A)_*"'] \ar[d,"L_nTf"] \\
+            \tilde L_nTB & L_nTB \ar[l,"(T\iota_B)_*"]
+        \end{tikzcd}
+    \]
+    lo cual muestra que los morfismos
+    $\tau_A=(T\iota_A)_*:L_nTA\to\tilde L_nTA$
+    son los componentes de una transformación natural
+    $\tau:L_nT\to\tilde L_nT$.
+    
+    Ahora veamos que $\tau$ es un isomorfismo, para lo cual
+    basta ver que cada componente $\tau_A$ es un isomorfismo.
+    Recordemos que obtuvimos $\tau_A$ a partir de la familia
+    de morfismos de complejos
+    $(\iota_A:P_A\to\tilde P_A \mid A\in\cal A)$.
+    Similarmente, el lema de comparación nos da otra familia
+    de morfismos $(\kappa_A:\tilde P_A\to P_A\mid A\in\cal A)$,
+    donde cada $\kappa_A$ está sobre la identidad $\id_A:A\to A$.
+    En diagramas:
+    \[
+    \begin{tikzcd}
+        P_A \ar[d,"\iota_A"']\ar[r] & A \ar[d,"\id_A"]
+        &{}&
+            & \tilde P_A \ar[d,"\kappa_A"']\ar[r] & A\ar[d,"\id_A"] \\
+        \tilde P_A \ar[r] & A
+        &{}&
+            & P_A \ar[r] & A.
+    \end{tikzcd}
+    \]
+    Pegando estos cuadrados verticalmente, obtenemos
+    \[
+    \begin{tikzcd}
+        \tilde P_A \ar[d,"\kappa_A"']\ar[r] \ar[dd,"\iota_A\kappa_A"',bend right=50]
+        & A \ar[d,"\id_A"] \ar[dd,"\id_A",bend left=50]
+        &{}&
+            & P_A \ar[d,"\iota_A"']\ar[r] \ar[dd,"\kappa_A\iota_A"',bend right=50]
+            & A\ar[d,"\id_A"] \ar[dd,"\id_A",bend left=50] \\
+        P_A \ar[d,"\iota_A"']\ar[r] & A \ar[d,"\id_A"]
+        &{}&
+            & \tilde P_A \ar[d,"\kappa_A"']\ar[r] & A\ar[d,"\id_A"] \\
+        \tilde P_A \ar[r] & A
+        &{}&
+            & P_A \ar[r] & A.
+    \end{tikzcd}
+    \]
+    Luego, el morfismo de complejos $\iota_A\kappa_A:\tilde P_A\to\tilde P_A$
+    está sobre $\id_A$. Por el lema de comparación, obtenemos
+    una homotopía $\iota_A\kappa_A\sim\id_{\tilde P_A}$.
+    Similarmente, como el morfismo de complejos $\kappa_A\iota_A:P_A\to P_A$
+    está sobre $\id_A$, tenemos una homotopía $\kappa_A\iota_A\sim\id_{PA}$.
+    \[
+    \begin{tikzcd}
+        \tilde P_A \ar[dd,"\kappa_A\iota_A"'{name=KI},bend right]
+        \ar[dd,"\id_{\tilde P_A}"{name=id1},bend left]
+            &{}&
+                & P_A \ar[dd,"\iota_A\kappa_A"'{name=IK},bend right]
+                \ar[dd,"\id_{P_A}"{name=id2},bend left]
+        \\
+        {}
+        \\
+        \tilde P_A &{}& & P_A
+        \\
+        \ar[from=KI,to=id1,phantom,"\sim"]
+        \ar[from=IK,to=id2,phantom,"\sim"]
+    \end{tikzcd}
+    \]
+    Al aplicar $T$, los morfismos siguen siendo homótopos
+    \[
+    \begin{tikzcd}
+        T\tilde P_A \ar[dd,"T(\kappa_A\iota_A)"'{name=KI},bend right]
+        \ar[dd,"\id_{T\tilde P_A}"{name=id1},bend left]
+            &{}&
+                & TP_A \ar[dd,"T(\iota_A\kappa_A)"'{name=IK},bend right]
+                \ar[dd,"\id_{P_A}"{name=id2},bend left]
+        \\
+        {}
+        \\
+        T\tilde P_A &{}& & TP_A
+        \\
+        \ar[from=KI,to=id1,phantom,"\sim"]
+        \ar[from=IK,to=id2,phantom,"\sim"]
+    \end{tikzcd}
+    \]
+    Finalmente, como morfismos homótopos inducen el mismo morfismo
+    en homología, tenemos
+    \[
+    \begin{tikzcd}
+        H_n(T\tilde P_A)
+        \ar[dd,"(T(\kappa_A\iota_A))_*=\id_{H_n(TP_A)}"]
+            &{}&
+                & H_n(TP_A)
+        \ar[dd,"(T(\iota_A\kappa_A))_*=\id_{H_n(T\tilde P_A)}"]
+        \\
+        {}
+        \\
+        H_n(T\tilde P_A) &{}& & H_n(TP_A).
+    \end{tikzcd}
+    \]
+    Esto es:
+    \[
+    \begin{tikzcd}
+        \tilde L_nTA
+        \ar[dd,"(T\kappa_A)_*(T\iota_A)_*=\id_{\tilde L_nTA}"]
+            &{}&
+                & L_nTA
+        \ar[dd,"(T\iota_A)_*(T\kappa_A)_*=\id_{L_nTA}"]
+        \\
+        {}
+        \\
+        \tilde L_nTA &{}& & L_nTA.
+    \end{tikzcd}
+    \]
+    Luego, cada $\tau_A=(T\iota_A)_*$ es un isomorfismo, con inverso
+    $(T\kappa_A)_*$.
+    Se sigue que el funtor $\tau:L_nT\to\tilde L_nT$
+    es un isomorfismo natural y, de hecho, su inverso
+    $\sigma:\tilde L_nT\to L_nT$ tiene componentes $\sigma_A=(T\kappa_A)_*$.
+\end{proof}
+
+\begin{corollary}
+    Si $T:\cal A\to\cal B$ es un funtor aditivo
+    y $L_nT$ son sus funtores derivados, entonces
+    \[
+        L_nTP=0
+    \]
+    para $n\geq 1$ y cualquier proyectivo $P$,
+    ya que el complejo $P_\bul$ con $P_0=P$
+    y $P_k=0$ para $k\neq 0$
+    es una resolución proyectiva de $P$.
+\end{corollary}
+
+\begin{definition}[El funtor Tor]
+Si $B$ es un $R$-m\'odulo izquierdo, consideramos el funtor aditivo
+$$T=- \otimes_R B:\Mod\ds R\to\Z\ds\Mod $$
+y definimos 
+$$\Tor_n^R(-,B)=L_nT.$$
+\end{definition}
+De esta manera, si tomamos una resolución proyectiva $(P_A,\epsilon)$
+de un $R$-módulo derecho $A$
+$$
+P_A: 
+\begin{tikzcd}
+ \cdots \ar[r]  & P_2 \ar[r, "d_2"] & P_1 \ar[r, "d_1"] & P_0  \ar[r, "d_0"] & 0
+\end{tikzcd}
+$$
+y aplicamos $-\otimes_RB$
+$$
+P_A\otimes_R B: 
+\begin{tikzcd}
+ \cdots \ar[r]  & P_2 \otimes_R B\ar[r, "d_2\otimes\id_B"] & P_1 \otimes_R B\ar[r, "d_1\otimes\id_B"] & P_0 \otimes_R B \ar[r,"d_0\otimes\id_B"] & 0,
+\end{tikzcd}
+$$
+tenemos
+$$\Tor_n^R(A,B)=H_n(P_A\otimes B)
+=\frac{\Ker(d_n\otimes\id_B)}{\Im(d_{n+1}\otimes\id_B)}.$$
+\begin{remark}
+\begin{itemize}
+    \item Dado que tomamos un $R$-módulo izquierdo $B$, derivamos el funtor
+    $-\otimes_RB:\Mod\ds R\to\Z\ds\Mod$ y obtuvimos los funtores
+    \[T
+        \Tor^R_n(-,B):\Mod\ds R\to\Z\ds\Mod.
+    \]
+    \item Si $B$ es un bimódulo ${}_RB_S$, entonces
+    $-\otimes_RB$ es un funtor $\Mod\ds R\to\Mod\ds S$.
+    Así, sus funtores derivados son
+    $$\Tor_n^R(-,B): \Mod\ds R\to\Mod\ds S.$$
+    \item Si comenzamos con un $R$-módulo derecho $A$, podemos derivar
+    el funtor $A\otimes_R - :R\ds\Mod\to\Z\ds\Mod$ para obtener funtores
+    $$\tor_n^R(A,-):R\ds\Mod\to\Z\ds\Mod.$$
+    Es decir, para cada $R$-módulo izquierdo $B$, $\tor_n^R(A,B)$ se calcula
+    tomando una resolución proyectiva $(R_B,\epsilon)$ de $B$:
+    $$
+    \dots\to R_3\xto{d_3}R_2\xto{d_2}R_1\xto{d_1}R_0\xto{d_0}0,
+    $$
+    aplicando $A\otimes_R-$
+    $$
+    \dots\to
+    A\otimes_RR_3 \xto{\id_A\otimes d_3}
+    A\otimes_RR_2\xto{\id_A\otimes d_2}
+    A\otimes_RR_1\xto{\id_A\otimes d_1}
+    A\otimes_RR_0\xto{\id_A\otimes d_0}0,
+    $$
+    y tomando homología
+    \begin{eqnarray*}
+    \tor_n^R(A,B) & = & H_n(A\otimes_R R_B) \\
+    & = & \frac{\Ker(\id_A\otimes d_n)}{\Im(\id_A\otimes d_{n+1})}
+    \end{eqnarray*}
+    \end{itemize}
+\end{remark}
+
+Por los resultados anteriores,
+los módulos $\Tor_n^R(A,B)$ son independientes
+de la elección de resolución proyectiva de $A_R$, mientras
+que los módulos $\tor_n^R(A,B)$ son independientes de
+la elección de resolución proyectiva de ${}_RB$.
+Además, $\Tor_n(P,B)=0$ y $\tor(A,Q)=0$
+para cualesquiera módulos proyectivos $P_R$, ${}_RQ$.
+
+\begin{corollary}
+    Sea $T:\cal A\to\cal B$ un funtor aditivo,
+    y sea $(P_A,\epsilon)$ una resolución proyectiva
+    de $A\in\cal A$.
+    Tomando $K_n=\Ker(P_n\xrightarrow{d_n}P_{n-1})$ para $n\geq 1$
+    y $K_0=\Ker(P_0\xrightarrow\epsilon A)$,
+    tenemos
+    \begin{align*}
+        L_{n+1}TA
+        &\simeq L_nTK_0 \\
+        &\simeq L_{n-1}TK_1 \\
+        &\simeq L_{n-2}TK_2 \\
+        &\vdots \\
+        &\simeq L_1TK_{n-1} \\
+        &\simeq L_0TK_n.
+    \end{align*}
+    En particular, si $\cal A=\Mod\ds R$,
+    entonces para cualquier módulo ${}_RB$ se tiene
+    \begin{align*}
+        \Tor_{n+1}^R(A,B)
+        &\simeq \Tor_n^R(K_0,B) \\
+        &\simeq \Tor_{n-1}^R(K_1,B) \\
+        &\simeq \Tor_{n-2}^R(K_2,B) \\
+        &\vdots \\
+        &\simeq \Tor_1^R(K_{n-1},B) \\
+        &\simeq \Tor_0^R(K_n,B).
+    \end{align*}
+    o, si $\cal A=R\ds\Mod$, entonces para cualquier
+    módulo $B_R$ se tiene
+    \begin{align*}
+        \tor_{n+1}^R(B,A)
+        &\simeq \tor_n^R(B,K_0) \\
+        &\simeq \tor_{n-1}^R(B,K_1) \\
+        &\simeq \tor_{n-2}^R(B,K_2) \\
+        &\vdots \\
+        &\simeq \tor_1^R(B,K_{n-1}) \\
+        &\simeq \tor_0^R(B,K_n).
+    \end{align*}
+\end{corollary}
+\begin{proof}
+Sea $r\geq 0$. Como la sucesión
+\[
+  \cdots\to P_3\xto{d_3}P_2\xto{d_2}P_1\xto{d_1}P_0\xto\epsilon A\to 0
+\]
+es exacta, entonces
+\[
+  \cdots\to P_{r+3}\xto{d_{r+3}}
+  P_{r+2}\xto{d_{r+2}}
+  P_{r+1}\xto{d_{r+1}}
+  K_r \to 0
+\]
+es exacta, ya que $\Im(d_{r+1})=\Ker(d_r)=K_r$.
+Por lo tanto, reetiquetando como $Q_s=P_{r+s+1}$,
+$\delta_r=d_{r+s+1}$ y poniendo $\eta=d_{r+1}$,
+la sucesión exacta anterior
+\[
+  \cdots\to Q_2\xto{\delta_{2}}
+  Q_1\xto{d_{1}}
+  Q_0\xto{\eta}
+  K_n \to 0
+\]
+nos da una resolución proyectiva $(Q_\bul,\eta)$ de $K_r$.
+Luego, para cada $s\geq 0$ tenemos
+\begin{align*}
+    L_sTK_r
+    &\simeq H_s(TQ_\bul) \\
+    &= \frac{\Ker(\delta_s)}
+            {\Im(\delta_{s+1})} \\
+    &= \frac{\Ker(d_{r+s+1})}
+            {\Im(d_{r+s+2})} \\
+    &= H_{r+s+1}(TP_A) \\
+    &= L_{r+s+1}TA.
+\end{align*}
+En particular, dado $n\geq 0$, tenemos
+    \begin{align*}
+        L_{n+1}TA
+        &\simeq L_nTK_0 && \text{con }s=n, r=0 \\
+        &\simeq L_{n-1}TK_1 && \text{con }s=n-1, r=1 \\
+        &\simeq L_{n-2}TK_2 && \text{con }s=n-2, r=2 \\
+        &\vdots \\
+        &\simeq L_1TK_{n-1} && \text{con }s=1, r=n-1 \\
+        &\simeq L_0TK_n && \text{con }s=0, r=n.
+    \end{align*}
+\end{proof}
+
+\begin{lemma}
+    Dado un diagrama
+    \[
+      \begin{tikzcd}
+            & P'\ar[d,"f'",two heads]
+            &
+            & P''\ar[d,"f''",two heads] \\
+        0 \ar[r]
+            & A' \ar[r,"i"]
+            & A \ar[r,"q"]
+            & A'' \ar[r]
+        & 0
+      \end{tikzcd}
+    \]
+    donde las dos flechas verticales son epimorfismos,
+    entonces existe un epimorfismo $f:P'\oplus P''\repi A$
+    tal que el siguiente diagrama conmuta y tiene renglones exactos.
+    \[
+      \begin{tikzcd}
+        0 \ar[r]
+            & P'\ar[d,"f'",two heads] \ar[r]
+            & P'\oplus P'' \ar[d,"f",two heads] \ar[r]
+            & P''\ar[d,"f''",two heads] \ar[r]
+            & 0 \\
+        0 \ar[r]
+            & A' \ar[r,"i"]
+            & A \ar[r,"q"]
+            & A'' \ar[r]
+        & 0.
+      \end{tikzcd}
+    \]
+\end{lemma}
+\begin{proof}
+    Sea $P=P'\oplus P''$
+    y consideremos los morfismos del coproducto
+    $P'\xto{i'} P\xfrom{i''} P''$.
+    Como $q$ es epi y $P''$ es proyectivo, $f''$
+    se factoriza a través de $q$, digamos $f''=q\sigma$.
+    Por la propiedad del coproducto, existe un único morfismo
+    $f:P\to A$
+    (explícitamente dado como $f(x,y)=if'x+\sigma y$)
+    tal que el diagrama siguiente es conmutativo:
+    \[
+      \begin{tikzcd}
+            & P' \ar[r,"i'"]\ar[d,"f'",two heads] \ar[dr]
+            & P \ar[d,"f",dotted]
+            & P'' \ar[d,"f''",two heads]
+            \ar[dl,"\sigma"] \ar[l,"i''"'] \\
+        0 \ar[r]
+            & A' \ar[r,"i"]
+            & A \ar[r,"q"]
+            & A'' \ar[r]
+        & 0
+      \end{tikzcd}
+    \]
+    Recordemos que las proyecciones $P'\xfrom{q'}P\xto{q''}P''$ y
+    las inclusiones $P'\xto{i'}P\xfrom{i''}P''$
+    cumplen la ecuación $\id_P=i'q'+i''q''$.
+    De la conmutatividad del diagrama anterior, tenemos $qfi'=0$
+    y $qfi''=f''$.
+    Luego, $0=qfi'q'$ y $f''q''=qfi''q''$.
+    Sumando, tenemos
+    \begin{align*}
+        f''q''
+        &= qfi'q'+qfi''q'' \\
+        &= qf(i'q'+i''q'') \\
+        &= qf,
+    \end{align*}
+    por lo cual el diagrama
+    \[
+      \begin{tikzcd}
+        0 \ar[r]
+            & P' \ar[r,"i'"] \ar[d,"f'",two heads]
+            & P \ar[r,"q''"] \ar[d,"f"]
+            & P'' \ar[d,"f''",two heads] \ar[r]
+            & 0\\
+        0 \ar[r]
+            & A' \ar[r,"i"]
+            & A \ar[r,"q"]
+            & A'' \ar[r]
+        & 0
+      \end{tikzcd}
+    \]
+    es conmutativo.
+    La exactitud del primer renglón se verifica directamente, así que,
+    del lema de la serpiente, se sigue que $\epsilon$ es epi.
+\end{proof}
+\begin{lemma}[Lema de la herradura]
+Dada una sucesión exacta corta
+\[
+    0\to A'\xto i A\xto q A''\to 0
+\]
+y resoluciones proyectivas $(P'_{A'},\epsilon')$ de $A'$ y
+$(P''_{A''},\epsilon'')$ de $A''$,
+existe una resolución proyectiva $(P_A,\epsilon)$
+y morfismos de complejos tales que
+\[
+  \begin{tikzcd}
+    0 \ar[r]
+        & P'_{A'} \ar[r]\ar[d,"\epsilon'"]
+        & P_A \ar[r]\ar[d,"\epsilon"]
+        & P''_{A''} \ar[r]\ar[d,"\epsilon''"]
+    & 0 \\
+    0 \ar[r]
+        & A' \ar[r,"i"]
+        & A \ar[r,"q"]
+        & A'' \ar[r]
+    & 0
+  \end{tikzcd}
+\]
+es conmutativo y tiene renglones exactos.
+\end{lemma}
+\begin{proof}
+    Por hipótesis, tenemos el diagrama
+    \[
+      \begin{tikzcd}
+            & P'_0 \ar[d,"\epsilon'",two heads]
+            &
+            & P''_0 \ar[d,"\epsilon''",two heads] \\
+        0 \ar[r]
+            & A' \ar[r,"i"]
+            & A \ar[r,"q"]
+            & A'' \ar[r]
+        & 0.
+      \end{tikzcd}
+    \]
+    Poniendo $P_0=P'_0\oplus P''_0$ y aplicando el lema anterior, tenemos un epi
+    $\epsilon:P_0\to A$ tal que el siguiente diagrama conmuta y tiene renglones
+    exactos.
+    \[
+      \begin{tikzcd}
+        0 \ar[r]
+            & P'_0 \ar[d,"\epsilon'",two heads] \ar[r]
+            & P_0 \ar[d,"\epsilon",two heads] \ar[r]
+            & P''_0 \ar[d,"\epsilon''",two heads] \ar[r]
+            & 0 \\
+        0 \ar[r]
+            & A' \ar[r,"i"]
+            & A \ar[r,"q"]
+            & A'' \ar[r]
+        & 0.
+      \end{tikzcd}
+    \]
+    Además, $P_0=P'_0\oplus P''_0$ es proyectivo porque $P'_0$ y $P''_0$ lo son.
+    Del lema de la serpiente, tenemos una sucesión exacta corta
+    $0\to\ker\epsilon'\to\ker\epsilon\to\ker\epsilon''\to 0$.
+    Este es el caso $n=0$ de un argumento por inducción.
+    
+    Ahora hagamos inducción sobre $n\geq 0$.
+    Supongamos que tenemos la sucesión central
+    construida hasta el grado $n$ y que, definiendo
+    \begin{align*}
+        K'_n &=
+        \begin{cases}
+            \ker \epsilon' & n=0 \\
+            \ker d'_n & n\geq 1
+        \end{cases}
+        &
+        K_n &=
+        \begin{cases}
+            \ker \epsilon & n=0 \\
+            \ker d_n & n\geq 1
+        \end{cases}
+        &
+        K''_n &=
+        \begin{cases}
+            \ker \epsilon'' & n=0 \\
+            \ker d''_n & n\geq 1
+        \end{cases}
+    \end{align*}
+    tenemos una sucesión exacta $0\to K'_n\to K_n\to K''_n\to 0$.
+    Por exactitud, $d'_{n+1}$ y $d''_{n+1}$ se factorizan a través de sus
+    respectivas imágenes $K'_n$ y $K''_n$.
+    Así, obtenemos el diagrama con renglones exactos
+    \[
+      \begin{tikzcd}[column sep=5,row sep=40]
+        &&& P'_{n+1} \arrow[ld, two heads]
+        &&
+        && P''_{n+1} \arrow[ld, two heads]
+        \\
+        0 \arrow[rr]
+        && K'_n \arrow[rr] \arrow[rd, hook]
+        && K_n \arrow[rr] \arrow[rd, hook]
+        && K''_n \arrow[rr] \arrow[rd, hook]
+        && 0 \\
+        & 0 \arrow[rr]
+        && P'_n \arrow[rr]
+        && P_n \arrow[rr]
+        && P''_n \arrow[rr]
+        && 0.
+        \ar[from=1-4,to=3-4,crossing over,"d'_{n+1}",near start]
+        \ar[from=1-8,to=3-8,crossing over,"d''_{n+1}",near start]
+        \end{tikzcd}
+    \]
+    Poniendo $P_{n+1}=P'_{n+1}\oplus P''_{n+1}$ y aplicando el lema anterior,
+    obtenemos un epimorfismo $P_{n+1}\to\ker d_n$
+    que hace que el siguiente diagrama sea conmutativo
+    y que el primer renglón también sea exacto:
+    \[
+      \begin{tikzcd}[column sep=5,row sep=40]
+        & 0 \arrow[rr]
+        && P'_{n+1} \arrow[rr] \arrow[ld, two heads]
+        && P_{n+1} \arrow[rr] \arrow[ld, two heads,dotted]
+        && P''_{n+1} \arrow[rr] \arrow[ld, two heads]
+        && 0 \\
+        0 \arrow[rr]
+        && K'_n \arrow[rr] \arrow[rd, hook]
+        && K_n \arrow[rr] \arrow[rd, hook]
+        && K''_n \arrow[rr] \arrow[rd, hook]
+        && 0 \\
+        & 0 \arrow[rr]
+        && P'_n \arrow[rr]
+        && P_n \arrow[rr]
+        && P''_n \arrow[rr]
+        && 0.
+        \ar[from=1-4,to=3-4,crossing over,"d'_{n+1}",near start]
+        \ar[from=1-6,to=3-6,crossing over,dashed]
+        \ar[from=1-8,to=3-8,crossing over,"d''_{n+1}",near start]
+        \end{tikzcd}
+    \]
+    Definiendo $d_{n+1}$ como la flecha intermitente $P_{n+1}\to P_n$,
+    tenemos que $\Im(d_{n+1})=\Ker(d_n)$, así que la sucesión central
+    es exacta en grado $n$.
+    Ahora definamos
+    \begin{align*}
+        K'_{n+1}&=\ker d'_{n+1} = \ker(P'_{n+1}\repi K'_n) \\
+        K_{n+1}&=\ker d_{n+1} =  \ker(P_{n+1}\repi K_n) \\
+        K''_{n+1}&=\ker d''_{n+1} =  \ker(P''_{n+1}\repi K''_n).
+    \end{align*}
+    Aplicando el lema del 9 al diagrama
+    \[
+        \begin{tikzcd}
+            & 0 \ar[d] & 0 \ar[d] & 0 \ar[d] \\
+            0 \ar[r]
+            & K'_{n+1} \ar[r]\ar[d]
+            & K_{n+1} \ar[r]\ar[d]
+            & K''_{n+1} \ar[r]\ar[d]
+            & 0 \\
+            0 \ar[r]
+            & P'_{n+1} \ar[r]\ar[d]
+            & P_{n+1} \ar[r]\ar[d]
+            & P''_{n+1} \ar[r]\ar[d]
+            & 0 \\
+            0 \ar[r]
+            & K'_{n} \ar[r]\ar[d]
+            & K_{n} \ar[r]\ar[d]
+            & K''_{n} \ar[r]\ar[d]
+            & 0 \\
+            & 0 & 0 & 0,
+        \end{tikzcd}
+    \]
+    obtenemos la exactitud del primer renglón, lo cual conluye la inducción.
+\end{proof}
+
+\begin{remark}
+    En el teorema anterior, para cada $n\geq 0$,
+    la sucesión exacta
+    \[
+        0\to P'_n\to P_n\to P''_n\to 0
+    \]
+    se escinde como $P_n=P'_n\oplus P''_n$.
+    Esto puede parecer especial, pero en realidad no lo es, ya que cualquier
+    sucesión exacta $P\to P''\to 0$ con $P''$ proyectivo se escinde.
+\end{remark}
+
+\begin{corollary}
+    Si en una sucesión exacta corta de módulos
+    \[
+        0\to A'\to A\to A''\to 0
+    \]
+    tanto $A'$ como $A''$ son finitamente presentados,
+    entonces $A$ también lo es.
+\end{corollary}
+\begin{proof}
+    Por hipótesis, tenemos un diagrama con columnas exactas
+    \[
+      \begin{tikzcd}
+        & \vdots \ar[d] && \vdots \ar[d] \\
+        & 0 \ar[d]      && 0 \ar[d] \\
+        & R^n\ar[d]     && R^k\ar[d]
+        \\
+        & R^m\ar[d]     && R^l\ar[d]
+        \\
+        0 \ar[r]
+            & A' \ar[r] \ar[d]
+            & A \ar[r]
+            & A'' \ar[r] \ar[d] & 0 \\
+        & 0 && 0
+      \end{tikzcd}
+    \]
+    Por el lema de la herradura, tenemos un diagrama
+    con columnas y renglones exactos
+    \[
+      \begin{tikzcd}
+        & \vdots \ar[d]
+          & \vdots \ar[d]
+            & \vdots \ar[d] \\
+        0 \ar[r]
+        & 0 \ar[r] \ar[d]
+        & 0 \ar[r] \ar[d]
+        & 0 \ar[r] \ar[d]
+        & 0 \\
+        0 \ar[r]
+            & R^n \ar[r]\ar[d]
+            & R^{n+k} \ar[r]\ar[d]
+            & R^k \ar[r]\ar[d]
+        & 0 \\
+        0 \ar[r]
+            & R^m \ar[r]\ar[d]
+            & R^{m+l} \ar[r]\ar[d]
+            & R^l \ar[r]\ar[d]
+        & 0 \\
+        0 \ar[r]
+            & A' \ar[r] \ar[d]
+            & A \ar[r] \ar[d]
+            & A'' \ar[r] \ar[d]
+        & 0 \\
+        & 0 & 0 & 0
+      \end{tikzcd}
+    \]
+    lo cual muestra que $A$ es finitamente presentado, como se quería.
+\end{proof}
+
+\iffalse
+\begin{theorem}
+    Consideremos un diagrama conmutativo con renglones exactos
+    en una categoría abeliana $\cal A$ con suficientes proyectivos.
+    \[
+    \begin{tikzcd}
+        0 \ar[r]
+            & A' \ar[r]\ar[d]
+            & A \ar[r]\ar[d]
+            & A'' \ar[r]\ar[d]
+        & 0 \\
+        0 \ar[r]
+            & C' \ar[r]
+            & C \ar[r]
+            & C'' \ar[r]
+        & 0
+    \end{tikzcd}
+    \]
+    Entonces, para cualquier funtor aditivo $T:\cal A\to\cal C$,
+    tenemos un diagrama entre la sucesiones exactas largas de $L_nT$:
+    \[
+    \begin{tikzcd}[column sep=10]
+        \cdots \ar[r] &
+        L_{n+1}T(A'') \ar[r]\ar[d]
+            & L_nT(A') \ar[r]\ar[d]
+            & L_nT(A) \ar[r]\ar[d]
+            & L_nT(A'') \ar[r]\ar[d]
+        & L_{n-1}T(A')\ar[d]
+        \ar[r] & \cdots
+        \\
+        \cdots \ar[r] &
+        L_{n+1}T(C'') \ar[r]
+            & L_nT(C') \ar[r]
+            & L_nT(C) \ar[r]
+            & L_nT(C'') \ar[r]
+        & L_{n-1}T(C')
+        \ar[r] & \cdots
+    \end{tikzcd}
+    \]
+    En particular, si $\cal A=\Mod\ds R$ y $T=(-\otimes_RB)$,
+    tenemos un diagrama entre sucesiones exactas:
+    \[
+    \begin{tikzcd}[column sep=10]
+        \cdots \ar[r] &
+        \Tor_{n+1}^R(A'',B) \ar[r]\ar[d]
+            & \Tor_n^R(A',B) \ar[r]\ar[d]
+            & \Tor_n^R(A,B) \ar[r]\ar[d]
+            & \Tor_n^R(A'',B) \ar[r]\ar[d]
+        & \Tor_{n-1}^R(A',B)\ar[d]
+        \ar[r] & \cdots
+        \\
+        \cdots \ar[r] &
+        \Tor_{n+1}^R(A'',B) \ar[r]
+            & \Tor_n^R(C',B) \ar[r]
+            & \Tor_n^R(C,B) \ar[r]
+            & \Tor_n^R(C'',B) \ar[r]
+        & \Tor_{n-1}^R(C',B)
+        \ar[r] & \cdots
+    \end{tikzcd}
+    \]
+\end{theorem}
+\fi
+\begin{theorem}\label{naturalidad-sucesiones-Tor}
+    Dado un diagrama de $R$-módulos derechos con renglones exactos
+    \[
+    \begin{tikzcd}
+        0 \ar[r]
+            & A' \ar[r]\ar[d]
+            & A \ar[r]\ar[d]
+            & A'' \ar[r]\ar[d]
+        & 0 \\
+        0 \ar[r]
+            & C' \ar[r]
+            & C \ar[r]
+            & C'' \ar[r]
+        & 0,
+    \end{tikzcd}
+    \]
+    para cada $R$-módulo izquierdo $B$ hay un diagrama conmutativo
+    entre las sucesiones exactas:
+    \[
+    \begin{tikzcd}[column sep=10]
+        \cdots \ar[r] &
+        \Tor_{n+1}^R(A'',B) \ar[r]\ar[d]
+            & \Tor_n^R(A',B) \ar[r]\ar[d]
+            & \Tor_n^R(A,B) \ar[r]\ar[d]
+            & \Tor_n^R(A'',B) \ar[r]\ar[d]
+        & \Tor_{n-1}^R(A',B)\ar[d]
+        \ar[r] & \cdots
+        \\
+        \cdots \ar[r] &
+        \Tor_{n+1}^R(A'',B) \ar[r]
+            & \Tor_n^R(C',B) \ar[r]
+            & \Tor_n^R(C,B) \ar[r]
+            & \Tor_n^R(C'',B) \ar[r]
+        & \Tor_{n-1}^R(C',B)
+        \ar[r] & \cdots
+    \end{tikzcd}
+    \]
+\end{theorem}
+\begin{proof}
+    Tomemos resoluciones proyectivas $P_{A'}$ y $P_{A''}$.
+    Por el lema de la herradura, tenemos una sucesión exacta de resoluciones
+    \[
+    \begin{tikzcd}
+        0 \ar[r]
+            & P_{A'} \ar[r]
+            & P_A \ar[r]
+            & P_{A''} \ar[r]
+        & 0
+    \end{tikzcd}
+    \]
+    al aplicar $(-\otimes_RB)$, la sucesión 
+    \[
+    \begin{tikzcd}
+        0 \ar[r]
+            & TP_{A'} \ar[r]
+            & TP_A \ar[r]
+            & TP_{A''} \ar[r]
+        & 0
+    \end{tikzcd}
+    \]
+    sigue siendo exacta, pues cada renglón
+    \[
+        0\to P'_n\to P_n\to P''_n\to 0
+    \]
+    se escinde por la proyectividad de $P''_n$ y los funtores aditivos
+    mandan sucesiones exactas que se escinden en
+    sucesiones exactas que se escinden.
+    Dice Rotman que por el teorema \ref{naturalidad}, obtenemos el diagrama deseado.
+    pero yo (Alfredo) no entiendo cómo puede aplicar ese teorema.
+    \todo{help}.
+    
+    Me sale un teorema parecido tomando una resolución proyectiva de $B$,
+    pero eso es con el $\tor$ en vez del $\Tor$.
+    Para que me salga con el $\Tor$ también se puede uno tomar
+    una resolución de $B$, pero el diagrama tiene que ser
+    de módulos izquierdos y $B$ tiene que ser derecho.
+\end{proof}
+
+PENDIENTE: SESIÓN 7
+\todo{SES 7}
+
+\subsubsection{Axiomas para el Tor.}
+En esta secci\'on presentamos los axiomas que caracterizan la sucesi\'on de funtores $\Tor_n^R(-,M)$.
+\begin{theorem}[Axiomas para Tor] Sea $(T_n:\Mod\ds R\to\Z\ds\Mod)$ una familia de funtores covariantes aditivos. Si, \begin{enumerate}
+    \item para cada sucesi\'on exacta corta $\xymatrix{ 0\ar[r] & A\ar[r] & B \ar[r] & C \ar[r] & 0 }$ de $R$-m\'odulos derechos, existe una sucesi\'on exacta larga con homomorfismo de conexión natural 
+    $$
+    \xymatrix{\ar[r] & T_{n+1}(C) \ar[r]^{\Delta_{n+1}} & T_n(A)\ar[r] & T_n(B) \ar[r] & T_n(C) \ar[r]^{\Delta_n} & T_{n-1}(A)\ar[r] & },
+    $$
+    \item $T_0\cong -\otimes_R M$ para alg\'un $R$-m\'odulo $M$,
+    \item $T_n(P)=\{0\}$ para todo proyectivo $P$ y para toda $n\geq 1$, 
+\end{enumerate}
+entonces 
+    $$T_n\cong \Tor_n^R(-,M) \qquad \forall n\geq 0.$$
+    \label{PropTor}
+\end{theorem}
+\begin{proof}
+    Procedemos por inducci\'on, 
+    \begin{itemize}
+        \item $n=0$ se sigue por el axioma (ii). 
+        \item $n=1$, tenemos lo siguiente, sea $A\in\textup{m\'od}$-$R$, lo cubrimos con un proyectivo, 
+        $$
+        \xymatrix{0\ar[r] & K\ar[r] & P \ar[r] & A \ar[r] & 0}
+        $$
+        con $P$ proyectivo, y as\'i por el axioma (i), tenemos el siguiente diagrama con renglones exactos
+        $$
+        \begin{tikzcd}
+{} \arrow[r] & T_1(P) \arrow[r]          & T_1(A) \arrow[r, "\Delta_1"] \arrow[d, "\tau_1A", dashed] & T_0(K) \arrow[r] \arrow[d, "\tau_0K"] \arrow[d] & T_0(P) \arrow[d, "\tau_0P"] \\
+{} \arrow[r] & {\Tor_1^R(P,M)} \arrow[r] & {\Tor_1^R(A,M)} \arrow[r, "\delta_1"']                    & {\Tor_0^R(K,M)} \arrow[r]                       & {\Tor_0^R(P,M)}            
+\end{tikzcd}
+        $$
+        donde $\tau_0K$ y $\tau_0P$ son los isomorfismos naturales dados por el axioma (ii). Mientras que por el axioma (iii) tenemos 
+        $T_1(P)=\{0\}=\Tor_1^R(P,M)$, as\'i $\Delta_1$ y $\delta_1$ son inyectivos, por lo tanto $T_1(A)\cong \Tor_1^R(A,M)$, con isomorfismo $\tau_1A$, que hace conmutar el diagrama. 
+        \item Para $n\geq 1$. Tomemos el siguiente diagrama
+        $$
+        \begin{tikzcd}
+{} \arrow[r] & T_{n+1}(P) \arrow[r]          & T_{n+1}(A) \arrow[r, "\Delta_{n+1}"] \arrow[d, "\tau_nA", dashed] & T_n(K) \arrow[r] \arrow[d, "\tau_n K"] & T_n(P) \arrow[d] \\
+{} \arrow[r] & {\Tor_{n+1}^R(P,M)} \arrow[r] & {\Tor_{n+1}^R(A,M)} \arrow[r, "\delta_{n+1}"']                    & {\Tor_n^R(K,M)} \arrow[r]              & {\Tor_n^R(P,M)} 
+\end{tikzcd}
+        $$
+    \end{itemize}
+    Por hip\'otesis, 
+    $$T_n(K)\cong \Tor_1^R(K,M) \qquad \textup{y} \qquad T_n(P)\cong \Tor_1^R(P,M) $$
+    $$ T_{n+1}(P)=\{0\}=\Tor_{n+1}(P) \qquad \textup{y} \qquad T_{n}(P)=\{0\}=\Tor_{n}(P) $$
+    As\'i, 
+    $$T_{n+1}(A) \cong T_n(K) \qquad \textup{y} \qquad \Tor_n^R(A,M)\cong \Tor_n^R(K,M),$$
+    y definimos  
+    $$\tau_{n+1}A= \delta_{n+1}^{-1}\tau_nK\Delta_{n+1} $$
+    que es un isomorfismo natural.
+\end{proof}
+Este teorema puede ser generalizado como sigue: 
+\begin{corollary}
+    Sean $(T_n)_{n\geq 0}$, $(T_n')_{n\geq 0}$ sucesiones de funtores aditivos covariantes entre categorías abelianas $\mathcal{A}$ y $\mathcal{C}$, donde $\mathcal{A}$ tiene suficientes proyectivos. Si 
+    \begin{enumerate}
+        \item para cada sucesi\'on exacta corta $\xymatrix{ 0\ar[r] & A\ar[r] & B \ar[r] & C \ar[r] & 0 }$ en $\mathcal{A}$, existe una sucesión exacta larga con homomorfismos de conexión naturales,
+        \item $T_0\cong T_0'$,
+        \item $T_n(P)=\{0\}=T_n'(P)$ para todo $P$ proyectivo y toda $n\geq 1$, 
+    \end{enumerate}
+    entonces $T_n\cong T_n'$ para toda $n\geq 0$.
+\end{corollary}
+La demostraci\'on se sigue de manera similar al Teorema \ref{PropTor}. Notemos que en este Corolariom no asumimos que  $(T_n)_{n\geq 0}$ y $(T_n')_{n\geq 0}$ sean sucesiones de funtores derivados. 
+
+
+\subsubsection{\texorpdfstring{$\partial$}{d}-Funtores homológicos}
+\begin{definition}
+Si $\mathcal{A}$ y $\mathcal{C}$ son categorías abelianas entonces diremos que una sucesión de funtores aditivos covariantes $(T_n:\mathcal{A}\rightarrow\mathcal{C})_{n\geq 0}$ es un \textbf{$\partial$-funtor homol\'ogico} si para cada sucesi\'on exacta corta
+$$\xymatrix{ 0\ar[r] & A\ar[r] & B \ar[r] & C \ar[r] & 0 }$$ en $\mathcal{A}$
+se tiene una sucesión exacta larga
+$$
+\begin{tikzcd}
+{} \arrow[r] & T_n(A) \arrow[r]     & T_n(B) \arrow[r]     & T_n(C) \arrow[lld]   &    \\
+             & T_{n-1}(A) \arrow[r] & T_{n-1}(B) \arrow[r] & T_{n-1}(C) \arrow[r] & {}
+\end{tikzcd}
+$$
+y adem\'as termina en 
+$$\xymatrix{T_0(A)\ar[r] & T_0(B)\ar[r] & T_0(C)\ar[r] &} $$
+con morfismos de conexi\'on naturales
+$$\partial_n:T_n(C)\rightarrow T_{n-1}(A), $$
+es decir, si 
+$$\xymatrix{ 0\ar[r] & A'\ar[r] & B '\ar[r] & C' \ar[r] & 0 }$$
+entonces el siguiente diagrama conmuta
+$$
+\begin{tikzcd}
+T_n(C) \arrow[d] \arrow[r] & T_{n-1}(A) \arrow[d] \\
+T_n(C') \arrow[r]          & T_{n-1}(A')         
+\end{tikzcd}
+$$
+\end{definition}
+\begin{definition}
+Un \textbf{morfismo de $\partial$-funtores homol\'ogicos } es una familia 
+$$\tau:(T_n)_{n\geq 0}\rightarrow (H_n)_{n\geq 0} $$
+de transformaciones naturales
+$$\tau_n: T_n\rightarrow H_n $$
+tales que los siguientes cuadrados son s\'olidos
+$$
+\begin{tikzcd}
+T_n(C) \arrow[d," \tau_{n,C}"] \arrow[r, "\partial"] & T_{n-1}(A) \arrow[d," \tau_{n,A}"] \\
+H_n(C) \arrow[r,"\partial"]          & H_{n-1}(A)         
+\end{tikzcd}
+$$
+para cada sucesi\'on exacta corta $(\xymatrix{ 0\ar[r] & A\ar[r] & B \ar[r] & C \ar[r] & 0 })$ en $\mathcal{A}$.
+\end{definition}
+Finalmente, 
+\begin{definition}
+Si $F:\mathcal{A} \rightarrow\mathcal{B}$ es un funtor aditivo, un $\partial$-funtor homol\'ogico $(T_n:\mathcal{A}\rightarrow \mathcal{B})_{n\geq 0}$ es una \textbf{extensi\'on homol\'ogica} de $F$ si existe un isomorfismo natural 
+$$\tau_0:F\rightarrow T_0 $$
+\end{definition}
+A manera de ejemplo, el funtor $(\Tor_n(A,-))_{n\geq 0}$ es una extensi\'on homol\'ogica de $A\otimes_R -$.
+
+\begin{theorem}
+    Sea $\mathcal{A}$ una categoría abeliana con suficientes proyectivos. 
+    \begin{enumerate}
+        \item Si $(T_n)$ y $(H_n)$ son $\partial$-funtores homol\'ogicos $\mathcal{A}\rightarrow \mathbb{Z}$-m\'od con $H_n(P)=\{0\}$ para todo $P$ proyectivo para toda $n\geq 1$, y si $\tau_0:T_0\rightarrow H_0$ es una transformaci\'on natural, entonces existe un \'unico morfismo $\tau:(T_n)\rightarrow (H_n)$. 
+    
+    M\'as a\'un, si $\tau_0$ es un isomorfismo natural, entonces $\tau_n$ es un isomorfismo natural para toda $n\geq 0$.
+     \item Si $F: \mathcal{A}\rightarrow \mathbb{Z}$-m\'od  es un funtor exacto izquiero aditivo covariante entonces existe una extensi\'on homol\'ogica  $(H_n)_{n\geq 0}$ de $F$ con $H_n(P)=\{P\}$ para todo $P$ proyectivo y toda $n\geq 1$. 
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \begin{enumerate}
+        \item Si $$\xymatrix{ 0\ar[r] & A\ar[r] & B \ar[r] & C \ar[r] & 0 } $$ es exacta, construimos $\tau_n:T_n\rightarrow H_n$ por inducci\'on en $n\geq 0$. 
+        \begin{itemize}
+            \item Para $n=0$, se asume por hip\'otesis.
+            \item Para $n\geq 1$ supones que hemos construido 
+            $$\tau_{n-1}:T_{n-1}\rightarrow H_{n-1}. $$
+            Como hay suficientes proyectivos, entonces para $C$ tenemos la siguiente sucesi\'on exacta corta
+             $$\begin{tikzcd}
+            &             &             & 0 \arrow[d]           &   \\
+            &             &             & K \arrow[d]           &   \\
+            &             &             & K \arrow[d]           &   \\
+0 \arrow[r] & A \arrow[r] & B \arrow[r] & C \arrow[r] \arrow[d] & 0 \\
+            &             &             & 0                     &  
+\end{tikzcd} $$
+             con $P$ proyectivo. Ahora, obtenemos el siguiente diagrama conmutativo
+             $$
+             \begin{tikzcd}
+                 & T_{n}(C) \arrow[r, "\partial"] \arrow[d, dotted] & T_{n-1}(K) \arrow[r] \arrow[d, "{\tau_{n,K}}"] & T_{n-1}(P) \arrow[d, "{\tau_{n,P}}"] \\
+H_n(P) \arrow[r] & H_n(C) \arrow[r, "\rho"']                        & H_{n-1}(K) \arrow[r]                           & H_{n-1}(P)                          
+\end{tikzcd}
+             $$
+             como 
+             $$H_n(P)=\{0\}=H_{n-1}(P) \qquad \forall n\geq 1 $$
+             entonces 
+             $\rho$ es un isomorfismo y podemos definir la composici\'on 
+             $$\tau_{n,C}:T_n(C)\rightarrow H_n(C) $$
+             como $$\tau_{n,C}= \rho^{-1}\tau_{n-1,K}\partial.$$
+             Afirmamos que 
+             $$(\tau_{n,C}):T_n(C)\rightarrow H_n(C))_{C\in\mathcal{A}} $$ es natural y est\'a bien definida. Para ello notemos lo siguiente: dado el siguiente diagrama
+             $$ 
+             \begin{tikzcd}
+            &              &             & C \arrow[d, "f"] &   \\
+0 \arrow[r] & A' \arrow[r] & A \arrow[r] & A'' \arrow[r]    & 0
+\end{tikzcd}
+             $$ donde el rengl\'on es exacto, existe un diagrama conmutativo $$
+             \begin{tikzcd}
+T_n(C) \arrow[r, "T_nf"] \arrow[d, "{\tau_{n,C}}"'] & T_n(A'') \arrow[r, "\partial"]  & T_{n-1}(A') \arrow[d, "{\tau_{n-1,A}}"] \\
+H_n(C) \arrow[r, "H_nf"']                           & H_n(A'') \arrow[r, "\partial"'] & H_{n-1}(A')                            
+\end{tikzcd}
+             $$
+             Si nos tomamos una cubierta proyectiva para $C$, tenemos el siguiente diagrama conmutativo
+             $$
+             \begin{tikzcd}
+0 \arrow[r] & K \arrow[r] \arrow[d, "g"'] & P \arrow[r] \arrow[d] & C \arrow[r] \arrow[d, "f"] & 0 \\
+0 \arrow[r] & A' \arrow[r]                & A \arrow[r]           & A'' \arrow[r]              & 0
+\end{tikzcd}
+             $$
+             con $P$ proyectivo. Considere el siguiente diagrama 
+             $$
+             \begin{tikzcd}
+T_n(C) \arrow[rrr, "\partial"] \arrow[ddd, "T_nf"'] \arrow[rd, "{\tau_{n,C}}"] &                                                 &                                  & T_{n-1}(K) \arrow[ddd, "{T_{n-1,K}}"] \arrow[ld, "{\tau_{n-1,K}}"] \\
+                                                                               & H_n(C) \arrow[r, "\partial"] \arrow[d, "H_nf"'] & H_{n-1}(K) \arrow[d, "H_{n-1}g"] &                                                                    \\
+                                                                               & H_n(A'') \arrow[r, "\partial"']                 & H_{n-1}(A')                      &                                                                    \\
+T_n(A'') \arrow[rrr, "\partial"']                                              &                                                 &                                  & T_{n-1}(A') \arrow[lu, "{\tau_{n-1,A}}"]                          
+\end{tikzcd}
+             $$
+             notemos que los trapecios de arriba y el lado derecho conmutan por naturalidad de $\tau_n$ y $\tau_{n-1}$, as\'i como el cuadrado del centro conmuta ya que $(H_n)$ es un $\partial$-funtor homol\'ogico. El rect\'angulo restante conmuta por el diagrama anterior. Se sigue que el cuadrado completo conmuta. 
+             
+             Con esto tenemos la familia $(\tau_n):(T_n)\rightarrow (H_n)$ para toda $n\geq 0$. 
+             
+             Para ver que es natural, tomemos $X_1,X_2\in\mathcal{A}$ y tomemos  la siguiente sucesi\'on exacta
+             $$
+             \begin{tikzcd}
+0 \arrow[r] & K_i \arrow[r] & P_i \arrow[r] & X_i \arrow[r] & 0
+\end{tikzcd}
+             $$
+            para cada $i=1,2$ y $P_i$ proyectivo. Sea $f:X_1\rightarrow X_2$, definamos
+            $$\tau_{n,X_i}:T_n(X_i)\rightarrow H_n(X_i),$$
+            para ello tomemos 
+            $$
+            \begin{tikzcd}
+            &               &               & X_1 \arrow[d, "f"] &   \\
+0 \arrow[r] & K_2 \arrow[r] & P_2 \arrow[r] & X_2 \arrow[r]      & 0
+\end{tikzcd}
+            $$
+             coomo antes, as\'i por lo ya visto, tenemos el siguiente diagrama conmutativo
+             $$ \begin{tikzcd}
+T_n(X_1) \arrow[r, "T_nf"] \arrow[d, "{\tau_{n,X_1}}"'] & T_n(X_2) \arrow[r, "\partial"] \arrow[d, "{\tau_{n,X_2}}"] & T_{n-1}(X_2) \arrow[d, "{\tau_{n-1,K_2}}"] \\
+H_{n}(X_1) \arrow[r, "H_nf"']                           & H_{n}(X_2) \arrow[r, "\partial"']                          & H_{n-1}(K_2)                              
+\end{tikzcd}$$
+             lo que nos da la naturalidad. 
+             
+             Ahora, veamos que no dependen de la resoluci\'on proyectiva. Tomemos $X_1=X_2$ y $f=id_{X_1}$, as\'i tenemos 
+             $$ 
+             \begin{tikzcd}
+0 \arrow[r] & K_1' \arrow[r] \arrow[d] & P_1' \arrow[r] \arrow[d] & X_1 \arrow[r] \arrow[d, "id_{X_1}"] & 0 \\
+0 \arrow[r] & K_1 \arrow[r]            & P_1 \arrow[r]            & X_1 \arrow[r]                       & 0
+\end{tikzcd}
+             $$
+             y hacemos lo mismo para 
+             $$
+             \begin{tikzcd}
+            &             &             & C \arrow[d, "id_C"] &   \\
+0 \arrow[r] & A \arrow[r] & B \arrow[r] & C \arrow[r]         & 0
+\end{tikzcd}
+             $$
+        \end{itemize}
+          \item Se sigue de Proposici\'on \ref{sucesionexactalarga}, del teorema \ref{naturalidad-sucesiones-Tor} y CITAR SESION 7.
+    \end{enumerate}
+\end{proof}
+
+\section{Funtores derivados derechos (covariantes)}
+Como se ha visto anteriormente, los funtores derivados izquierdos satisfacen que si $T$ es exacto derecho, entonces $L_0T$ es naturalmente isomorfo a $T$. Es por esta raz\'on que es natural tomar los funtores derivados izquierdos. 
+En esta secci\'on definimos los \textit{funtores derivados derechos} $R^nT$, donde $T:\mathcal{A}\rightarrow \mathcal{C}$ es un funtor covariante aditivo entre categor\'ias abelianas. De esta manera, tenemos el an\'alogo al Corolario REFERENCIA SESION 7, que dice que $R^0\cong T$ cuando $T$ es exacto. Esta construcci\'on es propia para los funtores $Hom$. 
+Sea $T:\mathcal{A}\rightarrow \mathcal{C}$ un funtor covariante aditivo. Derivamos a $T$ por la derecha, para eso fijamos $B\in\mathcal{A}$ con suficientes inyectivos y tomamos la resolución inyectiva 
+$$
+E = \xymatrix{0\ar[r] & B \ar[r]^{\eta} &E^0\ar[r]^{d^0} & E^1 \ar[r]^{d^1} & E^2 \ar[r]^{d^2} & E^3 \ar[r] & }
+$$
+y le aplicamos $T$ para obtener el complejo $TE^B$, donde $E^B$ es la resoluci\'on inyectiva omitida y tomamos la homolog\'ia: 
+$$(R^nT)B=H^{n}(TE^B)=\frac{\Ker Td^n}{\Im Td^{n-1}} .$$
+donde $E^n=E_{-n}$ y $d^n=d_{-n}$, de esta manera, lo anterior puede escribirse como
+$$(R^nT)B=H_{-n}(TE^B)=\frac{\Ker Td_{-n}}{\Im Td_{-n+1}} .$$
+Usando el dual al lema de Comparación, si $f:B\rightarrow B'$ es un homomorfismo, entonces existe un único morfismo, salvo homotopía, $\tilde{f}:E^B\rightarrow E'^B$ sobre $f$, y as\'i en homolog\'ia tenemos
+$$(T \tilde{f})_{n*}= (R^nT)f:H^n(TE^B)\rightarrow H^n(TE'^{B} ) $$
+
+\begin{theorem}
+    Si $\mathcal{A}$ y $ \mathcal{C}$  son categorías abelianas con $\mathcal{A}$ con suficientes inyectivos. Si $T:\mathcal{A}\rightarrow \mathcal{C}$ es un funtor aditivo covariante, entonces 
+    $$R^nT:\mathcal{A} \rightarrow \mathcal{C} $$ también son aditivos para toda $n\in \mathbb{Z}$.
+\end{theorem}
+La demostración de este y los siguientes resultados son esencialmente duales a  las demostraciones en los funtores derivados izquierdos. Por tanto, serán omitidas. 
+
+\begin{definition}
+A los funtores $(R^nT)_{n\in\mathbb{Z}}$ construidos se les llama \textbf{funtores derivados derechos} de $T$.  
+\end{definition}
+
+De manera similar a los funtores derivados izquierdos, para los derechos tenemos:
+\begin{itemize}
+    \item Si $T$ preserva multiplicación, entonces $R^nT$ también.
+    \item  $(R^nT)B=0$ para toda $n$ negativa y para toda $B\in\mathcal{A}$.
+\end{itemize}
+\begin{definition}
+Si $T=\Hom_R(A,-)$ entonces definimos $\Ext_r^n(A,-)=R^nT$. Si la resolución proyectiva de $B$ es 
+$$
+E=\xymatrix{0\ar[r] & B \ar[r]^{\eta} &E^0\ar[r]^{d^0} & E^1 \ar[r]^{d^1} & E^2 \ar[r]^{d^2} & E^3 \ar[r] & },
+$$
+entonces 
+\begin{eqnarray*}
+\Ext_R^n(A,B) & = & H^n(\Hom_R(A,E^B))\\
+& = & \frac{\Ker d^n_*}{\Im d_*^{n-1}},
+\end{eqnarray*}
+donde $d_*^n:\Hom_R(A,E^n) \rightarrow \Hom_R(A,E^{n+1})$ se define como $d_*^n:f\mapsto d^nf$.
+\end{definition}
+
+\begin{corollary}
+    Sea $T:\mathcal{A}\rightarrow \mathcal{C}$ un funtor aditivo covariante, si $E$ es inyectivo, entonces 
+    $$(R^nT)E=\{0\} \qquad \forall n\geq 1.$$
+    En particular, si $E\in$ mód-$R$ es inyectivo, 
+    $$\Ext_R^n(A,E)=\{0\}\qquad  \forall n\geq 1, \forall A\in R-\textup{mód} $$
+\end{corollary}
+
+\begin{corollary}
+    Sea $\mathcal{A}$ una categoría abeliana con suficientes inyectivos, sea $B\in \mathcal{A}$ y $\mathbf{E}$ una resolución inyectiva para $B$ 
+    $$
+    \mathbf{E} = \xymatrix{0\ar[r] & B\ar[r]^{\eta} & E^0 \ar[r]^{d^0} & E^1\ar[r]^{d^1} & E^2 \ar[r]^{d^2} & E^3 \ar[r] &  }
+    $$
+    Definimos,  
+    $$V_0=\Im \eta \qquad \textup{y}\qquad V_n=\Im d^{n-1}  $$
+    para toda $n\geq 1$. Entonces, 
+    $$(R^{n+1}T)B \cong (R^nT)V_0 \cong (R^{n-1}T)V_1\cong \cdots \cong (R^1T)V_{n-1}.$$
+    En particular, 
+    $$\Ext_R^{n+1}(A,B)\cong\Ext_R^{n}(A,V_0)\cong \cdots \Ext_R^1(A,V_{n-1}). $$
+\end{corollary}
+
+\begin{theorem}
+    Si  
+    $$\xymatrix{0 \ar[r] & B' \ar[r]^{i} & B \ar[r]^{p} & B'' \ar[r] & 0 } $$
+    es una sucesión exacta en una categoría abeliana $\mathcal{A}$ con suficientes inyectivos y $T:\mathcal{A}\rightarrow \mathcal{C}$ un funtor covariante aditivo, con $\mathcal{C}$ abeliana, entonces existe una sucesión exacta larga
+    $$ 
+    \begin{tikzcd}
+{} \arrow[r] & (R^nT)B' \arrow[r, "(R^nT)i"]          & (R^nT)B \arrow[r, "(R^nT)p"]          & (R^nT)B'' \arrow[lld, "\partial_n"'] &    \\
+             & (R^{n+1}T)B' \arrow[r, "(R^{n+1}T)i"'] & (R^{n+1}T)B \arrow[r, "(R^{n+1}T)p"'] & (R^{n+1}T)B'' \arrow[r]              & {}
+\end{tikzcd}
+    $$
+    que empieza en 
+    $$
+    \begin{tikzcd}
+0 \arrow[r] & (R^0T)B' \arrow[r, "(R^0T)i"] & (R^0T)B \arrow[r, "(R^0T)p"] & (R^0T)B'' \arrow[r] & {}
+\end{tikzcd}.
+    $$
+\end{theorem}
+
+\begin{corollary}
+    Si  $T:\mathcal{A}\rightarrow \mathcal{C}$ es un funtor covariante aditivo donde $\mathcal{A}$ tiene suficientes inyectivos, entonces el funtor $R^0T$ es exacto izquierdo.
+\end{corollary}
+
+\begin{theorem}\label{teorema:ext0-hom}
+    \begin{enumerate}
+        \item Si un funtor covariante aditivo  $T:\mathcal{A}\rightarrow \mathcal{C}$ es exacto izquierdo, donde $\mathcal{A}$ y $\mathcal{C}$ son categorías abelianas con $\mathcal{A}$ con suficientes inyectivos, entonces $T\cong R^0T$.
+        \item Si $A\in R$-mód, entonces el funtor $\Hom_R(A,-)\cong \Ext_R^0(A,-)$. Así, para todo $B\in R$-mód , existe un isomorfismo 
+        $$\Hom_R(A,B)\cong \Ext_R^0(A,B).$$    
+        \end{enumerate}
+\end{theorem}
+
+\begin{theorem}
+  Supongamos que $\cal A$ es una categoría abeliana con
+  suficientes inyectivos. Si
+  \[
+    0\to B'\to B\to B''\to 0
+  \]
+  es una sucesión exacta en $\cal A$ y $T:\cal A\to\cal C$ es un
+  funtor aditivo, entonces hay una sucesión exacta larga
+  
+  \[
+    \begin{tikzcd}
+    0 \ar[r]&
+    R^0T(B') \ar[r]
+    & R^0T(B) \ar[r]
+    & R^0T(B'') \ar[dll]
+    \\
+    & R^1T(B') \ar[r] &\cdots
+    \\
+    &&\cdots \ar[r]
+    &R^{n-1}T(B'')\ar[dll]
+    \\
+    &R^{n}T(B') \ar[r]
+    & R^{n}T(B) \ar[r]
+    & R^{n}T(B'')  \ar[dll]
+    \\
+    &R^{n+1}T(B') \ar[r]
+    & R^{n+1}T(B) \ar[r]
+    & R^{n+1}T(B'') \ar[dll]
+    \\
+    &R^{n+2}T(B') \ar[r]
+    & \cdots
+    \end{tikzcd}
+  \]
+\end{theorem}
+
+\begin{corollary}
+  Si $T:\cal A\to\cal C$ es un funtor aditivo entre categorías
+  abelianas y $\cal A$ tiene suficientes inyectivos, entonces
+  $R^0T:\cal A\to\cal C$ es exacto izquierdo.
+\end{corollary}
+
+\begin{theorem}
+  Sean $\cal A,\cal C$ categorías abelianas y supongamos que
+  $\cal A$ tiene suficientes inyectivos.
+  Si $T:\cal A\to \cal C$ es exacto izquierdo, entonces
+  \[
+    T\simeq R^0T
+  .\]
+  En particular, si $A$ es un $R$-módulo, entonces
+  \[
+    \Hom(A,-)\simeq\Ext^0_R(A,-)
+  .\]
+\end{theorem}
+
+\begin{corollary}
+  Si $A$ es un $R$-módulo y
+  \[
+    0\to B'\to B\to B''\to 0
+  \]
+  es una sucesión exacta corta de $R$-módulos, entonces hay una
+  sucesión exacta
+  \[
+    \begin{tikzcd}
+    0 \ar[r]&
+    \Hom(A,B') \ar[r]
+    & \Hom(A,B) \ar[r]
+    & \Hom(A,B'') \ar[dll]
+    \\
+    & \Ext^1(A,B') \ar[r] &\cdots
+    \\
+    &&\cdots \ar[r]
+    &\Ext^{n-1}(A,B'')\ar[dll]
+    \\
+    &\Ext^{n}(A,B') \ar[r]
+    & \Ext^{n}(A,B) \ar[r]
+    & \Ext^{n}(A,B'')  \ar[dll]
+    \\
+    &\Ext^{n+1}(A,B') \ar[r]
+    & \Ext^{n+1}(A,B) \ar[r]
+    & \Ext^{n+1}(A,B'') \ar[dll]
+    \\
+    &\Ext^{n+2}(A,B') \ar[r]
+    & \cdots
+    \end{tikzcd}
+  \]
+\end{corollary}
+
+\begin{theorem}[Axiomas para el Ext covariante]
+  Sea $(F_n:R\ds\Mod\to\Z\ds\Mod)_{n\geq 0}$ una sucesión de
+  funtores aditivos covariantes. Si
+  \begin{enumerate}[label=(\roman*)]
+    \item
+    para toda sucesión exacta corta de $R$-módulos
+    \[
+      0\to B'\to B\to B''\to 0
+    \]
+    existe una sucesión exacta larga
+    \[
+      \begin{tikzcd}
+      0 \ar[r]&
+      F^0(B') \ar[r]
+      & F^0(B) \ar[r]
+      & F^0(B'') \ar[dll]
+      \\
+      & F^1T(B') \ar[r] &\cdots
+      \\
+      &&\cdots \ar[r]
+      &F^{n-1}(B'')\ar[dll]
+      \\
+      &F^{n}(B') \ar[r]
+      & F^{n}(B) \ar[r]
+      & F^{n}(B'')  \ar[dll]
+      \\
+      &F^{n+1}(B') \ar[r]
+      & F^{n+1}(B) \ar[r]
+      & F^{n+1}(B'') \ar[dll]
+      \\
+      &F^{n+2}(B') \ar[r]
+      & \cdots
+      \end{tikzcd}
+    \]
+      
+    \item
+    existe un $R$-módulo $M$ con
+    \[
+      F^0 \simeq \Hom(M,-)
+    \]
+    y
+    
+    \item
+    \[
+      F^n(E)=0
+    \]
+    para todo $R$-módulo inyectivo $E$
+    y para cualquier $n\geq 1$
+  \end{enumerate}
+  entonces
+  \[
+    F^n = \Ext^n(M,-)
+  \]
+  para todo $n\geq 0$.
+\end{theorem}
+
+\begin{corollary}
+  Si
+  $(F^n)_{n\geq 0}$ y $(F'{}^n)_{n\geq 0}$ son sucesiones de funtores
+  que cumplen las condiciones (i) y (iii) de arriba y
+  $F^0\simeq F'{}^0$, entonces $F^n\simeq F{}^n$
+  para todo $n\geq 0$.
+\end{corollary}
+
+\begin{definition}
+  Sean $\cal A$ y $\cal B$ categorías abelianas donde $\cal A$
+  tiene suficientes inyectivos.
+  Decimos que una sucesión $(T^n:\cal A\to\cal B)_{n\geq 0}$ de
+  funtores aditivos es un $\partial$-funtor cohomológico si
+  para toda sucesión exacta en $\cal A$
+  \[
+    0\to A\to B\to C\to 0
+  \]
+  existe una sucesión exacta larga
+  \[
+    \begin{tikzcd}
+    0 \ar[r]&
+    T^0(A) \ar[r]
+    & T^0(B) \ar[r]
+    & T^0(C) \ar[dll]
+    \\
+    & T^1T(A) \ar[r] &\cdots
+    \\
+    &&\cdots \ar[r]
+    &T^{n-1}(C)\ar[dll]
+    \\
+    &T^{n}(A) \ar[r]
+    & T^{n}(B) \ar[r]
+    & T^{n}(C)  \ar[dll]
+    \\
+    &T^{n+1}(A) \ar[r]
+    & T^{n+1}(B) \ar[r]
+    & T^{n+1}(C) \ar[dll]
+    \\
+    &T^{n+2}(A) \ar[r]
+    & \cdots
+    \end{tikzcd}
+  \]
+  con morfismos de conexión $\partial_n:T^n(C)\to T^{n+1}(A)$
+  naturales en la sucesión. Es decir, dado un diagrama con
+  renglones exactos
+  \[
+    \begin{tikzcd}
+      0 \ar[r]
+      & A \ar[r]\ar[d] & B \ar[r]\ar[d] & C \ar[r]\ar[d] & 0 \\
+      0 \ar[r] & A' \ar[r] & B' \ar[r] & C' \ar[r] & 0
+    \end{tikzcd}
+  \]
+  el diagrama
+  \[
+    \begin{tikzcd}
+      T^n(C) \ar[r,"\partial_n"] \ar[d] & T^{n+1}(A) \ar[d] \\
+      T^n(C') \ar[r,"\partial_n"'] & T^{n+1}(A')
+    \end{tikzcd}
+  \]
+  es conmutativo.
+\end{definition}
+
+\begin{definition}
+  Si $(T^n)_{n\geq 0}$ y $(F^n)_{n\geq 0}$ son
+  $\partial$-funtores cohomológicos, un morfismo de
+  $\partial$-funtores cohomológicos
+  \[
+    \tau:(T^n)_{n\geq 0} \to (F^n)_{n\geq 0}
+  \]
+  es una sucesión de transformaciones naturales
+  \[
+    (\tau^n:T^n\to F^n)_{n\geq 0}
+  \]
+  tales que, para toda sucesión exacta
+  \[
+    0\to A\to B\to C\to 0
+  \]
+  los diagramas
+  \[
+    \begin{tikzcd}
+      T^n(C) \ar[r,"\partial_n"] \ar[d,"\tau_C"']
+        & T^{n+1}(A) \ar[d,"\tau_A"] \\
+      F^n(C) \ar[r,"\partial_n"'] & F^{n+1}(A)
+    \end{tikzcd}
+  \]
+  sean conmutativos para todo $n\geq 0$.
+\end{definition}
+Dadas dos categorías abelianas $\cal A,\cal B$, si $\cal A$ tiene
+suficientes inyectivos, los $\partial$-funtores cohomológicos,
+junto con sus morfismos, forman una categoría.
+
+\begin{definition}
+  Una extensión cohomológica de un funtor $F:\cal A\to\cal B$ es
+  un $\partial$-funtor cohomológico $(T^n:\cal A\to\cal B)_{n\geq
+  0}$ junto con un isomorfismo natural
+  \[
+    F \xto\simeq T^0
+  .\]
+\end{definition}
+\begin{example}
+  La sucesión $(\Ext^n(A,-):R\ds\Mod\to Z\ds\Mod)_{n\geq 0}$ es
+  un $\partial$-funtor cohomológico equipado con un isomorfismo
+  natural
+  \[
+    \Hom(A,-)\xto\simeq\Ext^0(A,-)
+  .\]
+  Así, $(\Ext^n(A,-))_{n\geq 0}$ es una extensión cohomológica de
+  $\Hom(A,-)$.
+\end{example}
+
+\begin{theorem}
+  Sean $\cal A$ y $\cal B$ son categorías abelianas, donde $\cal A$
+  tiene suficientes inyectivos.
+  Si $(T^n:\cal A\to\cal B)_{n\geq 0}$,
+  $(F^n:\cal A\to\cal B)_{n\geq 0}$ son $\partial$-funtores
+  cohomológicos tales que
+  \[
+    T^nE=0=F^nE
+  \]
+  para todo inyectivo $E\in\cal A$, entonces cada transformación
+  natural
+  \[
+    \tau^0:T^0\to F^0
+  \]
+  induce un morfismo de $\partial$-funtores homológicos
+  \[
+    \tau:(T^n)_{n\geq 0}\to (F^n)_{n\geq 0}
+  .\]
+  Más aún, si $\tau^0$ es un isomorfismo, entonces $\tau$ también
+  lo es.
+\end{theorem}
+\begin{theorem}
+  Si $F:\cal A\to\cal B$ es un funtor aditivo exacto izquierdo,
+  donde $\cal A$ tiene suficientes inyectivos,
+  entonces existe una única extension cohomológica
+  $(F^n:\cal A\to\cal B)_{n\geq 0}$ de $F$ tal que
+  \[
+    F^nE=0
+  \]
+  para todo inyectivo $E\in\cal A$ y toda $n\geq 1$.
+\end{theorem}
+
+PENDIENTE SESIÓN 10
+\todo{SES 10}
+
+\chapter{Los funtores Tor y Ext}
+
+\section{Propiedades del Tor}
+
+\subsubsection{Resoluciones planas y Tor}
+\begin{theorem}
+    Los funtores $\Tor_n^R(A,-)$ y $\Tor_n^R(-,B)$ pueden calcularse usando resoluciones planas de cualquiera de las variables; más precisamente, para toda resolución plana $F_A$ y $G_B$ de $A$ y $B$ respectivamente, y para toda $n\geq 0$,
+    $$H_n(F_A\otimes_R B)\cong \Tor_n^R(A,B)\cong H_n(A\otimes_R G_B) .$$
+\end{theorem}
+\begin{proof}
+    Sea $F_A\rightarrow A$ una resolución libre para $A$ y $P_B\rightarrow B$ una resolución plana entonces basta probar que 
+    \begin{eqnarray*}
+    H_n(F_A\otimes_R B) & \cong & \Tor_n^R(A,B)\\
+    & \cong & Tor_n{R^{op}}(B,A)\\
+    & \cong & H_n(P_B \otimes A)
+    \end{eqnarray*}
+Entonces, procedemos por inducción sobre $n\geq 0$, tomemos  
+$$ 
+\xymatrix{ \ar[r] & F_2\ar[r]^{d_2} & F_1\ar[r]^{d_1} & F_0 \ar[r] & 0  }
+$$
+una resolución plana de $A$ que al tensorizar por $B$ resulta 
+$$ 
+\xymatrix{ \ar[r] & F_2\otimes B\ar[r]^{d_2\otimes id_B } & F_1\otimes B\ar[r]^{d_1\otimes id_B} & F_0 \otimes B\ar[r] & 0  }
+$$
+de donde 
+\begin{eqnarray*}
+    H_n(F_A\otimes B) & = & F_0/ \Im(d_1 \otimes id_B)\\
+    & = & \Coker(d_1 \otimes id_B)\\
+    & \cong & F_0\otimes B / \Ker(d_0\otimes id_B)\\
+    & \cong & A\otimes B
+    \end{eqnarray*}
+Para $n=1$, tomemos 
+$$ 
+\xymatrix{ \ar[r] & F_2\ar[r]^{d_2} & F_1\ar[r]^{d_1} & F_0 \ar[r] & 0  }
+$$
+como antes,  así, podemos factorizar de la siguiente manera, 
+$$\begin{tikzcd}
+F_2 \arrow[rr, "d_2"] &  & F_1 \arrow[rr, "d_1"] \arrow[rd] &                         & F_0 \\
+                      &  &                                  & F_1/\ker d_1 \arrow[ru] &    
+\end{tikzcd}$$
+y aplicando el producto tensorial tenemos
+$$\begin{tikzcd}
+F_2\otimes B \arrow[rr, "d_2 \otimes id_B"] &  & F_1 \otimes B\arrow[rr, "d_1\otimes id_B"] \arrow[rd] &                         & F_0\otimes B \\
+                      &  &                                  & F_1/\ker d_1 \otimes B \arrow[ru, "i\otimes id_B "] &    
+\end{tikzcd}$$
+Notemos que, 
+$$\Im(d_1\otimes id)=\Im(i\otimes id) $$
+de hecho, 
+$$\frac{F_1}{\Ker d_1}\otimes B \cong \Im d_1\otimes id $$
+ahora, $d_1\otimes id$ es suprayectivo por lo que tenemos el siguiente diagrama
+$$
+\begin{tikzcd}
+F_2\otimes B \arrow[r, "d_1\otimes id_B"] & F_1\otimes B \arrow[r, "d_2\otimes id_B"] \arrow[d, "\alpha"] & F_0\otimes B \\
+                                          & F_1\otimes B/ \Im(d_1\otimes id_B)) \arrow[d, "\beta"]        &              \\
+                                          & F_1\otimes B / \ker(d_1\otimes id_B)                          &             
+\end{tikzcd}
+$$
+ya que $\Im(d_1\otimes id)\subseteq \Ker(d_1\otimes id)$, $\beta$ es sobreyectivo y así 
+$$ 
+\begin{tikzcd}
+F_1\otimes B / \ker(d_1\otimes id_B)) \arrow[r, "\gamma"] & F_0\otimes B
+\end{tikzcd}
+$$
+tal que $\gamma$ es isomorfa en su imagen; en particular, es inyectiva y definimos $\eta=\gamma\beta$. 
+De esta manera podemos observar que 
+$$\ker\eta=\frac{\ker(d_1\otimes id)}{\Im(d_2\otimes id)}=H_1(F_A\otimes_R B) $$
+y 
+$\Im \eta =\Im \gamma$, pero $d_1\otimes id=\gamma\beta\alpha$, entonces
+$$\Im{d_1\otimes id}=\Im \gamma$$
+ya que $\alpha$ y $\beta$ son sobreyectivos. Por lo tanto, 
+$$H_1(F_A\otimes B)\cong \Im\gamma = \Im{d_1\otimes id}=\Im{i\otimes id}. $$
+Ahora consideremos,
+$$
+\begin{tikzcd}
+{Tor_1^R(F_0,B)} \arrow[r] & {Tor_1^R(A,B)} \arrow[r] & Y\otimes B \arrow[r] & F_0\otimes B
+\end{tikzcd}
+$$
+como $F$ es plano, entonces 
+$$Tor_1^R(F_0,B) =\{0\}, $$
+sustituyendo en la sucesión anterior tenemos, 
+$$
+\begin{tikzcd}
+{0} \arrow[r] & {Tor_1^R(A,B)} \arrow[r] & Y\otimes B \arrow[r] & F_0\otimes B
+\end{tikzcd}
+$$
+como la sucesión es exacta, entonces
+\begin{eqnarray*}
+\Tor_1^R(A,B) & \cong & \Ker(i\otimes id) \\
+& \cong & H_1(F_A\otimes B)\\
+& \cong & \Ker(\frac{F_1\otimes B}{\Im{d_1\otimes id}}\rightarrow F_0\otimes B)\\
+& \cong & H_1(F_A \otimes B)
+\end{eqnarray*}
+y de aquí llegamos a que 
+$$\Tor_1^R(A,B) \cong H_1(F_A\otimes B).$$
+Para $n\geq 1$, tomemos
+$$
+\begin{tikzcd}
+{Tor_{n+1}^R(F_0,B)} \arrow[r] & {Tor_{n+1}^R(A,B)} \arrow[r] & {\Tor_{n+1}(Y,B)} \arrow[r] & {Tor_0(F_0,B)} \arrow[r] & {}
+\end{tikzcd}
+$$
+Por hipótesis de inducción, tenemos 
+\begin{eqnarray*}
+\Tor_n^R(F_0,B) & = & 0, \\
+\Tor_{n+1}^R(F_0,B)& = & 0,
+\end{eqnarray*}
+por lo tanto, 
+$$\Tor_{n+1}(A,B) \cong \Tor_{n+1}(Y,B).$$
+Si tomamos una resolución plana $F'$ para $Y$, entonces por hipótesis $H_n(F'\otimes B)\cong \Tor_n(Y,B)$, pero $H_n(F'\otimes B)=H_{n+1}(F_A\otimes B)$.
+\end{proof}
+
+\subsubsection{Sumas directas y Tor}
+
+\begin{proposition}
+Si $(B_k)_{k\in K}$ es una familia de $R$-módulos, entonces existe un isomorfismo natural 
+$$\Tor_n^R(A, \oplus_{k\in K} B_k)\cong \oplus_{k\in K}\Tor_n^R (A,B_k) \qquad \forall n\geq 0.$$
+\end{proposition}
+\begin{proof}
+    Para $n=0$ sabemos que $\Tor_0^R(A,-)\cong A\otimes_R -$. 
+    Ahora para el paso inductivo, para cada $i$ tenemos 
+    $$ 
+    \xymatrix{0\ar[r] & N_i \ar[r] & P_i \ar[r] & B_i \ar[r] & 0}
+    $$
+    con $\{B_i\}_{i\in \mathbb{N}}\subseteq R$-mód. Es decir, tenemos proyectivos que cubren a cada $B_i$. Además, tenemos la siguiente sucesión exacta 
+     $$ 
+    \xymatrix{0\ar[r] &  \oplus_i N_i \ar[r] & \oplus_iP_i \ar[r] & \oplus_iB_i \ar[r] & 0}
+    $$
+    y dado que la suma de proyectivos es proyectiva, entonces
+     $$ 
+    \xymatrix{\Tor_1(A,\oplus_iP_i) \ar[r] &  \Tor_1(A,\oplus_iB_i) \ar[r] & A\otimes \oplus_iN_i \ar[r] &A \otimes \oplus_iP_i}
+    $$
+    Por otro lado, tomemos,
+    $$ 
+    \xymatrix{\oplus_i \Tor_1(A,P_i) \ar[r] &  \oplus_i\Tor_1(A,B_i) \ar[r] &\oplus_i( A\otimes N_i) \ar[r] & \oplus_i(A \otimes P_i)}
+    $$
+    de donde podemos notar que
+    \begin{eqnarray*}
+     A\otimes \oplus_iN_i & \cong & \oplus_i( A\otimes N_i) \\
+      A\otimes \oplus_iP_i & \cong & \oplus_i( A\otimes P_i)
+    \end{eqnarray*}
+    Sin embargo,  $\Tor_1(A,\oplus_i P_i)=0$ por ser $\oplus P_i$ proyectivo, de la misma manera $\oplus\Tor_1(A,P_i)=0 $. 
+    Por lo tanto, del lema del 5to tenemos, 
+    $$\Tor_1(A,\oplus B_i)\cong \oplus \Tor_1(A,B_i). $$
+\end{proof}
+\begin{example}
+Ahora tomemos $B\in \mathbb{Z}$-mód, $n\in\mathbb{Z}$ y 
+$$
+\xymatrix{0\ar[r]& \mathbb{Z} \ar[r]^{\mu_n} & \mathbb{Z} \ar[r] & \mathbb{Z}/n\mathbb{Z} \ar[r] & 0 }
+$$
+donde $\mu_n$ es multiplicar por $n$. Aplicando el producto tensorial por $B$, tenemos
+$$
+\xymatrix{0\ar[r]& \mathbb{Z}\otimes B \ar[r]^{\mu_n\otimes id_B} & \mathbb{Z}\otimes B \ar[r] & \mathbb{Z}/n\mathbb{Z}\otimes B \ar[r] & 0 }
+$$
+del cual resulta la siguiente sucesión,
+$$
+\xymatrix{0\ar[r]& \Tor_1(\mathbb{Z},B) \ar[r] & \Tor_1(\mathbb{Z}/n\mathbb{Z},B) \ar[r] & \mathbb{Z}\otimes B \ar[r]^{\mu_n\otimes id_B} & \mathbb{Z}\otimes B}
+$$
+así $\Tor_1(\mathbb{Z},B)=0$ y dado que son grupos abelianos $\mathbb{Z}\otimes B=B$, por lo tanto $\mu_n\otimes id_B=id_B$.
+
+Definimos 
+$$B[n]=\{b\in B: nb=0 \}, $$
+así de lo anterior resulta la siguiente sucesión 
+$$ 
+\xymatrix{0\ar[r]& B[n] \ar[r] & B \ar[r] & B}
+$$
+y 
+$$ 
+\xymatrix{0\ar[r] & \Tor_1(\mathbb{Z}/n \Z), B \ar[r] & \Z \otimes B \ar[r] & \Z \otimes B}
+$$
+por lo tanto, 
+$$B[n]\cong \Tor_1(\Z / n\Z , B) $$.
+\end{example}
+Ahora, si $A$ y $B$ son $\Z$-módulos finitamente generados, entonces 
+\begin{eqnarray*}
+A & \cong & C_i \\
+B & \cong & C_j'
+\end{eqnarray*}
+para algunos $C_i$ y $C_j'$. Por lo tanto, 
+\begin{eqnarray*}
+\tor_1(A,B) & \cong & \Tor(\oplus_i C_i,\oplus_j C_j') \\
+& \cong & \oplus_{i,j} \Tor_1(C_i,C_j')
+\end{eqnarray*}
+ya que $C_i$ y $C_j'$ son cíclicos, entonces son cícilos finitos y aplicando el ejemplo anterior, tenemos $\Tor_1(\Z/ n\Z, \Z/m\Z)$ para alguna componente, de esta manera ,
+\begin{eqnarray*}
+\Tor_1(\Z/ n\Z, \Z/m\Z) & = & \{x\in \Z / m\Z: nx=0\} \\
+& = & \{\overline{x}\in \Z / n\Z: nx\in m\Z\}\\
+& = & [n:m\Z] \\
+& = & \Z / m \Z[d] 
+\end{eqnarray*}
+donde $d=mcd(m,n)$.
+
+\subsubsection{Límites dirigidos y Tor}
+
+Tomemos un $R$-módulo derecho $A$.
+Si $(B_i,\phi_j^i)$ es un sistema dirigido de $R$-módulos izquierdos,
+entonces los morfismos $B_i\to\colim_iB_i$ inducen morfismos
+$A\otimes B_i\to A\otimes\colim_iB_i$.
+Así, tenemos un único morfismo
+\[
+  A\otimes_R\colim_iB_i \to \colim_i(A\otimes_RB_i)
+\]
+que hace conmutar el diagrama
+\[
+  \begin{tikzcd}
+    A\otimes B_i \ar[dr] \ar[dd] \\
+    & A\otimes\colim_iB_i \ar[dl] \\
+     \colim_iA\otimes B_i
+  \end{tikzcd}
+\]
+para todo $i$ (dado en los generadores como
+$a\otimes [b]\mapsto [a\otimes b]$).
+Este morfismo es, de hecho, un isomorfismo.
+Expresamos esto diciendo que el funtor $A\otimes_R-$ preserva
+colímites dirigidos.
+Ahora probaremos que sus funtores derivados $\Tor_n^R(A,-)$ tienen la
+misma propiedad.
+\begin{theorem}
+  Sean $A$ un $R$-módulo derecho y $(I,\leq)$ un conjunto dirigido.
+  Entonces las transformaciones naturales
+  \[
+    t_n:\Tor_n(A,\colim-)\to\colim\Tor_n(A,-)
+  \]
+  entre los funtores $(\Mod_R)^{(I,\leq)}\to\Mod_\Z$ son, de hecho,
+  isomorfismos naturales.
+  Los componentes de estas transformaciones naturales están dadas,
+  para cualquier sistema dirigido $(B_i,\phi_j^i)$
+  de $R$-módulos izquierdos, como el único morfismo
+  \[
+    \Tor_{n}^{R}(A,\colim_iB_i) \to \colim_i\Tor_{n}^{R}(A,B_i)
+  \]
+  que hace conmutar el diagrama
+  \[
+    \begin{tikzcd}
+      \Tor_{n}^{R}(A,B_i) \ar[dr] \ar[dd] \\
+      & \Tor_{n}^{R}(A,\colim_iB_i) \ar[dl] \\
+       \colim_i\Tor_{n}^{R}(A,B_i).
+    \end{tikzcd}
+  \]
+\end{theorem}
+\begin{proof}
+  Procederemos por inducción sobre $n\geq 0$.
+  El caso base $n=0$ es el del producto tensorial,
+  el cual se trató antes de enunciar el teorema.
+
+  Ahora tomemos $n\geq 1$ y supongamos que
+  \[
+    t_{n-1}:\Tor_{n-1}^{R}(A,\colim-)\to\colim\Tor_{n-1}^{R}(A,-)
+  \]
+  es un isomorfismo.
+
+  Para cualquier sistema dirigido $(B_i,\phi_i^i)$, 
+  consideremos un nuevo sistema dirigido $(P_i,\psi_{i}^{j})$,
+  donde $P_i$ son los módulos libres
+  $P_i=R^{(B_i)}$ para cada $i\in I$, mientras que los
+  $\psi_{i}^{j}:P_i\to P_j$ son los morfismos inducidos por las
+  funciones $\phi_{i}^{j}:B_i\to B_j$. Así, siempre que
+  $i\leq j\leq k$, tenemos $\phi_i^j\phi_k^i=\phi_i^k$,
+  por lo cual $\psi_i^j\psi_k^j=\psi_i^k$.
+  Además, para cada $i$ tenemos un morfismo suprayectivo
+  natural $P_i\to B_i$, lo cual nos da un morfismo de sistemas
+  dirigidos $(P_i)\to(B_i)$. Los núcleos $K_i=\ker(P_i\to
+  B_i)$ forman otro sistema dirigido con un morfismo a $(P_i)$ de tal
+  modo que obtenemos una sucesión exacta de sistemas dirigidos
+  indicados por $I$:
+  \[
+    0\to(K_i)\to(P_i)\to(B_i)\to 0
+  .\]
+  Dado que el funtor $\colim$ es exacto, obtenemos una
+  sucesión exacta
+  \[
+    0\to\colim_iK_i\to\colim_iP_i\to\colim_iB_i\to 0
+  .\]
+  Aplicando $A\otimes_R-$, obtenemos una sucesión exacta larga
+  \[
+    \begin{tikzcd}
+    &\cdots \ar[r]
+    & \Tor_3(A,\colim_iB_i) \ar[dll]
+    \\
+    \Tor_2(A,\colim_iK_i) \ar[r]
+    & \Tor_2(A,\colim_iP_i) \ar[r]
+    & \Tor_2(A,\colim_iB_i) \ar[dll]
+    \\
+    \Tor_1(A,\colim_iK_i) \ar[r]
+    & \Tor_1(A,\colim_iP_i) \ar[r]
+    & \Tor_1(A,\colim_iB_i) \ar[dll]
+    \\
+    A\otimes\colim_iK_i \ar[r]
+    & A\otimes\colim_iP_i \ar[r]
+    & A\otimes\colim_iB_i \ar[r]
+    & 0.
+    \end{tikzcd}
+  \]
+  Por otro lado, al aplicar $A\otimes-$ a cada sucesión
+  \[
+    0\to K_i\to P_i\to B_i\to 0
+  \]
+  obtenemos una sucesión exacta larga
+  \[
+    \begin{tikzcd}
+    &\cdots \ar[r]
+    & \Tor_3(A,B_i) \ar[dll]
+    \\
+    \Tor_2(A,K_i) \ar[r]
+    & \Tor_2(A,P_i) \ar[r]
+    & \Tor_2(A,B_i) \ar[dll]
+    \\
+    \Tor_1(A,K_i) \ar[r]
+    & \Tor_1(A,P_i) \ar[r]
+    & \Tor_1(A,B_i) \ar[dll]
+    \\
+    A\otimes K_i \ar[r]
+    & A\otimes P_i \ar[r]
+    & A\otimes B_i \ar[r]
+    & 0
+    \end{tikzcd}
+  \]
+  y, por la funtorialidad de $\Tor_n(A,-)$, obtenemos
+  morfismos que convierten a estas sucesiones exactas largas en
+  una sucesión exacta larga de sistemas dirigidos indicados por
+  $I$. De nuevo por la exactitud de $\colim$, tenemos 
+  \[
+    \begin{tikzcd}
+    &\cdots \ar[r]
+    & \colim_i\Tor_3(A,B_i) \ar[dll]
+    \\
+    \colim_i\Tor_2(A,K_i) \ar[r]
+    & \colim_i\Tor_2(A,P_i) \ar[r]
+    & \colim_i\Tor_2(A,B_i) \ar[dll]
+    \\
+    \colim_i\Tor_1(A,K_i) \ar[r]
+    & \colim_i\Tor_1(A,P_i) \ar[r]
+    & \colim_i\Tor_1(A,B_i) \ar[dll]
+    \\
+    \colim_i A\otimes K_i \ar[r]
+    & \colim_i A\otimes P_i \ar[r]
+    & \colim_i A\otimes B_i \ar[r]
+    & 0.
+    \end{tikzcd}
+  \]
+  En este punto es donde entran los morfismos
+  $\Tor_{n}^{R}(A,\colim_iB_i)\to\colim_i\Tor_{n}^{R}(A,B_i)$
+  que aparecen en el enunciado del teorema.
+  Éstos nos dan un morfismo entre estas dos sucesiones exactas
+  \[
+    \begin{tikzcd}[column sep=10]
+      \dots \ar[r]
+      & \Tor_1(A,\colim_iP_i) \ar[r] \ar[d,"t_{1,P}"]
+      & \Tor_1(A,\colim_iB_i) \ar[r] \ar[d,"t_{1,B}"]
+      &A\otimes\colim_iK_i \ar[r] \ar[d,"\simeq"]
+      & A\otimes\colim_iP_i \ar[r] \ar[d,"\simeq"]
+      & A\otimes\colim_iB_i \ar[r] \ar[d,"\simeq"]
+      & 0
+      \\
+      \dots \ar[r]
+      & \colim_i\Tor_1(A,P_i) \ar[r]
+      & \colim_i\Tor_1(A,B_i) \ar[r]
+      & \colim_i A\otimes K_i \ar[r]
+      & \colim_i A\otimes P_i \ar[r]
+      & \colim_i A\otimes B_i \ar[r]
+      & 0.
+    \end{tikzcd}
+  \]
+  Dado que cada $P_i$ es plano (porque es libre) entonces
+  $\colim_iP_i$ es plano (porque el límite dirigido de módulos
+  planos es plano). Así, tenemos
+  \[
+    \forall n\geq 1,\hspace{5mm} \Tor_n(-,\colim_iP_i) = \colim_i\Tor_n(-,P_i) = 0
+  .\]
+  Además, por hipótesis, $t_{n,K},t_{n,P}$ son
+  isomorfismos. Luego, la exactitud del diagrama
+  \[
+    \begin{tikzcd}[column sep=10]
+      \dots \ar[r]
+      & \cancelto{0}{\Tor_{n}(A,\colim_iP_i)} \ar[r] \ar[d,"t_{n,P}"]
+      & \Tor_{n}(A,\colim_iB_i) \ar[r] \ar[d,"t_{n,B}"]
+      & \Tor_{n-1}(A,\colim_iK_i) \ar[r] \ar[d,"t_{n-1,K}","\simeq"']
+      & \Tor_{n-1}(A,\colim_iP_i) \ar[d,"t_{n-1,K}","\simeq"']
+      \\
+      \dots \ar[r]
+      & \cancelto{0}{\colim_i\Tor_{n}(A,P_i)} \ar[r]
+      & \colim_i\Tor_{n}(A,B_i) \ar[r]
+      & \colim_i\Tor_{n-1}(A,K_i) \ar[r]
+      & \colim_i\Tor_{n-1}(A,P_i).
+    \end{tikzcd}
+  \]
+  implica que
+  $t_{n,B}:\Tor_1(A,\colim_iB_i)\to\colim_i\Tor_1(A,B_i)$
+  es un isomorfismo. Como el sistema dirigido $(B_i,\phi_{i}^{j})$ era
+  arbitrario, tenemos que
+  \[
+    t_n:\Tor_{1}^{R}(A,\colim-)\to\colim\Tor_{n}^{R}(A,-)
+  \]
+  es un isomorfismo. Esto concluye el paso de inducción.
+\end{proof}
+
+\section{El teorema de Chase}
+
+Ahora queremos demostrar el teorema de Chase, que relaciona
+algunas propiedades de un anillo $R$ con propiedades de
+su categoría de módulos.
+
+Antes, necesitamos dos lemas.
+
+Sean $M$ un $R$-módulo derecho y $(L_i\mid i\in X)$ una familia
+de $R$-módulos izquierdos.
+Notemos que, para cada $i\in X$, la función
+$M\times\prod_i L_i\to M\otimes L_i$ dada por $(m,l)\mapsto
+m\otimes l_i$ es bilineal, por lo cual induce un morfismo de
+$\Z$-módulos $\phi_i:M\otimes\prod_iL_i\to M\otimes L_i$
+dado en $x\otimes l$ como $\phi(x\otimes l)=x\otimes l_i$.
+Por la propiedad universal del producto, los $\phi_i$ inducen un morfismo
+$\phi:M\otimes\prod_iL_i\to\prod_i(M\otimes L_i)$
+dado en los generadores como $\phi(x\otimes l)=(x\otimes l_i \mid i\in X)$.
+Notemos que $\phi$ es un iso en el caso $M=R^n$,
+pues tenemos un diagrama conmutativo
+\[
+  \begin{tikzcd}
+    R^n\otimes\prod_iL_i\ar[r,"\phi"] \ar[d,"\simeq"']
+      &\prod_i(R^n\otimes L_i) \ar[d,"\simeq"] \\
+    \left(\prod_iL_i\right)^n \ar[r,"\simeq"] & \prod_iL_i^n
+  \end{tikzcd}
+\]
+en el cual la flecha inferior está dada por
+$(q_1,\dots,q_n)\mapsto((q_{1i},\dots,q_{ni})\mid i\in X)$,
+donde $q_{ji}$ son los componentes de $q_j$; es decir:
+$q_j=(q_{ji}\mid i\in X)\in\prod_iL_i$ para $j=1,\dots,n$.
+
+Sin embargo, esto no siempre ocurre.
+Los dos lemas siguientes relacionan propiedades de finitud
+de $M$ con propiedades de $\phi$.
+
+\begin{lemma}
+Para un $R$-módulo derecho $M$ son equivalentes
+  \begin{enumerate}
+    \item
+    $M$ es finitamente generado.
+    \item
+    Para toda familia $(L_i\mid i\in X)$ de $R$-módulos izquierdos,
+    el morfismo
+    \[
+        \phi:M\otimes\prod_iL_i\to\prod_i(M\otimes L_i)
+    \]
+    es suprayectivo.
+    \item
+    Para todo conjunto $X$, el morfismo
+    \[
+        M\otimes R^X\to M^X
+    \]
+    es suprayectivo.
+  \end{enumerate}
+\end{lemma}
+\begin{proof}
+\begin{itemize}
+  \item 1$\implies$2.
+  Por hipótesis, tenemos una sucesión exacta $R^m\to M\to 0$.
+  Luego, obtenemos un cuadrado
+  \[
+    \begin{tikzcd}
+      R^n\otimes\prod_iL_i\ar[r,"\simeq"] \ar[d]
+        &\prod_i(R^n\otimes L_i) \ar[d] \\
+      M\otimes\prod_iL_i \ar[r,"\phi"] \ar[d]
+      & \prod_i(M\otimes L_i) \ar[d] \\
+      0 & 0
+    \end{tikzcd}
+  \]
+  donde las columnas son exactas porque el producto tensorial
+  y el producto directo son exactos derechos.
+  Como la flecha superior es iso,
+  concluimos que la flecha inferior también es epi.
+  
+  \item
+  2$\implies$3. Tómese $L_i=R$ para todo $i\in X$.
+  
+  \item 
+  3$\implies$1.
+  Tómese $X=M$, el conjunto subyacente de $M$.
+  Por hipótesis, el morfismo de $\Z$-módulos
+  \[
+    \psi:M\otimes R^M \to M^M
+  \]
+  dado en los generadores como $\psi(m\otimes t)=(mt_m \mid m\in M)$,
+  es suprayectivo, así que para el elemento $u=(m \mid m\in M)\in M^M$
+  existe una suma finita
+  $\sum_{i=1}^n m_i\otimes t_i\in M\otimes R^M$
+  tal que $\psi(\sum_{i=1}^n m_i\otimes t_i)=u$.
+  Esto es,
+  \[
+    \left(\sum_{i=1}^n m_it_{im}\mid m\in M\right)
+    = (m \mid m\in M)
+  ,\]
+  de modo que, para cada $m\in M$, tenemos
+  \[
+    m = \sum_{i=1}^n m_it_{im}
+  .\]
+  Luego, los $m_1,\dots,m_n\in M$ generan a $M$.
+\end{itemize}
+\end{proof}
+
+\begin{lemma}
+Para un $R$-módulo derecho $M$ son equivalentes
+  \begin{enumerate}
+    \item
+    $M$ es finitamente presentado.
+    \item
+    Para toda familia $(L_i\mid i\in X)$ de $R$-módulos izquierdos,
+    el morfismo
+    \[
+        \phi:M\otimes\prod_iL_i\to\prod_i(M\otimes L_i)
+    \]
+    es un iso.
+    \item
+    Para todo conjunto $X$, el morfismo
+    \[
+        M\otimes R^X\to M^X
+    \]
+    es un iso.
+  \end{enumerate}
+\end{lemma}
+\begin{proof}
+  \begin{itemize}
+    \item
+    1$\implies$2.
+    Por hipótesis, $M$ es finitamente presentado,
+    así que tenemos una sucesión exacta
+    \[
+      R^n\to R^m\to M\to 0
+    .\]
+    Como el producto tensorial y el producto directo son exactos,
+    el diagrama
+    \[
+    \begin{tikzcd}
+      R^n\otimes\prod_iL_i\ar[r,"\simeq"] \ar[d]
+        &\prod_i(R^n\otimes L_i) \ar[d] \\
+      R^m\otimes\prod_iL_i\ar[r,"\simeq"] \ar[d]
+        &\prod_i(R^m\otimes L_i) \ar[d] \\
+      M\otimes\prod_iL_i \ar[r,"\phi"] \ar[d]
+      & \prod_i(M\otimes L_i) \ar[d] \\
+      0 & 0
+    \end{tikzcd}
+    \]
+    tiene columnas exactas. Como los dos morfismos superiores son
+    isos, $\phi$ también lo es.
+    
+    \item
+    2$\implies$3.
+    Tómese $L_i=R$ para todo $i\in X$.
+    
+    \item
+    3$\implies$1.
+    Por el lema anterior, la hipótesis implica que
+    $M$ es finitamente generado, así que
+    tenemos una sucesión exacta
+    \[
+      0\to K\to R^m\to M\to 0
+    .\]
+    Veamos que $K$ es finitamente generado,
+    para lo cual usaremos el lema anterior.
+    Sea $X$ un conjunto.
+    Como el producto directo es exacto
+    y el producto tensorial es exacto derecho, el diagrama
+    \[
+    \begin{tikzcd}
+      & 0 \ar[d] \\
+      K\otimes R^X \ar[r] \ar[d]
+        & K^X \ar[d] \\
+      R^m\otimes R^X\ar[r,"\simeq"] \ar[d]
+        &(R^m)^X \ar[d] \\
+      M\otimes R^X \ar[r,"\simeq"] \ar[d]
+      & M^X \ar[d] \\
+      0 & 0
+    \end{tikzcd}
+    \]
+    tiene columnas exactas. Además, el renglón inferior es iso
+    por hipótesis y el renglón de en medio es iso por la observación
+    antes del lema anterior.
+    Cazando un elemento $a\in K^X$, se muestra que
+    $K\otimes R^X\to K^X$ es suprayectiva.
+    Como $X$ es arbitrario, se sigue que $K$ es finitamente generado.
+    Así, $M$ es finitamente presentado.
+  \end{itemize}
+\end{proof}
+
+Finalmente, antes de probar el teorema que queremos, haremos una
+definición más.
+
+\begin{definition}[Módulos coherentes]
+  Un módulo es coherente si es finitamente presentado y todos sus
+  módulos finitamente generados son finitamente presentados.
+\end{definition}
+
+Ahora sí, el teorema que queremos es el siguiente.
+
+\begin{theorem}[Chase]
+  Sea $R$ un anillo. Son equivalentes:
+  \begin{enumerate}[label=(\alph*)]
+    \item Todo producto directo de módulos planos es plano.
+    \item $R^I$ es plano para cualquier conjunto $I$.
+    \item Todo módulo derecho finitamente presentado es
+    coherente.
+    \item Para todo $a\in R$, el anulador derecho
+    $\Ann(a)\in\Lambda(R_R)$ es finitamente generado y la
+    intersección de ideales derechos finitamente generados de $R$
+    es un ideal derecho finitamente generado.
+    \item $R_R$ es coherente.
+  \end{enumerate}
+\end{theorem}
+\begin{proof}
+  \begin{itemize}
+    \item
+    (a)$\implies$(b). Es inmediato, pues $R$ es plano.
+
+    \item
+    (b)$\implies$(c). Supongamos que $M_R$ es finitamente
+    presentado. Mostraremos que $M$ es coherente. Para esto,
+    tomemos un submódulo $L\leq M$ finitamente generado.
+    Para cualquier conjunto $I$, consideremos los lados del
+    cuadrado conmutativo el diagrama
+    \[
+      \begin{tikzcd}
+        L\otimes R^I \ar[r]\ar[d] & M\otimes R^I \ar[d] \\
+        L^I \ar[r] & M^I.
+      \end{tikzcd}
+    \]
+    Como $L$ es finitamente generado, y $M$ es finitamente
+    presentado, el lado izquierdo del cuadrado es epi y el lado
+    derecho es iso, por los lemas anteriores.
+    Por hipótesis, $R^I$ es plano, así que la flecha superior es
+    mono.
+    Se sigue que $L\otimes R^I\to L^I\to M^I$ es un monomorfismo,
+    pues es composición de dos monomorfismos.
+    Luego, $L\otimes R^I\to L^I$ es mono, así que es iso.
+    Como $I$ es un conjunto arbitrario, se sigue que $L$ es
+    finitamente presentado.
+    
+    \item
+    (c)$\implies$(d). Sea $a\in R$.
+    Notemos que el anulador derecho $\Ann(a)$ es el núcleo del
+    morfismo $R\to aR$. Es decir, tenemos la sucesión exacta
+    \[
+      0\to\Ann(a)\to R\to aR\to 0
+    .\]
+    Como $aR$ es un submódulo finitamente generado de $R_R$,
+    la hipótesis (c) nos dice que es finitamente presentado.
+    Por lo tanto, existe una sucesión exacta
+    $R^n\to R^m\to aR\to 0$.
+    Como $R^m$ es libre, también es proyectivo, así que obtenemos
+    una flecha $R^m\to R$ que hace conmutar el cuadrado derecho
+    del siguiente diagrama.
+    \[
+      \begin{tikzcd}
+        & R^n \ar[r]\ar[d,dotted]
+          & R^m \ar[r]\ar[d]
+          & aR \ar[r]\ar[d,"\id"]
+          & 0 \\
+        0 \ar[r]
+          & \Ann(a) \ar[r]
+          & R \ar[r]
+          & aR \ar[r]
+          & 0
+      \end{tikzcd}
+    .\]
+    Esto produce la flecha punteada $R^n\to R$ que hace conmutar
+    el cuadrado de la izquierda.
+    Por el lema de la serpiente tenemos una sucesión exacta
+    \[
+      0\to\Coker(R^n\to\Ann(a))\to\Coker(R^m\to R)\to 0
+    ,\]
+    así que $\Coker(R^n\to\Ann(a))\simeq\Coker(R^m\to R)$.
+    En particular, $\Coker(R^m\to\Ann(a))$ es finitamente generado,
+    pues es un cociente de $R^m$. Luego, $\Ann(a)$ es finitamente
+    generado, pues tenemos la sucesión exacta
+    \[
+      0\to\Im(R^n\to\Ann(a))\to\Ann(a)\to\Coker(R^n\to\Ann(a))\to 0
+    .\]
+    Ahora sean $I,J\leq R$ dos ideales derechos finitamente
+    generados.
+    Notemos que $I\cap J$ es el núcleo del morfismo $R\to
+    R/I\oplus R/J$, así que tenemos la sucesión exacta
+    \[
+      0\to I\cap J\to R\xto\beta \frac{R}{I}\oplus \frac{R}{J}
+    .\]
+    Como la suma directa es exacta y $R/I$, $R/J$ son finitamente
+    presentados, se sigue que $R/I\oplus R/J$ es finitamente
+    presentado, así que es coherente, por la hipótesis (c).
+    Luego, la imagen $\Im\beta$, siendo un submódulo finitamente
+    generado de $R/I\oplus R/J$ (pues es cociente de $R$), es un
+    módulo finitamente presentado.
+    Así, tenemos una sucesión exacta
+    \[
+      0\to I\cap J \to R \xto{\beta'}\Im\beta\to 0
+    ,\]
+    donde $\beta'$ es la (co)restricción de $\beta$ a su imagen.
+    Haciendo el mismo argumento que con la sucesión
+    $0\to\Ann(a)\to R\to aR\to 0$, concluimos que $I\cap J$ es
+    finitamente generado.
+    
+    \item
+    (d)$\implies$(e).
+    La sucesión $0\to R\to R\to 0$ muestra que $R$ es finitamente
+    presentado.
+    Ahora sea $I\leq R$ un ideal derecho finitamente generado,
+    digamos $I=a_1R+a_2R+\dots+a_nR$.
+    Por inducción sobre $n$, veremos que $I$ es finitamente
+    presentado. Para $n=1$, tenemos la sucesión exacta
+    \[
+      0\to\Ann(a_1)\to R\to a_1R\to 0
+    \]
+    con $\Ann(a_1)$ finitamente generado por hipótesis (d), lo
+    cual muetra que $a_1R=I$ es finitamente presentado.
+    
+    Ahora supongamos que $I_1=a_1R+a_2R+\dots+a_{n-1}R$ es
+    finitamente presentado. Si $I_2=a_nR$, mostremos que
+    $I=I_1+I_2$ es finitamente presentado.
+    Consideremos la sucesión exacta
+    \[
+      0\to I_1\cap I_2\to I_1\oplus I_2\to I\to 0
+    \]
+    donde $I_1\oplus I_2$ es finitamente presentado porque $I_1$
+    e $I_2$ lo son, mientras que $I_1\cap I_2$ es finitamente
+    generado por la hipótesis (d).
+    Luego, tenemos un diagrama con renglones y columas exactas
+    \[
+      \begin{tikzcd}
+        && R^n\ar[d] \\
+          & R^k \ar[d] \ar[r,dotted]
+          & R^m \ar[d] \\
+        0 \ar[r]
+          & I_1\cap I_2\ar[r] \ar[d]
+          & I_1\oplus I_2 \ar[r] \ar[d]
+          & I \ar[r]
+          & 0, \\
+        & 0 & 0
+      \end{tikzcd}
+    \]
+    donde la existencia del morfismo punteado $R^k\to R^m$ que
+    hace conmutar el diagrama se debe a la proyectividad de
+    $R^k$.
+    Notemos que el morfismo compuesto $R^m\to I$ es epi, pues es
+    composición de epis.
+    Además, si $x\in R^m$ tiene imagen $0$ en $I$, entonces está
+    en el núcleo de $I_1\otimes I_2\to I$, por lo cual tiene un
+    levantamiento en $I_1\cap I_2$ y así tiene un levantamiento
+    en $R^k$. 
+    Esto muestra que la sucesión
+    \[
+      R^k\to R^m\to I\to 0
+    \]
+    es exacta y, por lo tanto, es una presentación finita de $I$.
+
+    \item
+    (e)$\implies$(a).
+    Supongamos que $(L_i\mid i\in S)$ es una familia de
+    $R$-módulos izquierdos planos.
+    Sea $I\leq R$ es un ideal derecho finitamente generado.
+    Como cada $L_i$ es plano, cada funtor $-\otimes L_i$ preserva
+    monomorfismos. Así, de la sucesión exacta $0\to I\to R$
+    obtenemos la exactitud de
+    \[
+      0\to I\otimes L_i\to L_i
+    \]
+    para cada $i\in S$.
+    Luego, por la exactitud del producto directo, la sucesión
+    \[
+      0\to\prod_i(I\otimes L_i)\to\prod_iL_i
+    \]
+    es exacta.
+    Ahora, por la hipótesis (e), $I$ es finitamente presentado,
+    así que el morfismo
+    \[
+      I\otimes\prod_iL_i\to \prod_i(I\otimes L_i)
+    \]
+    es un iso.
+    Como el cuadrado del diagrama
+    \[
+      \begin{tikzcd}
+        0 \ar[r,dotted]
+          & I\otimes\prod_iL_i \ar[r]\ar[d,"\simeq"']
+          & \prod_iL_i \ar[d,"\id"] \\
+        0 \ar[r]
+          & \prod_i(I\otimes L_i) \ar[r]
+          & \prod_iL_i
+      \end{tikzcd}
+    \]
+    es conmutativo, donde el morfismo superior del cuardado se
+    obtiene de $0\to I\to R$ al aplicar $-\otimes\prod_iL_i$,
+    se sigue que el primer renglón, incluyendo la flecha
+    punteada, también es exacto. Así, $\prod_iL_i$ es plano.
+  \end{itemize}
+\end{proof}
+
+\begin{remark}
+  En el transcurso de la demostración del teorema anterior,
+  probamos dos resultados útiles acerca sucesiones exactas,
+  así que vale la pena ponerlos por separado.
+  Supongamos que
+  \[
+    0\to A\to B\to C\to 0.
+  \]
+  es una sucesión exacta.
+  \begin{itemize}
+    \item Si $C$ es finitamente presentado y $B$ es
+    finitamente generado, entonces $A$ es finitamente
+    generado. La prueba es como en (c)$\implies$(d).
+    \item
+    Si $B$ es finitamente presentado y $A$ es finitamente
+    generado, entonces $C$ es finitamente presentado.
+    La prueba es como en (d)$\implies$(e).
+  \end{itemize}
+\end{remark}
+
+PENDIENTE SESIÓN 13
+\todo{SES 13}
+
+Bla bla bla
+
+\section{Localización}
+\begin{proposition}
+Sean $R$ y $A$ anillos y sea $T:R\ds\Mod\to A\ds\Mod$ un funtor aditivo exacto. Entonces para cada complejo $C_\bul,d)\in \Com(R)$ y para cada $n\in\mathbb{Z}$ existe un isomorfismo 
+$$H_n(TC_\bul,Td)\rightarrow TH_n(C_\bul,d).$$
+\end{proposition}
+\begin{proof}
+Consideremos el siguiente diagrama conmutativo
+$$
+\begin{tikzcd}
+             & C_{n+1} \arrow[r, "d_{n+1}"] \arrow[d, "d'_{n+1}"'] & C_n \arrow[r, "d_n"]        & C_{n-1}          &   \\
+{} \arrow[r] & \Im d_{n+1} \arrow[r, "j"]                                & \ker d_n \arrow[r] \arrow[u, "k"] & H_n(C) \arrow[r] & 0
+\end{tikzcd}
+$$
+aplicando $T$ tenemos
+$$
+\begin{tikzcd}
+             & TC_{n+1} \arrow[r, "Td_{n+1}"] \arrow[d, "Td'_{n+1}"'] & TC_n \arrow[r, "Td_n"]        & TC_{n-1}          &   \\
+{} \arrow[r] & T(\Im d_{n+1}) \arrow[r, "Tj"']                                & T(\ker d_n) \arrow[r] \arrow[u, "Tk"'] & TH_n(C) \arrow[r] & 0
+\end{tikzcd}
+$$
+y $T(\Im d_{n+1})=\Im T(d_{n+1})$, ya que $T$ es exacto, y el último renglón del último diagrama puede reescribirse de la siguiente manera: 
+$$
+\begin{tikzcd}
+ \Im Td_{n+1} \arrow[r, "Tj"']       & \ker Td_n \arrow[r] & TH_n(C) \arrow[r] & 0
+\end{tikzcd}
+$$
+Luego, 
+$$\frac{\ker Td_n}{\Im Td_n}=H_n(TC_\bul) \cong TH_n(C_\bul) $$
+\end{proof}
+
+Ahora, tomando un subconjunto multiplicativamente cerrado $S$ de un anillo $R$, veamos que el $\Tor$ conmuta con localización  através del siguiente resultado: 
+
+\begin{proposition}
+Si $S\subseteq R$ es un subconjunto multiplicativo, entonces existen isomorfismos 
+$$S^{-1}(\Tor_n^R(A,B))\cong \Tor_n^{S^{-1}R}(S^{-1}A,S^{-1}B) \qquad \forall n\geq 0$$
+para todos $A,B\in R-\Mod$.
+\end{proposition}
+\begin{proof}
+Procedemos por inducción:
+\begin{itemize}
+    \item $n=0$. Para $A,B\in R$-mód fijos, existe un isomorfismo natural 
+    $$\tau_{A,B}:S^{-1}(A\otimes_R B)\rightarrow S^{-1}A\otimes_{S^{-1}R}S^{-1}B $$ ya que
+    \begin{eqnarray*}
+    S^{-1}(A\otimes_R B) & \cong & S^{-1}R\otimes_R (A\otimes_R B)\\
+    & \cong & (S^{-1}A\otimes_R A )\otimes_{S^{-1}R\otimes_R B}\\
+    & \cong & S^{-1}A\otimes_{S^{-1}R}S^{-1}B
+    \end{eqnarray*}
+    \item $n\geq 0$. Ya que la localización es un funtor aditivo exacto, entonces 
+    $$H_n(S^{-1})(A\otimes_R P_B)\cong S^{-1}(H_n(A\otimes P_B))\cong S^{-1}(\Tor_n^R(A,B)). $$
+\end{itemize}
+\end{proof}
+
+De lo anterior, notemos que si $R$ es conmutativo, $\mathrm{m}$ maximal y si $A_\mathrm{m}$ es plano, entonces $\Tor_n^{R_\mathrm{m}}(A_\mathrm{m},B_\mathrm{m})=0$ para toda $n\leq 1$. Pero $\Tor_n^{R_\mathrm{m}}(A_\mathrm{m},B_\mathrm{m})=\Tor_n^R(A,B)_\mathrm{m}=0$. Así $\Tor_n^R(A,B)=0$, ya   que ser cero es una propiedad local. Y así, obtenemos el siguiente resultado: 
+\begin{corollary}(Ser plano es una propiedad local)
+Sea $A\in R\ds\Mod$, con $R$ un anillo conmutativo.
+Si $A_\m$ es plano como $R_\m$-módulo para todo $\m\in\maxSpec(R)$,
+entonces $A$ es plano. 
+\end{corollary}
+\begin{proof}
+    Como cada $A_\m$ es plano, entonces $\Tor^{R_\m}_n(A_\m,B_\m)=0$
+    para cualesquiera $n\geq 1$, $B\in R\ds\Mod$, $\m\in\maxSpec(R)$.
+    Luego, $\Tor^R_n(A,B)_\m=0$
+    para cualesquiera $n\geq 1$, $B\in R\ds\Mod$ y $\m\in\maxSpec(R)$.
+    Como ser cero es una propiedad local, se sigue que $\Tor^R_n(A,B)=0$
+    para todo $n\geq 1$ y $B\in R\ds\Mod$. Luego, $A$ es plano.
+\end{proof}
+
+\begin{lemma}
+Si $R$ es un anillo noetheriano izquierdo y $M$ es finitamente generado, entonces existe una resolución proyectiva $P$ de $M$ donde cada $P_n$ es finitamente generado.
+\end{lemma}
+\begin{proof}
+Ya que $M$ es finitamente generado, existe un $R$-mpdulo libre finitamente generado $P_0$ tal que
+$$ 
+\xymatrix{0\ar[r] &  K\ar[r] & \ar[r] P_0\ar[r] & M\ar[r] & 0 }
+$$
+como $P_0$ es finitamente generado, entonces $P_0\cong R^{(n)}$ entonces $K$ es finitamente generado, pues $R$ es noetheriano. 
+\end{proof}
+
+Finalizamos esta sección con el siguiente resultado
+acerca de módulos finitamente
+generados sobre un anillo noetheriano.
+
+\begin{theorem}
+Si $R$ es un anillo noetheriano conmutativo
+y si $A$ y $B$ son $R$-módulos finitamente generados, entonces 
+$\Tor_n^R(A,B)$
+es finitamente generado, para toda $n\leq 0$.
+\end{theorem}
+\begin{proof}
+Procedemos por inducción. 
+\begin{itemize}
+    \item $n=0$. Notemos que $A\otimes_R B$ es finitamente generado ya que $A$ y $B$ lo son en el anillo conmutativo $R$.
+    \item $n\leq 0$. Sea $P_A$ una resolución proyectiva de $A$, ya que $P_n\otimes B$ es finitamente generado por el resultado anterior, entonces $\ker (d_n\otimes id_B)$ es finitamente generado y $\Tor_n^R(A,B)$ también lo es.  
+\end{itemize}
+\end{proof}
+
+\section{Propiedades del Ext}
+En esta sección estudiamos algunos resultados y propiedades con el $\Ext$. 
+\begin{proposition}
+Si $(A_k)_{k\in K}$ es una familia de módulos, entonces existe un isomorfismo natural $$\Ext_R^n(\oplus_{k}A_k,B) \cong \prod \Ext_R^n(A_k,B) .$$
+\end{proposition}
+\begin{proof}
+\begin{itemize}
+    \item $n=0$.
+    Del teorema \ref{teorema:ext0-hom} tenemos $\Ext_R^0(-,B)\cong\Hom_R(-,B)$.
+    \item $n=1$. Para $k\in K$ tenemos
+    $$ 
+    \xymatrix{0 \ar[r] & L_k \ar[r] & P_k \ar[r] & A_k \ar[r] & 0  }
+    $$
+    con $P_k$ proyectivo. De aquí, obtenemos la siguiente sucesión:
+    $$ 
+    \xymatrix{0 \ar[r] & \oplus_k L_k \ar[r] &  \oplus_k P_k \ar[r] & \oplus_k A_k \ar[r] & 0  }
+    $$
+    donde $\oplus P_k$ es proyectivo ya que la suma directa de proyectivos lo es. Por lo tanto, existe el siguiente diagrama conmutativo con renglones exactos
+    $$
+    \begin{tikzcd}
+{\Hom(\oplus_k P_k,B)} \arrow[r] \arrow[d, "\tau"] & {\Hom(\oplus_k L_k,B)} \arrow[r, "\partial"] \arrow[d, "\sigma"] & {\Ext^1(\oplus_k A_k,B)} \arrow[r] \arrow[d] & {\Ext^1(\oplus_k P_k,B)} \arrow[d] \\
+{\prod \Hom(P_k,B)} \arrow[r]                      & {\prod \Hom(L_k,B)} \arrow[r, "d"']                              & {\prod \Ext^1(A_k,B)} \arrow[r]              & {\prod \Ext^1(P_k,B)}             
+\end{tikzcd}
+    $$
+    pero, 
+    $$\Ext^1(\oplus P_k,B)=0=\prod \Ext^1(P_k,B) $$
+    puesto que $P_k$ y $\oplus P_k$ son proyectivos. Así, $\partial$ y $d$ son sobreyectivos. Luego, existe un isomorfismo 
+    $$\Ext^1(\oplus A_k,B)\cong \prod \Ext^1(A_k,B).$$
+    \item $n\leq 1$. Tomamos el siguiente diagrama
+    $$
+    \begin{tikzcd}
+{\Ext^n(\oplus_k P_k,B)} \arrow[r] & {\Ext^n(\oplus_k L_k,B)us_k L_k,B)} \arrow[r, "\partial"] \arrow[d, "\sigma"] & {\Ext^{n+1}(\oplus_k A_k,B)} \arrow[r] \arrow[d, dashed] & {\Ext^{n+1}(\oplus_k P_k,B)} \\
+{\prod \Ext^n(P_k,B)} \arrow[r]    & {\prod \Ext^n(L_k,B)} \arrow[r, "d"']                                         & {\prod \Ext^{n+1}(A_k,B)} \arrow[r]                      & {\prod \Ext^{n+1}(P_k,B)}   
+\end{tikzcd}
+    $$
+    donde $\sigma$ es un isomorfismo por hipótesis de inducción. 
+    
+    Ya que 
+    $$\Ext^n(\oplus P_k,B)=0=\prod \Ext^n(P_k,B) $$
+    puesto que $P_k$ y $\oplus P_k$ son proyectivos entonces $\partial$ y $d$ son isomorfismos. 
+    Finalmente, $d\circ\partial^{-1}:\Ext^{n+1}(\oplus A_k,B)\rightarrow \prod \Ext^{n+1}(A_k,B)$ es un isomorfismo.  
+\end{itemize}
+\end{proof}
+
+Tenemos el resultado análogo.
+\begin{proposition}
+Si $(B_k)_{k\in K}$ es una familia de módulos,
+entonces existe un isomorfismo natural
+$$\Ext_R^n(A,\prod_{k}B_k) \cong \prod \Ext_R^n(A,B_k) .$$
+\end{proposition}
+
+\subsection{Extensiones y Ext}
+\begin{definition}
+Dados $A,C\in R$-mód, una extensión de $A$ por $C$ es una sucesión exacta corta 
+$$ 
+\xymatrix{ 0\ar[r] & A \ar[r]^{i}& B\ar[r]^{p} & C \ar[r] &0 }.
+$$
+Una extensión se escinde si existe un mapeo $s:C\rightarrow R$ con $p s= \id_C$. 
+\end{definition}
+
+\begin{proposition}
+Si $\Ext^1_R(C,A)=0$, entonces cada extensión de $A$ por $C$ se escinde.
+\end{proposition}
+\begin{proof}
+Tomemos 
+$$ 
+\xymatrix{ 0\ar[r] & A \ar[r]^{i}& B\ar[r]^{p} & C }.
+$$
+aplicando $\Hom(C,-)$ tenemos 
+$$ 
+\xymatrix{ 0\ar[r] & \Hom(C,B) \ar[r]^{p_*}&  \Hom(C,C) \ar[r]^{\partial} & \Ext^1(C,A) }.
+$$
+Por hipótesis, $\Ext^1(C,A)=0$ y así $p_*$ es sobrectiva. Y existe $s\in \Hom(C,B)$ tal que $\id_C=p_*(s)$, es decir, $ps=\id_C$
+\end{proof}
+
+El siguiente corolario se sigue inmediatamente de la proposición anterior. 
+
+\begin{corollary}
+\begin{enumerate}
+    \item $P\in R$-mód es proyectivo si y solo si $\Ext^1_R(P,B)=0$ para todo $B\in R$-mód.
+    \item $E\in R$-mód es inyectivo si y solo si $\Ext^1_R(A,E)=0$ para todo $A\in R$-mód.
+\end{enumerate}
+\end{corollary}
+
+\begin{definition}
+Dados dos módulos $C$ y $A$, dos extensiones de $A$ por $C$ 
+$$ 
+\xi: \xymatrix{ 0\ar[r] & A \ar[r]& B\ar[r] & C \ar[r] &0 },
+\quad
+\xi': \xymatrix{ 0\ar[r] & A \ar[r]& B'\ar[r] & C \ar[r] &0 }.
+$$
+decimos que un isomorfismo $\varphi:B\rightarrow B'$ es
+un isomorfismo de extensiones $\varphi:\xi\simeq\xi'$
+si el siguiente diagrama es conmutativo.
+$$
+\begin{tikzcd}
+0 \arrow[r] & A \arrow[r] \arrow[d, "\id_A"] & B \arrow[r] \arrow[d, "\varphi"] & C \arrow[r] \arrow[d, "\id_C"] & 0 \\
+0 \arrow[r] & A \arrow[r]                    & B' \arrow[r]                     & C \arrow[r]                    & 0
+\end{tikzcd}
+$$
+(de hecho, por el lema del 5, cualquier morfismo $\phi$ que haga conmutar
+el diagrama es, necesariamente, un isomorfismo).
+Se verifica inmediatamente que la existencia de un isomorfismo
+$\xi\simeq\xi'$ es una relación de equivalencia
+en la clase de extensiones de $A$ por $C$. Entonces definimos
+$$e(C,A) =
+\left\{\text{extensiones de $A$ por $C$ }\right\}/\simeq$$
+\end{definition}
+Nuestro objetivo ahora es construir una biyección
+\[
+    e(C,A) \simeq \Ext^1(C,A).
+\]
+El primer paso será construir una función $e(C,A)\to\Ext^1(C,A)$.
+Sea $(P_C,\epsilon)$ una resolución proyectiva de $C$, de modo que
+$\Ext^n(C,A)$ es la homología del complejo
+\[
+    \dots \from
+    \Hom(P_3,A) \xfrom{d_3^*}
+    \Hom(P_2,A) \xfrom{d_2^*}
+    \Hom(P_1,A) \xfrom{d_1^*}
+    \Hom(P_0,A) \xfrom{d_0^*}
+    0.
+\]
+En particular, $\Ext^1(C,A)=\ker(d_2^*)/\Img(d_1^*)$.
+
+Ahora tomemos una extensión $\xi$ de $A$ por $C$:
+\[
+    \xi=(0\to A\to B\to C\to 0).
+\]
+Dado que $\epsilon:P_C\to C$ es una resolución proyectiva y la sucesión
+$0\to A\to B\to C$ es exacta, el lema de comparación nos da
+un morfismo de complejos $\alpha:(P_C,\epsilon)\to\xi$ sobre $\id_C$:
+\[
+    \begin{tikzcd}
+        \dots \ar[r] &
+        P_3 \ar[r,"d_3"] \ar[d,"\alpha_3"] &
+        P_2 \ar[r,"d_2"] \ar[d,"\alpha_2"] &
+        P_1 \ar[r,"d_1"] \ar[d,"\alpha_1"] &
+        P_0 \ar[r,"\epsilon"] \ar[d,"\alpha_0"] &
+        C \ar[r] \ar[d,"\id_C"] & 0 \\
+        \dots \ar[r] &
+        0 \ar[r] &
+        0 \ar[r] &
+        A \ar[r] &
+        B \ar[r] &
+        C \ar[r] & 0.
+    \end{tikzcd}
+\]
+Nótese que $\alpha_n=0$ para $n\geq 2$.
+Así, $\alpha_1d_2=0$ por la conmutatividad del diagrama.
+Esto es, $d_2^*(\alpha_1)=0$, por lo cual $\alpha_1\in\ker(d_2^*)$.
+De este modo, obtenemos $[\alpha_1]\in\Ext^1(C,A)$.
+Para ver que esto define una función $e(C,A)\to\Ext^1(C,A)$,
+probaremos que la asignación no depende del morfismo de complejos
+$\alpha$ ni del representante de la clase de $\xi$ en $e(C,A)$.
+Primero, si $\alpha':(P_C,\epsilon)\to\xi$ es otro morfismo sobre $\id_C$,
+entonces el lema de comparación nos da una homotopía
+$s:\alpha'\sim\alpha$.
+En grado $1$, tenemos el diagrama (no conmutativo)
+\[
+    \begin{tikzcd}
+        P_2 \ar[r,"d_2"] &
+        P_1 \ar[r,"d_1"] \ar[dl,"s_1"']
+        \ar[d,"\alpha_1"',shift right]
+        \ar[d,"\alpha_1'",shift left] &
+        P_0 \ar[dl,"s_0"]
+        \\
+        0 \ar[r] &
+        A \ar[r] &
+        B
+    \end{tikzcd}
+\]
+con $\alpha_1'-\alpha_1=0s_1+s_0d_1=s_0d_1=d_1^*(s_0)$.
+Es decir, $\alpha_1'-\alpha_1 \in \Img(d_1^*)$, por lo cual
+$[\alpha_1']=[\alpha_1]$.
+
+Ahora supongamos que $\xi'=(0\to A\to B'\to C\to 0)$
+es una extensión isomorfa a $\xi$.
+Tomando de nuevo el morfismo de complejos $\alpha:(P_C,\epsilon)\to\xi$
+dado por el lema de comparación, podemos componerlo con
+el isomorfismo $\xi\simeq\xi'$ para obtener un morfismo de complejos
+$(P_C,d_0)\to\xi'$ sobre $\id_C$.
+\[
+    \begin{tikzcd}
+        \dots \ar[r] &
+        P_3 \ar[r,"d_3"] \ar[d,"\alpha_3"] &
+        P_2 \ar[r,"d_2"] \ar[d,"\alpha_2"] &
+        P_1 \ar[r,"d_1"] \ar[d,"\alpha_1"] &
+        P_0 \ar[r,"\epsilon"] \ar[d,"\alpha_0"] &
+        C \ar[r] \ar[d,"\id_C"] & 0 \\
+        \dots \ar[r] &
+        0 \ar[r] \ar[d] &
+        0 \ar[r] \ar[d] &
+        A \ar[r] \ar[d,"\id_A"] &
+        B \ar[r] \ar[d,"\beta"] &
+        C \ar[r] \ar[d,"\id_C"] & 0 \\
+        \dots \ar[r] &
+        0 \ar[r] &
+        0 \ar[r] &
+        A \ar[r] &
+        B' \ar[r] &
+        C \ar[r] & 0.
+    \end{tikzcd}
+\]
+Así, a $\xi'$ le corresponde en $\Ext^1(C,A)$ la clase de
+$\id_A\alpha_1=\alpha_1$, que es el mismo elemento que le corresponde
+a $\xi$. Por lo tanto, la asignación $[\xi]\mapsto[\alpha_1]$ es una función
+bien definida
+\[
+    \psi:e(C,A)\to\Ext^1(C,A)
+.\]
+
+\begin{remark}
+Notemos que, si $\xi:0\to A\to B\xto p C\to 0$ se escinde,
+entonces $\psi([\xi])=0$. En efecto, si $p$ tiene una sección $j:C\to B$
+(es decir, $pj=\id_C$), entonces $pj\epsilon=\epsilon$, así que
+el siguiente diagrama es un morfismo de complejos
+\[
+    \begin{tikzcd}
+        \dots \ar[r] &
+        P_2 \ar[r,"d_2"] \ar[d,"0"] &
+        P_1 \ar[r,"d_1"] \ar[d,"0"] &
+        P_0 \ar[r,"\epsilon"] \ar[d,"j\epsilon"] &
+        C \ar[r] \ar[d,"\id_C"] & 0 \\
+        \dots \ar[r] &
+        0 \ar[r] &
+        A \ar[r] &
+        B \ar[r,"p"] &
+        C \ar[r] \ar[l,"j",bend left] & 0.
+    \end{tikzcd}
+\]
+con $\alpha_1=0$. Luego, $\psi([\xi])=[\alpha_1]=[0]$.
+\end{remark}
+Ahora vamos a construir la función $\Ext^1(C,A)\to e(C,A)$ inversa a $\psi$.
+Para esto, consideremos primero el siguiente lema.
+\begin{lemma}
+Dada una extensión $\Xi:0\to X_1\xto j X_0\xto\epsilon C\to 0$
+y un morfismo $h:X_1\to A$, existe una única extensión (salvo isomorfismo)
+$0\to A\xto i B\xto\eta C\to 0$ tal que el diagrama
+\[
+    \begin{tikzcd}
+        0 \ar[r] &
+        X_1 \ar[r,"j"] \ar[d,"h"] &
+        X_0 \ar[r,"\epsilon"] \ar[d,"\beta"] &
+        C \ar[r] \ar[d,"\id_C"]
+        & 0 \\
+        0 \ar[r] &
+        A \ar[r,"i"] &
+        B \ar[r,"\eta"] &
+        C \ar[r] & 0.
+    \end{tikzcd}
+\]
+es conmutativo.
+\end{lemma}
+\begin{proof}
+    Sea $B=A\oplus_{X_1}X_0=\Coeq(j\oplus 0,-h\oplus 0)$
+    el coproducto fibrado de $h$ y $j$.
+    Definiendo $i,\beta$ como los morfismos canónicos,
+    \[
+        \begin{tikzcd}
+            X_1 \ar[r,"j"] \ar[d,"h"']
+            \ar[dr,phantom,"\ulcorner" description,very near end]
+            & X_0 \ar[d,"\beta"] \\
+            A \ar[r,"i"'] & B
+        \end{tikzcd}
+    \]
+    tenemos que $i$ es mono porque $j$ lo es.
+    Dado que $\epsilon j=0=0h:X_1\to C$, la propiedad del coproducto fibrado,
+    nos da una única flecha $\eta:B\to C$ que hace conmutar el diagrama
+    \[
+        \begin{tikzcd}
+            X_1 \ar[r,"j"] \ar[d,"h"']
+            & X_0 \ar[d,"\beta"] \ar[rdd,"\epsilon",bend left] \\
+            A \ar[r,"i"'] \ar[drr,"0"',bend right] & B \ar[dr,dotted,"\eta"] \\
+            && C
+        \end{tikzcd}
+    \]
+    Notemos que $\eta$ es epi, pues si $f:C\to Z$ cumple $f\eta=0$,
+    tenemos $0=f\eta\beta=f\epsilon$, así que $f=0$ porque $\epsilon$ es epi.
+    Por lo tanto, el diagrama
+    \[
+        \begin{tikzcd}
+            0 \ar[r] &
+            X_1 \ar[r,"j"] \ar[d,"h"] &
+            X_0 \ar[r,"\epsilon"] \ar[d,"\beta"] &
+            C \ar[r] \ar[d,"\id_C"]
+            & 0 \\
+            0 \ar[r] &
+            A \ar[r,"i"] &
+            B \ar[r,"\eta"] &
+            C \ar[r] & 0.
+        \end{tikzcd}
+    \]
+    es conmutativo y solo queda revisar la exactitud del segundo renglón en $B$.
+    Para esto, veamos que $\eta:B\to C$ cumple la propiedad del conúcleo de $i$.
+    Consideremos un morfismo $g:B\to Z$ con $gi=0$.
+    Entonces $g\beta j=gih=0$. Como $X_0\xto\epsilon C$ es el conúcleo de $j$,
+    la composición $g\beta$ se factoriza de manera única a través de $\epsilon$,
+    digamos como $g\beta=u\epsilon$.
+    \[
+        \begin{tikzcd}
+            0 \ar[r] &
+            X_1 \ar[r,"j"] \ar[d,"h"] &
+            X_0 \ar[r,"\epsilon"] \ar[d,"\beta"] &
+            C \ar[r] \ar[d,"\id_C"]
+            & 0 \\
+            0 \ar[r] &
+            A \ar[r,"i"] \ar[dr,"0"'] &
+            B \ar[r,"\eta"] &
+            C \ar[r] & 0
+            \\
+            && Z \ar[from=u,"g"']
+            \ar[from=uur,"u"',near start,bend right=25,crossing over]
+        \end{tikzcd}
+    \]
+    Notemos que tanto $g$ como $u\eta$ hacen conmutar el diagrama
+    \[
+        \begin{tikzcd}
+            X_1 \ar[r,"j"] \ar[d,"h"']
+            & X_0 \ar[d,"\beta"] \ar[rdd,"g\beta",bend left] \\
+            A \ar[r,"i"'] \ar[drr,"0"',bend right]
+            & B \ar[dr,"g",shift left] \ar[dr,"u\eta"',shift right] \\
+            && Z
+        \end{tikzcd}
+    \]
+    Por la propiedad universal del producto fibrado, se sigue que $g=u\eta$.
+    Más aún, esta $u$ es la única factorización de $g$ a través de $\eta$,
+    ya que $\eta$ es epi.
+    Esto muestra que $B\xto\eta C$ es el conúcleo de $A\xto i B$, así que
+    el diagrama
+    \[
+        \begin{tikzcd}
+            0 \ar[r] &
+            X_1 \ar[r,"j"] \ar[d,"h"] &
+            X_0 \ar[r,"\epsilon"] \ar[d,"\beta"] &
+            C \ar[r] \ar[d,"\id_C"]
+            & 0 \\
+            0 \ar[r] &
+            A \ar[r,"i"] &
+            B \ar[r,"\eta"] &
+            C \ar[r] & 0.
+        \end{tikzcd}
+    \]
+    tiene renglones exactos.
+    
+    Ahora supongamos que $0\to A\to B'\to C\to 0$ es otra extensión que hace
+    conmutar el diagrama
+    \[
+        \begin{tikzcd}
+            0 \ar[r] &
+            X_1 \ar[r,"j"] \ar[d,"h"] &
+            X_0 \ar[r,"\epsilon"] \ar[d,"\beta'"] &
+            C \ar[r] \ar[d,"\id_C"]
+            & 0 \\
+            0 \ar[r] &
+            A \ar[r,"i'"] &
+            B' \ar[r,"\eta'"] &
+            C \ar[r] & 0.
+        \end{tikzcd}
+    \]
+    Como $B$ es el coproducto de $h$ y $j$, tenemos una única flecha
+    $\phi:B\to B'$ que hace conmutativo el diagrama
+    \[
+        \begin{tikzcd}
+            X_1 \ar[r,"j"] \ar[d,"h"']
+            & X_0 \ar[d,"\beta"] \ar[rdd,"\beta'",bend left] \\
+            A \ar[r,"i"'] \ar[drr,"i'"',bend right]
+            & B \ar[dr,dotted,"\phi"] \\
+            && B'
+        \end{tikzcd}
+    \]
+    Luego, tenemos el diagrama
+    \[
+        \begin{tikzcd}
+            0 \ar[r] &
+            X_1 \ar[r,"j"] \ar[d,"h"] &
+            X_0 \ar[r,"\epsilon"] \ar[d,"\beta"] &
+            C \ar[r] \ar[d,"\id_C"]
+            & 0 \\
+            0 \ar[r] &
+            A \ar[r,"i"] \ar[d,"\id_A"] &
+            B \ar[r,"\eta"] \ar[d,"\phi"] &
+            C \ar[r] \ar[d,"\id_C"] & 0 \\
+            0 \ar[r] &
+            A \ar[r,"i'"] &
+            B' \ar[r,"\eta'"] &
+            C \ar[r] & 0.
+        \end{tikzcd}
+    \]
+    Por el lema del 5, $\phi$ es un isomorfismo y, por lo tanto, las
+    extensiones de $B$ y $B'$ son isomorfas.
+\end{proof}
+
+PENDIENTE SESIÓN 16
+\todo{SES 16}
+
+\chapter{Cohomología de gavillas}
+\section{Gavillas}
+Existen muchos tipos de categorías de gavillas,en particular, nosotros nos enfocaremos en gavillas abelianas. En todo momento $X$ será un espacio topológico y denotaremos por $\Omega X$ al conjunto de abiertos de $X$. El objetivo de las gavillas es estudiar a $X$ en términos de sus invariantes topológicos, para ello le asociamos un funtor cotravariante que va de $\Omega X$ a $\Ab$, las categorías abelianas, formalmente:  
+
+\begin{definition}
+Una \textbf{pregavilla} en $X$ es un funtor contravariante 
+$$\mathcal{F}:\Omega X  \rightarrow \Ab$$
+ tal que si $U\subseteq V$ en $X$, entonces tenemos las flechas
+ $$\F(V)\rightarrow \F(U) $$
+ llamadas \textbf{restricciones} y denotadas por $res_U^V$. 
+ \end{definition}
+
+ A los elementos de $\F(V)$ se les llama secciones. Así, sea $s\in \F(V)$, entonces $res_U^V(s)=s|_U$. 
+ 
+ \begin{definition}
+ Un \textbf{morfismo de pregavillas} es una transformación natural $\eta: \F \rightarrow \G$, es decir, para toda $U\in\Omega X$,
+ $$\eta_U:\F(U)\rightarrow \G(U) $$
+ es un morfismo de grupos, y de hecho, si $U\subseteq V$, entonces el siguiente diagrama conmuta
+ $$
+ \begin{tikzcd}
+\F(V) \arrow[r, "\eta_V"] \arrow[d, "res_U^V"'] & \G(V) \arrow[d, "res_U^V"] \\
+\F(U) \arrow[r, "\eta_U"']                      & \G(U)                     
+\end{tikzcd}
+ $$
+ \end{definition}
+Es claro que esto forma una categoría, llamada categoría de pregavillas abelianas del espacio topológico $X$, denotada por $\Psh(X,\Ab)$.
+
+\begin{definition}[Axioma de gavilla]
+Una pregavilla $\F\in \Psh(X,\Ab)$ es una gavilla si para todo $U\in\Omega X$ tal que $\mathcal{U}=\{U_i\}$ es una cubierta de $U$ se cumple que: 
+\begin{enumerate}
+    \item para cualesquiera dos secciones $s,s'\in \F(U)$ tales que
+    $$s|_{U_i}=s'|_{u_j} \qquad \forall i,j$$
+    entonces $s=s'$.
+    \item  si $s_i\in\F(U_i)$ y $s_j\in \F(U_j)$ con $U_i,U_j\in\mathcal{U}$ tal que $$ s_i|_{U_i\cap U_j}=s_j|_{U_i\cap U_j}\qquad \forall i,j$$
+    entonces existe una sección $s\in \F(U)$ tal que $s|_{U_i}=s_i$.
+ \end{enumerate}
+\end{definition}
+
+Algunas observaciones que se siguen directamente de la definición son las siguientes: 
+\begin{itemize}
+    \item Observemos que la sección global de (ii) es única por (i). 
+    \item  $\F(\emptyset)=0$. Ya que si $\emptyset=\cup U_i$ con $j\in\emptyset$ y si $s,s'\in\F(\emptyset)$ entonces por vacuidad 
+    $$s|_{U_i}=s'|_{U_j} $$
+    para toda $i,j$ y por lo tanto, $s=s'$.
+    \item Si hay un elemento en $\F(\emptyset)$ es único. En efecto, si $s_i\in\F(U_i)$ tal que 
+    $$ s_i|_{U_i\cap U_j}=s_j|_{U_i\cap U_j}\qquad \forall i,j$$
+    entonces por (ii) existe una única sección global tal que $s|_{U_i}=s_i$.
+\end{itemize}
+\begin{example}
+Sea $X$ un espacio topológico. Para cada $U\in\Omega X$,
+definimos $\cal C(U)=\{f:U\to\C: f \textup{ es continua}\}$.
+Así, $\cal C$ es una gavilla con valores en $\C$-espacios vectoriales.
+$$\cal C:\Omega X\to\C\ds\Mod .$$
+\end{example}
+
+\begin{example}
+Si $S$ es una superficie de Riemann, entonces para todo $U\in\Omega S$ definimos
+$$\cal O(U)=\{f:U\to\C: f \textup{ es holomorfa}\}. $$ 
+Este es un funtor contravariante
+$$\mathcal{O}(-):\Omega S \rightarrow \textup{Rings}. $$
+Además,  
+$\cal C^\infty(U) $ es una gavilla de funciones diferenciables. En particular, podemos construir el haz tangente como una gavilla. 
+\end{example}
+
+\subsection{Fibras}
+
+Dado un espacio topológico $X$ y un punto $p\in X$, denotemos como $\cal U(p)$
+al sistema de vecindades abiertas de $p$ en $X$:
+$$\cal U(p)=\{U\in\Omega X:p\in U\}.$$
+Notemos que $\cal U(p)$, ordenado con la contención usual,
+es un conjunto codirigido (dirigido hacia abajo), pues
+si $U_\alpha,U_\beta\in\cal U(p)$, entonces $U_\alpha \cap U_\beta\in\cal U(p)$.
+Al aplicar $\cal F$, la familia $\cal F(\cal U(p))$ es un conjunto
+dirigido (hacia arriba), pues las inclusiones
+$$\iota_\alpha^\beta:U_\alpha \rightarrow U_\beta$$
+se convierten en morfismos
+$$\varphi_\alpha^\beta
+=\F(\iota_\alpha^\beta):\F(U_\beta)\rightarrow \F(U_\alpha).$$
+Así, tenemos el límite directo $\lim_{U\in\cal U(p)}\cal F(U)$.
+
+\begin{definition}
+La \textbf{fibra} de $\F$ en el punto $p$ es el límite directo
+$$\F_p:=\colim \cal F(\cal U(p))=\colim_{p\in U} \F(U).$$
+\end{definition}
+Notemos que, como $\cal F(\cal U(p))$ es un conjunto dirigido,
+entonces $\cal F_p$ tiene la descripción
+\[
+    \cal F_p = (\bigsqcup_{U\in\cal U(p)} \cal F(U))/\sim
+\]
+donde dos secciones $s\in\cal F(U),s'\in\cal F(U')$, definidas en vecindades
+abiertas $U,U'$ de $p$, son equivalentes ($s\sim s'$) si existe
+una vecindad abierta $U''$ de $p$ con $U''\subseteq U\cap U'$, tal que
+$s|_{U''}=s'|_{U''}$.
+La clase de $s\in\cal F(U)$ en $\cal F_p$ se llama germen de $s$ en $p$,
+y la podemos denotar como
+$$s(p)=[s]_p=\<U,s\>_p.$$
+Cuando el punto $p$ es claro por contexto,
+podemos omitirlo de la notación, para escribir $[s]$ o $\<U,s\>$.
+
+\begin{example}
+Sea $S$ una superficie de Riemann.
+Tomamos $\mathcal{O}:\Omega S\rightarrow \textup{Ab}$  tal que $\mathcal{O}_p=\lim_{\rightarrow U}\mathcal{O}(U)$ y tomemos $s\in \mathcal{O}(U_\alpha)$ una función holomorfa definida en $U_\alpha$, $s:U_\alpha\rightarrow \mathbb{C}$. Si elegimos cartas $(V,z)$ al rededor de $p$ 
+y $V$ es una carta de $z(p)$ en $\mathbb{C}$, entonces
+$$s(z)=\sum_{n=0}^{\infty} c_n(z-z(p))^n $$
+Tomando el límite directo en $p$, obtenemos
+$$\mathcal{O}_p\mapsto \mathbb{C}\{z-z(p)\} $$
+es decir, la fibra en $p$ es isomorfo al anillo en series de Taylor en los complejos al rededor del punto $z(p)$. 
+
+De manera similar, tomando la gavilla $\mathcal{M}:\Omega S\rightarrow \textup{Campos}$, vemos que la fibra es isomorfa al anillo en series de potencias al rededor del punto $z(p)\in\mathbb{C}$: 
+$$ \mathcal{M}_p\mapsto \mathbb{C}[[z-z(p)]].$$
+\end{example}
+
+\begin{lemma}
+Sea $F$ una gavilla en un espacio topológico $S$ y $u\in\Omega S$
+cualquier abierto.
+Dadas secciones $s,t\in Fu$, si $s_p=t_p$ para todo $p\in u$,
+entonces $s=t$.
+\end{lemma}
+\begin{proof}
+    Para cada $p\in u$ tenemos $[s]_p=[t]_p$.
+    Por la descripción de $F_p$, esto significa que,
+    para cada $p\in u$, existe un abierto
+    $u_p\subseteq u$, con $p\in u_p$, donde las restriciones
+    de $s$ y $t$ coinciden:
+    \[
+        s|u_p=t|u_p
+    .\]
+    Como para cada $p\in u$ tenemos $p\in u_p\subseteq u$,
+    la colección $\{u_p\mid p\in u\}$ es una cubierta de $u$.
+    Por el axioma de localidad (primer axioma de gavilla),
+    se sigue que $s=t$.
+\end{proof}
+
+\section{La categoría de gavillas}
+Dado un espacio topológico $S$, las pregavillas y las gavillas
+sobre $S$ forman categorías, donde los morfismos son las transformaciones
+naturales.
+
+\begin{lemma}
+    Un morfismo de (pre)gavillas $\eta:F\to G$ es un isomorfismo
+    si, y solo si, para todo abierto $u\in\Omega S$, el morfismo
+    $\eta_u:Fu\to Gu$ es un isomorfismo.
+\end{lemma}
+
+Ahora tomemos un morfismo de gavillas $\eta:F\to G$.
+Dado un punto $p\in S$, consideremos el sistema de vecindades abiertas de $p$.
+Si $u,v$ son vecindades de $p$ con $v\leq u$, tenemos un diagrama conmutativo
+\[
+    \begin{tikzcd}[column sep=0.01]
+        Fu \ar[rr] \ar[d] && Fv \ar[d] \\
+        Gu \ar [rr] \ar[dr] && Gv \ar[dl] \\
+        & G_p
+    \end{tikzcd}
+\]
+así, la familia de morfismos $Fu\to G_p$ nos da un único morfismo
+$F_p\to G_p$ que hace conmutar todos los diagramas de la forma
+\[
+    \begin{tikzcd}
+        Fu \ar[d] \ar[r] & Gu \ar[d] \\
+        F_p \ar[r] & G_p.
+    \end{tikzcd}
+\]
+con $p\in u$.
+
+\begin{proposition}
+Un morfismo de gavillas $\eta:F\to G$ es un isomorfismo
+si, y solo si, para todo $p\in S$ el morfismo entre las fibras
+$\eta_p:F_p\to G_p$ es un isomorfismo.
+\end{proposition}
+\begin{proof}
+    Por un lado si $\eta$ es un isomorfismo, entonces
+    cada $\eta_u:Fu\to Gu$ es un isomorfismo, así que
+    $\eta_p:F_p\to G_p$ es un isomorfismo para cada $p\in S$.
+    
+    Por otro lado, supongamos que, para cada $p\in S$,
+    el morfismo $\eta_p$ es iso.
+    Sea $u\in\Omega S$ y mostremos que $\eta_u:Fu\to Gu$ es un iso.
+    Tomando $s,t\in Fu$, con $\eta_us = \eta_ut$,
+    para cada $p\in u$ los gérmenes $[\eta_us]_p=[\eta_us]_p$
+    son $\eta_p[s]_p=\eta_p[t]_p$.
+    Como cada $\eta_p$ es un isomorfismo,
+    tenemos $[s]_p=[t]_p$ para todo $p$.
+    Como $F$ es gavilla, esto implica que $s=t$.
+    Así, $\eta_u$ es inyectiva.
+    
+    Ahora consideremos una sección $r\in Gu$.
+    Como cada $\eta_p$ es suprayectiva, para cada $p\in U$
+    existe una sección $t_p\in F(v_p)$ definida en una vecindad $v_p$ de $p$
+    tal que $\eta_p[t_p]_p=[r]_p$.
+    
+    Nos gustaría pegar estas secciones $t_p$ en la cubierta
+    $\{v_p\mid p\in u\}$. Lamentablemente, pueden no coincidir en las
+    intersecciones $v_p\cap v_q$. Por eso, necesitamos restringirnos más.
+    
+    Para cada $p\in u$, tenemos $\eta_p[t_p]_p=[r]_p$,
+    esto es: $[\eta_{v_p}t_p]_p=[r]_p$,
+    lo cual significa que existe un abierto $u_p$
+    con $p\in u_p\subseteq v_p\subseteq u$ tal que las restricciones de
+    $\eta_{v_p}t_p\in G(v_p)$ y $r\in Gu$ coinciden:
+    \[
+        r|u_p = (\eta_{v_p}t_p)|u_p = \eta_{u_p}(t_p|u_p)
+    \]
+    Ahora sí, definamos $s_p=(t_p|u_p)\in F(u_p)$ para cada $p\in u$,
+    de modo que
+    \[
+        r|u_p = \eta_{u_p}s_p
+    .\]
+    
+    Esta familia de secciones $s_p$ sí las podremos pegar.
+    Para esto, veamos que coinciden
+    en las intersecciones $u_p\cap u_q$ para cualesquiera dos puntos
+    $p,q\in u$. Tomando cualquier punto $x\in u_p\cap u_q$, tenemos
+    \begin{align*}
+        \eta_x[s_p|(u_p\cap u_q)]_x
+        &= \eta_x[s_p]_x \\
+        &= [\eta_{u_p}s_p]_x \\
+        &= [r|u_p]_x \\
+        &= [r|u_q]_x \\
+        &= [\eta_{u_q}s_q]_x \\
+        &= \eta_x[s_q]_x \\
+        &= \eta_x[s_q|(u_p\cap u_q)]_x.
+    \end{align*}
+    Como cada $\eta_x$ es inyectiva, se sigue que
+    $[s_p|(u_p\cap u_q)]_x=[s_q|(u_p\cap u_q)]_x$.
+    Por el principio de localidad, tenemos
+    $s_p|(u_p\cap u_q)=s_q|(u_p\cap u_q)$.
+    Notando que $\{u_p\mid p\in u\}$ es una cubierta de $u$,
+    el axioma de pegado (segundo axioma de gavilla) nos permite obtener
+    una sección $s\in Fu$ que coincida con $s_p\in F(u_p)$
+    en cada $u_p$:
+    \[
+        s|u_p = s_p
+    .\]
+    Luego, $s\in Fu$ cumple $\eta_us=r$, dado que, para todo $p\in u$,
+    tenemos
+    \begin{align*}
+        [\eta_us]_p
+        &= [(\eta_us)|u_p]_p \\
+        &= [\eta_{u_p}(s|u_p)]_p \\
+        &= [\eta_{u_p}s_p]_p \\
+        &= [r|u_p]_p \\
+        &= [r]_p.
+    \end{align*}
+\end{proof}
+
+\section{Núcleos, imágenes y conúcleos}
+
+\begin{definition}
+    Sea $\phi:F\to G$ un morfismo de pregavillas sobre $S$.
+    Las construcciones en $\Psh(S)$ se hacen abierto por abierto:
+    \begin{enumerate}
+        \item El núcleo $\ker\phi$ es la pregavilla dada para todo
+        $u\in\Omega S$ como $(\ker\phi)(u)=\ker(\phi_u:Fu\to Gu)$.
+        \item La imagen $\Im\phi$ es la pregavilla dada para todo
+        $u\in\Omega S$ como $(\Im\phi)(u)=\Im(\phi_u:Fu\to Gu)$.
+        \item El conúcleo $\Im\phi$ es la pregavilla dada para todo
+        $u\in\Omega S$ como $(\Coker\phi)(u)=\Coker(\phi_u:Fu\to Gu)$.
+    \end{enumerate}
+\end{definition}
+
+\begin{definition}
+Si $F,G\in\Psh(S)$, diremos que $F$ es una subpregavilla de $G$,
+$F\leq G$, si
+\begin{enumerate}
+    \item $\forall u\in\Omega S$, $Fu\leq Gu$
+    \item Para toda contención $u\leq v$, el morfismo
+    $Fv\to Fu$ es la restricción de $Gv\to Gu$.
+\end{enumerate}
+
+Si $F\leq G$, entonces la pregavilla cociente, denotada como $G/F$,
+es la pregavilla dada por $(G/F)(u)=(Gu)/(Fu)$ para todo $u\in\Omega S$
+y, para toda contención $u\leq v$, el morfismo $(G/F)(v)\to(G/F)(u)$
+es el único que hace conmutar el siguiente diagrama:
+\[
+\begin{tikzcd}
+    Fv \ar[r] \ar[d] & Fu \ar[d] \\
+    Gv \ar[r] \ar[d] & Gu \ar[d] \\
+    (G/F)(v) \ar[r] & (G/F)(u).
+\end{tikzcd}
+\]
+\end{definition}
+
+\begin{proposition}
+    Si $\phi:F\to G$ es un morfismo de gavillas, entonces $\ker\phi$ es
+    una gavilla.
+\end{proposition}
+\begin{proof}
+    Sea $\cal U\subseteq \Omega X$ una familia
+    de abiertos y definamos $U=\bigcup\cal U$.
+    Supongamos que tenemos secciones $s,t\in(\ker\phi)U$ que coinciden
+    en cada $u\in\cal U$:
+    \[
+        s|u = t|u
+    .\]
+    Dado que $s,t\in(\ker\phi)(U)=\ker(\phi_U)\subseteq FU$
+    y $F$ es una gavilla, esto implica que $s=t$, así que $\ker\phi$
+    cumple el axioma de localidad.
+    
+    Ahora supongamos que tenemos una familia de secciones
+    $\{s_u\mid u\in\cal U\}$ que coinciden en las interseciones $u\cap v$
+    para cada $u,v\in\cal U$:
+    \[
+        s_u|(u\cap v) = s_v|(u\cap v)
+    .\]
+    Dado que $s_u\in(\ker\phi)(u)=\ker(\phi_u)\subseteq Fu$, el axioma
+    de pegado nos da una sección $s\in FU$ que coincide
+    con $s_u$ en cada $u$
+    \[
+        s|u = s_u
+    ,\]
+    pero falta probar que $s\in(\ker\phi)(U)$.
+    Para cada $u\in \cal U$, tenemos $s_u\in\ker(\phi_u)$.
+    Denotando los elementos neutros como $0_u\in Fu$ y $0_U\in FU$, tenemos
+    \begin{align*}
+        (\phi_Us)|u
+        &= \phi_us_u \\
+        &= 0_u \\
+        &= 0_U|u
+    \end{align*}
+    Por el axioma de localidad, se sigue que $\phi_Us=0_U\in FU$.
+    Así, $s\in\ker(\phi_U)=(\ker\phi)(U)$, por lo cual $\ker\phi$
+    cumple el axioma de pegado.
+    
+    Se sigue que $\ker\phi$ es una gavilla.
+\end{proof}
+
+\begin{example}
+    Sea $S$ una superficie de Riemann.
+    Entonces tenemos las gavillas $\cal O$, $\cal O^*$,
+    dadas para cada $u\in\Omega S$ como
+    \begin{align*}
+        \cal Ou &= \{s:u\to\C \mid s \text{ holomorfa } \} \\
+        \cal O^*u &= \{s:u\to\C^* \mid s \text{ holomorfa } \},
+    \end{align*}
+    Si $\cal O$ tiene estructura aditiva y $\cal O^*$,
+    entonces tenemos un morfismo de gavillas abelianas
+    \[
+        \exp:\cal O\to\cal O^*
+    \]
+    dado, para cada $u\in\Omega S$, como
+    \begin{align*}
+        \exp_u:\cal Ou &\to\cal O^*u \\
+        s &\mapsto e^{2\pi i s}
+    \end{align*}
+    donde $(e^{2\pi is})(p)=e^{2\pi is(p)}$ para todo $p\in S$.
+    
+    Para cada $u\in\Omega S$, tenemos
+    \begin{align*}
+        \exp_u(s) = 1
+        &\iff e^{2\pi i s}=1 \\
+        &\iff \forall p\in u, \quad s(p)\in\Z \\
+        &\iff s \in \{ f:u\to\Z \mid f \text{ localmente constante } \} \\
+        &\iff s \in \underline\Z u.
+    \end{align*}
+    donde $\underline\Z$ es la notación para la gavilla de funciones
+    localmente constantes. Así,
+    \[
+        \ker(\exp) = \underline\Z
+    .\]
+\end{example}
+\begin{example}
+    Sea $S$ una superficie de Riemann.
+    Tenemos las gavillas $\cal C$ y $\cal C^\infty$ de funciones
+    continuas y funciones lisas, con estructura aditiva.
+    
+    Sabemos que una función $f=u+iv:U\to\C$ es holomorfa si, y solo si,
+    cumple las ecuaciones de Cauchy-Riemann:
+    \begin{align*}
+        \frac{\partial u}{\partial x} &= \frac{\partial v}{\partial y} \\
+        \frac{\partial u}{\partial y} &= -\frac{\partial v}{\partial x},
+    \end{align*}
+    lo cual sucede si, y solo si,
+    \[
+        \left(
+        \frac{\partial u}{\partial x} - \frac{\partial v}{\partial y}
+        \right)
+        + i \left(
+        \frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}
+        \right) = 0.
+    \]
+    Esto se puede escribir como
+    \[
+        \left(
+        \frac{\partial}{\partial x} + i\frac{\partial}{\partial y}
+        \right)(u+iv)
+        = 0.
+    \]
+    La linealidad de la derivada nos dice que
+    \[
+        \ol\partial
+        = \frac{\partial}{\partial \ol z}
+        = \left(
+        \frac{\partial}{\partial x} + i\frac{\partial}{\partial y}
+        \right)
+        :\cal C^\infty\to\cal C^\infty
+    \]
+    es un morfismo de gavillas abelianas.
+    Por lo tanto, tenemos que $f=u+iv\in\cal C^\infty(U)$
+    es holomorfa si, y solo si, $\ol\partial f=0$, así que
+    \[
+        \cal O = \Ker \ol\partial
+    .\]
+\end{example}
+
+A pesar de que el núcleo de un morfismo de gavillas es una gavilla,
+la imagen de un morfismo de gavillas no es, en general, una gavilla,
+como lo muestra el siguiente ejemplo.
+
+\begin{example}
+Consideremos la superficie de Riemann $S=\C^*$ y el morfismo de gavillas
+abelianas
+\[
+    \exp:\cal O\to\cal O^*
+\]
+definido como en el ejemplo anterior,
+donde vimos que $\ker(\exp)=\underline\Z$.
+
+Veremos que la pregavilla $\Im(\exp)$ no satisface el axioma de pegado.
+Para esto, consideremos la cubierta de $S$ por los dos abiertos
+\begin{align*}
+    U_1 &= \C^*\setminus\R^-
+    &
+    U_2 &= \C^*\setminus\R^+.
+\end{align*}
+Notemos que $U_1$ y $U_2$ son simplemente conexos, por lo cual
+tenemos ramas del logaritmo $\log_j\in\cal O(U_j)$ tales que
+Por si acaso, esto no denota el logaritmo base $1$ y base $2$,
+sino funciones holomorfas $\log_j:U_j\to\C$ que cumplen
+\[
+    e^{\log_j(z)}=z
+\]
+para todo $z\in U_j$.
+
+Ahora consideremos las secciones $s_j\in\cal O^*(U_j)$
+dadas por $s_j(z)=z$. Estas secciones están en $\Im(\exp)(U_j)$, ya que
+\begin{align*}
+    s_j(z)
+    &= z \\
+    &= e^{\log_j(z)} \\
+    &= e^{2\pi i\log_j(z)/(2\pi i)} \\
+    &= \exp(f_j)(z),
+\end{align*}
+donde $f_j(z) = \log_j(z)/(2\pi i)$.
+En particular, $f_j\in\cal O(U_j)$, así que
+$s_j=\exp(f_j)\in\Im(\exp)$.
+
+Además, tenemos $U_1\cap U_2=\C^*\setminus\R$, por lo cual
+\[
+    s_1|(U_1\cap U_2) = s_2|(U_1\cap U_2)
+,\]
+sin embargo, el pegado de $s_1$ y $s_2$
+es la sección global $s\in\cal O(S)$ dada por $s(z)=z$ para todo $z\in S$,
+la cual no está en $\Img(\exp)(S)$,
+pues no se puede escribir como $s=\exp(f)$ porque el logaritmo
+no se puede definir en todo $S$, ya que éste no es simplemente conexo.
+
+Se sigue que la pregavilla $\Img(\exp)$ no es una gavilla.
+\end{example}
+
+PENDIENTE SESIÓN 19
+\todo{SES 19}
+
+Tenemos un morfismo natural 
+$$\theta: \F \rightarrow \F^+,$$
+que definimos $U\in\Omega X$ tal que $\theta_U: \F(U) \rightarrow \F^+(U)$, tomamos una sección $s^+=\theta_U(s):U\rightarrow |F|$ tal que 
+$s^+(x)=[s]_x\in\F_x$. 
+
+De la observación REFERENCIA tenemos que si $\F$ es gavilla entonces $\F^+\cong \F$.
+
+\begin{proposition}
+Si $\F$ es pregavilla y $\G$ gavilla tomemos dos morfismos
+$$ 
+\begin{tikzcd}
+\F \arrow[r, "\varphi", shift left] \arrow[r, "\psi"', shift right] & \G
+\end{tikzcd}
+$$
+tal que $\varphi_x=\psi_x$ para toda $x\in X$ entonces $\varphi=\psi$
+\end{proposition}
+\begin{proof}
+Basta ver que para toda $U\in\Omega X$, $\varphi_U=\psi_U$. Sea $U\in \Omega X$ y $s\in\F(U)$, tomemos $[s]_x\in\F_x$ para $x\in U$. 
+Notemos ahora que 
+\begin{eqnarray*}
+[\varphi s]_x & = & \varphi_x[s]_x\\
+& = & \psi_x[s]_x\\
+& = & [\psi s]_x
+\end{eqnarray*}
+como coinciden, entonces existe $W$ una vecindad de $x$ tal que 
+$\varphi s|_W=\psi s|_W$, como esto es para toda $x\in U$, entonces $\{W_x\}$ forman una cubierta de $U$. Como $\G$ es gavilla, existe una única sección que las representa en $\G(U)$.
+\end{proof}
+Si $\F$ es gavilla, $\theta:\F\rightarrow \F^+$ es biyectiva. 
+
+Para ver la inyectividad tomemos dos secciones $s,s'$ tal que $\theta(s)=\theta(s')$, es decir, $s^+(x)=s'^+(x)$ para toda $x\in U\in\Omega X$, o bien, $[s]_x=[s']_x$ y así $s|_W=s'|_W$ para una vecindad $W$ de $x$,
+como $\F$ es gavilla $s=s'$
+Probemos la sobreyectividad, sea $s'\in\F^+(U)$ y $x\in U$, tomemos $U_x$ una vecindad de $x$ y $s(x)\in\rangle U_x,s'\langle$, como $U_x$ forman una cubierta para $U$, entonces existe una sección $s\in\F(U)$ tal que $s|_{U_x}=s$ y así $\theta(s)=s(x)=s'(x)$.
+
+Por lo tanto, $\theta$ es isomorfismo.
+
+Ahora, supongamos que si $\F$ es una pregavilla en $X$ y $\G$ es una gavilla en $X$ y además tenemos 
+$$
+\begin{tikzcd}
+\F \arrow[r, "\varphi"] \arrow[d] & \G \arrow[d] \\
+\F^+ \arrow[r, "\varphi^+"']      & \G^+        
+\end{tikzcd}
+$$
+que es un diagrama conmutativo.
+Entonces como $\theta_G$ es un isomorfismo, existe un flecha de $\varphi^*:=\theta_G^{-1}\varphi^+:\F^+\rightarrow \G$ que factoriza a $\varphi$, es decir, $\varphi= \theta_G^{-1}\varphi^+\theta_F$ ya que 
+$\theta_G\varphi= \varphi^+\theta_F$. 
+Y además, $\varphi^*$ es único. 
+
+\section{Cohomología de Cech}
+\todo{Exposición Alejandro}
+\subsection{Sucesión exacta larga en cohomología}
+Notemos que si $\phi:\mathcal{F}\rightarrow \mathcal{G}$ es un morfismo de gavillas, entonces $\phi$ induce un morfismo en los grupos de cohomología de $\check{C}$ech.
+$$\phi_*:\check{H}^n(X,\mathcal{F})\rightarrow \check{H}^n(X,\mathcal{G}) $$
+tal que:
+\begin{itemize}
+    \item $id_*=id$
+    \item $(\phi\circ \psi)_*=\phi_*\circ \psi_*$
+\end{itemize}
+\subsection{El homomorfismo de conexión}
+Tomemos $\phi:\mathcal{F}\rightarrow \mathcal{G}$ un homomorfismo de gavillas sobreyectivo entonces 
+$$
+\xymatrix{0\ar[r]&\mathcal{K}\ar[r]^{i}& \mathcal{F}\ar[r]^\phi & \mathcal{G} \ar[r]& 0}
+$$
+es una sucesi\'on exacta de gavillas en $X$, donde $\mathcal{K}$, denota la gavilla kernel de $\phi$.  
+Definamos un homomorfismo llamado \textit{homomorfismo de conexi\'on}
+$$\Delta:\check{H}^{0}(X,\mathcal{G})\rightarrow \check{H}^1(X,\mathcal{K}),$$
+que debido al RESULTADO REFERENCIA se puede escribir como 
+$$\Delta: \mathcal{G}(X)\rightarrow \check{H}^1(X,\mathcal{K}),$$
+para definirlo tomemos $g\in\mathcal{G}(X)$, ya que $\phi$ es sobreyectivo para cada punto $p$ existe una vecindad $U_p$ de $p$ y un elemento $f_p\in\mathcal{F}(U_p)$ tal que $g|_{U_p}=\phi(f_p)$. 
+Note que $\mathcal{U}=\{U_p\}$ es una cubierta abierta de $X$; sea $h_{pq}=f_q-f_p \in \mathcal{U}_{pq}$, es claro que $(h_{pq})$ es un $1$-cociclo para la gavilla $\mathcal{F}$;
+adem\'as $\phi(h_{pq})=0$, ya que la diferencia en la intersección $U_p\cap U_q$ es $g-g$. 
+Por tanto, $(h_{pq})$ es un $1$-cociclo para la gavilla kernel $\mathcal{K}$,
+y representa una clase de cohomolog\'ia en $\check{H}^1(\mathcal{U,K})$. Esta imagen en $\check{H}^1(X,\mathcal{K})$ es denotada por $\Delta(g)$ (\cite{Kato}), además se prueba que no depende de las preimágenes ni de la cubierta elegida para $X$ como podemos apreciar en el siguiente resultado (ver \cite{Mir}). 
+
+\begin{lemma}
+La construcci\'on de $\Delta(g)$ es independiente de $\mathcal{U}$ y de las preim\'agenes $f_p$
+\end{lemma}
+\begin{proof}
+Primero demostremos la independencia de las preim\'agenes. Fijemos $\mathcal{U}$. 
+Supongamos que existen, para cada $p$, $f_p$ y $f'_p\in\mathcal{F}(U_p)$ tales que 
+$$\phi(f_p)=\phi(f'_p)=g|_{U_p}.$$
+Sean $h_{pq}=f_q-f_p$ y $h'_{pq}=f'_q-f'_p$.
+Definamos $k_i=f_i-f'-i\in\mathcal{F}(U_i)$; 
+note que en efecto $k_i\in\mathcal{K}(U_i)$ para cada $i$, as\'i que $(k_i)$ es una $0$-cocadena para $\mathcal{K}$. 
+Adem\'as, $d(k_i)=(l_{pq})$, donde 
+$$l_{pq}=k_q-k_p=(f_q-f'_q)-(f_p-f'_p)=h_{pq}-h'_{pq}.$$
+Por lo tanto, la diferencia $(h_{pq})-(h'_{pq})=(l_{pq})$ es una cofrontera, y ambos representan el mismo elemento en el grupo de cohomolog\'ia $\check{H}^1(\mathcal{U,K})$.
+
+Para demostrar la independencia de la cubierta abierta podemos suponer, sin p\'erdida de generalidad, que $\mathcal{V}\prec \mathcal{U}$, 
+de lo contrario, consideramos un refinamiento com\'un, y sean $f_p\in\mathcal{F}(U_p)$ preim\'agenes de $g|_{U_p}$ y $r$ una aplicaci\'on de refinamiento. 
+En $V_q$ definimos $f'_q=f_{r(q)}|_{V_q}$ y obtenemos preim\'agenes de $g$ en los $V_q$. Acabaos de demostrar que podemos usar los $f'_q$ para calcular $\Delta(g)$ a trav\'es de $\mathcal{V}$, tal como podr\'amos usar cualquier otro conjunto de preim\'agenes de $g$ en $\mathcal{V}$.
+Como $\tilde{r}((f_p))=(f'_p)$ tenemos que su imagen por el homomorfismo can\'onico en $\check{H}^1(X,\mathcal{F})$ ser\'a la misma.
+\end{proof}
+
+Este homomorfismo de conexi\'on nos ayuda para saber cu\'ando una secci\'on global $g\in\mathcal{G}(X)$ es la imagen de una secci\'on global de $\mathcal{F}(X)$ mediante $\phi$.
+\begin{theorem}
+Sea $\phi:\mathcal{F}\rightarrow \mathcal{G}$ un epimorfismo de gavillas y $g\in\mathcal{G}(X)$ una secci\'on global de $\mathcal{G}$. 
+Existe una secci\'on global $s\in\mathcal{F}$ tal que $\phi(s)=g$ si y solo si $\Delta(g)=0$.
+\label{lemma315}
+\end{theorem}
+\begin{proof}
+$(\Rightarrow) $ Supongamos que $\phi(s)=g$. Entonces en la construcci\'on del homomorfismo de conexi\'on podemos tomar para todo $p\in X$, 
+una vecindad $U_p=X$ y una secci\'on $f_p=s$, en este caso tendr\'iamos para todo $p,q$, usando la notaci\'on anterior, $h_{pq}=0$ que inducen el elemento cero en la cohomolog\'ia. 
+
+$(\Leftarrow)$ Supongamos que $\Delta(g)=0$ en $\check{H}^1(X,\mathcal{F})$, entonces para la cubierta $\mathcal{U}$, tenemos que $(h_{pq})$ es una cofrontera, es decir, $h_{pq}=k_q-k_p$ para cierta $(k_p)$ $1$-cocadena de $\mathcal{K}$. Sea $s_p=f_p-k_p$, siendo $f_p$ la preimagen de $g$ en $U_p$. 
+En $U_{pq}$ tenemos 
+$$ s_p-s_q=(f_p-k_p)-(f_q-k_q)=(k_q-k_p)-(f_q-f_p)=k_q-k_p-h_{pq}=0, $$
+as\'i por el axioma de gavilla, las secciones $\{s_p\}$ juntas son las secci\'on $s\in\mathcal{F}(X)$ tal que $s|_{U_p}=s_p$ y como $$g|_{U_p}=\phi(f_p)=\phi(s_p+k_p)=\phi(s_p)=\phi(s|_{U_p}),$$
+y nuevamente por el axioma de gavilla se obtiene lo deseado. 
+\end{proof}
+
+Un resultado del Teorema anterior es el siguiente:
+\begin{corollary}
+Sea $\phi:\mathcal{F}\rightarrow \mathcal{G}$ un homomorfismo de gavillas con gavilla kernel $\mathcal{K}$. Si $\check{H}^1(X,\mathcal{K})=0$ la correspondencia entre secciones globales $\phi_X:\mathcal{F}(X)\rightarrow\mathcal{G}(X)$ es sobreyectiva.
+\end{corollary}
+
+Observemos que el teorema anterior puede expresarse diciendo que la sucesi\'on 
+\begin{equation}
+\label{exactacorta}
+\xymatrix{ \mathcal{F}(X) \ar[r]^{\phi_X} & \mathcal{G}(X)\ar[r]^{\Delta} & \check{H}^1(X,\mathcal{K})  }.
+\end{equation}
+es exacta. Además, podemos notar que es una pequeña parte de una sucesión exacta más grande como se muestra a continuación:
+\begin{proposition}
+Sea $\phi:\mathcal{F}\rightarrow \mathcal{G}$ un epimorfimos de gavillas con kernel $\mathcal{K}$. 
+Entonces la sucesi\'on 
+\begin{equation}
+\xymatrix{0 \ar[r] &  \mathcal{K}(X) \ar[r]^i &  \mathcal{F}(X) \ar[r]^{\phi_X} &  \mathcal{G}(X) \ar[r]^{\Delta} &  \check{H}^1(X,\mathcal{K}) \ar[r]^{i_*} & \check{H}^1(X,\mathcal{F}) \ar[r]^{\phi_*} & \check{H}^1(X,\mathcal{G}) }
+\end{equation}
+es exacta en cada paso. 
+\end{proposition}
+\begin{proof}
+La exactitud de $\mathcal{K}$ y $\mathcal{F}$ se da por definici\'on; mientras que la exactitud de $\mathcal{G}$ es justamente el Teorema \ref{lemma315}. 
+
+Ahora comprobemos la exactitud en el resto. Veamos primero que $ \Im(\Delta)\subset\ker(i_*)$, supongamos que $g\in\mathcal{G}(X)$. Por construcci\'on de $\Delta(g)$ tomamos una cubierta abierta ${\mathcal{U_i}}_{i \in I}$ y buscamos elementos $f_i\in\mathcal{F}(U_i)$ con $\phi_{U_i}(f_i)=g|_{U_i}$; 
+entonces $\Delta(g)$ es definido por un $1$-cociclo $k_{ij}=f_j-f_i$ para la gavilla $\mathcal{K}$. 
+Pero este $1$-cociclo es una cofrontera en la gavilla $\mathcal{F}$.
+
+Para finalizar la exactitud en $\check{H}^1(X,\mathcal{K})$, veamos que $\ker(i_*)\subset \Im(\Delta)$. 
+Suponga que $(k_{ij})$ es un $1$-cociclo para la gavilla $\mathcal{K}$ que representa una clase en el kernel de $i_*$. 
+Entonces $(k_{ij})$ es una cofrontera, considerada como un $1$-cociclo para la gavilla $\mathcal{F}$, as\'i existe una $0$-cocadena $(f_i)$ tal que $k_{ij}=f_j-f_i $ en $U_{ij}$ para toda $i,j$. 
+Consideremos la $0$-cocadena $(g_i)$ para $\mathcal{G}$,
+donde $g_i=\phi(f_i)$. 
+Note que 
+$$g_i-g_j=\phi(f_i-f_j)=\phi(k_{ij})=0 \qquad\textup{ en } U_{ij},$$ 
+as\'i por el axioma de gavilla para $\mathcal{G}$ existe una secci\'on global $g\in\mathcal{G}(X)$ tal que $g|_{U_i}=g_i$ para toda $i$. 
+Adem\'as de la construcci\'on de $\Delta$ tenemos que $\Delta(g)$ es una clase de $(k_{ij})$. 
+
+Finalmente, mostramos la exactitud en $\check{H}^1(X,\mathcal{F})$.
+Es claro que $i_*\circ\phi_*=0$, por lo que solamente necesitamos probar que $\ker(\phi_*)\subset\Im(i_*)$. 
+Sea $c$ una clase en $\ker(\phi_*)$  representada por un $1$-cociclo $(f_{ij})$ con respecto a la cubierta $\mathcal{U}$ tal que $\phi(f_{ij})=g_j-g_i$ para todo $i,j\in J$.
+Desp\'ues de refinar $\mathcal{U}$ (si fuera necesario) ya que $\phi$ es un epimorfismo de gavillas, que cada $g_i=\phi(f_i)$ para cada elemento $f_i\in\mathcal{F}(U_i)$.
+
+Sea $h_{ij}=f_{ij}-f_j+f_i\in\mathcal{F}(U_{ij})$; 
+es claramente un $1$-cociclo ya que $(f_{ij})$ lo es. 
+Aplicando $\phi$, vemos que 
+$\phi(h_{ij})=\phi(f_{ij})-g_i+g_i=0,$
+as\'i que $(h_{ij})$ es actualmente un $1$-cociclo para la gavilla kernel $\mathcal{K}$. 
+Ya que difiere del cociclo $(f_{ij})$ por la cofrontera de la $0$-cocadena $(f_i)$, esto tambi\'en da la clase orginal $c$ en cohomolog\'ia. 
+As\'i $c$ est\'a en la imag\'en de $i_*$.
+\end{proof}
+ Así, notamos que una sucesi\'on exacta corta de gavillas nos brinda una sucesi\'on exacta larga en cohomolog\'ia. 
+
+\begin{theorem}
+Sea $X$ un espacio paracompacto y sea 
+$$ 
+\xymatrix{ 0 \ar[r] & \mathcal{K} \ar[r] & \mathcal{F} \ar[r] & \mathcal{G} \ar[r] & 0 }
+$$
+una sucesi\'on exacta corta de gavillas en $X$. Entonces existe un homomorfismo de conexi\'on $\Delta:\check{H}^{n}(X,\mathcal{G})\rightarrow\check{H}^{n+1}(X,\mathcal{G})$ para cada $n\geq 0$ tal que la sucesi\'on de grupos de cohomolog\'a
+$$ 
+\xymatrix{0 \ar[r] & \check{H}^0(X,\mathcal{K}) \ar[r]^{i_*} & \check{H}^0(X,\mathcal{F}) \ar[r]^{\phi_*} & \check{H}^0(X,\mathcal{G}) \ar[r]^{\Delta} & \\
+  \ar[r] & \check{H}^1(X,\mathcal{K}) \ar[r]^{i_*} & \check{H}^1(X,\mathcal{F}) \ar[r]^{\phi_*} & \check{H}^1(X,\mathcal{G}) \ar[r]^{\Delta} & \\
+  \ar[r] & \check{H}^2(X,\mathcal{K}) \ar[r]^{i_*} & \check{H}^2(X,\mathcal{F}) \ar[r]^{\phi_*} & \check{H}^2(X,\mathcal{G}) \ar[r]^{\Delta} &}
+$$
+es exacta.
+\end{theorem}
+
+\subsection{Axiomas de cohomología}
+\begin{definition}
+Una gavilla $\F$ sobre $X$ es fina si para cada cubierta abierta localmente finita $\mathcal{U}=\{U_i\}$ de $X$ existe para cada $i$ un endomorfismo $f_i$ de $\F$ tal que:
+\begin{enumerate}
+    \item $\Supp(f_i)\in U_i$
+    \item $\sum_i f_i =\id$
+\end{enumerate}
+\end{definition} 
+o bien, decimos que $\F$ es fina si para dos conjuntos disjuntos $A\cap B\neq 0$ cerrados de $X$, existe un endomorfismo $\F\rightarrow \F$ cuya restricción a la identidad está en una vecindad de $A$ y el endomorfismo cero en una vecindad de $B$.
+
+\begin{example}
+La gavilla de funciones continuas $\mathcal{C}_X$ es una gavilla fina sobre un espacio topológico Hausdorff paracompacto. Ya que para cualquier cubierta abierta finita $\mathcal{U}=\{U_i\}$ de $X$ existe una partición de la unidad $\{\varphi_i\}$ subordinada a dicha cubierta. Usando estas $\varphi_i$ definimos $\eta_i:\mathcal{C}\rightarrow \mathcal{C}$ tal que 
+$\eta_i(U):\mathcal{C}(U)\rightarrow \mathcal{C}(U)$ está dado por 
+$\varphi_i\cdot s$, para todo $U\in\mathcal{U}$. 
+Claramente es un morfismo de gavillas para cada $\eta_i$ es un morfismo de gavillas para cada $i$. Además, 
+\begin{enumerate}
+    \item Si $x\in X-U_i$, entonces $\eta_i(\mathcal{C}_x)=0$, ya que para cualquier $[s]_x\in\mathcal{C}_x$, representado por $\langle s,U\rangle$, con $x\in U$ podemos elegir $U$ tal que $U\subseteq X-U_i$ y así, 
+    $$\eta_i[s]_x=[\eta_i(U)(s)]_x=[\varphi_i\cdot s]_x=0 $$
+    \item Sea $s\in\mathcal{C}(X)$ una sección global, entonces para cada $x\in X$ se tiene
+    $$\sum_i \eta_i (s)(x)=\sum_i (\varphi_i\cdot s )(x)=\sum_i (\varphi_i(x))\cdot(s(x))=s(x)\sum_i\varphi_i(x)=s(x)$$
+\end{enumerate}
+\end{example}
+
+Con esta nueva definición en mente y lo que hemos visto hasta el momento de teoría de cohomología de $\check{C}$ech, veamos que en efecto es una teoría de cohomología.
+
+Una teoría de cohomología de gavillas $\mathcal{M}$ para un espacio topológico $X$ con gavillas en $R$-módulos sobre $X$ consta de: 
+\begin{enumerate}
+    \item Un $R$-módulo $H^q(X,\F)$ para cada gavillas $\F$ y para cada entero $q$. 
+    \item Un homomorfismo $H^q(X,\F)\rightarrow H^q(X,G)$ para cada homomorfismo $\F\rightarrow \G$ y para cada entero $q$. 
+    \item Un homomorfismo $H^q(X,\F'')\rightarrow H^{q+1}(X,\F)$ para cada sucesión exacta corta
+    $$\xymatrix{
+    0\ar[r] & \F' \ar[r] & \F \ar[r] & F''\ar[r] & 0
+    } $$
+    y para cada entero $q$. Tal que las siguientes propiedades se cumplen:
+    \begin{enumerate}
+        \item $H^q(X,\F)=0$ para $q<0$, y existe un isomorfismo $$H^0(X,\F)\cong \F(X)$$
+        tal que para cada homorfismo  $\F\rightarrow \F'$ el siguiente diagrama conmuta
+$$
+\begin{tikzcd}
+{H^0(X,\F)} \arrow[r, "\cong"] \arrow[d] & \F(X) \arrow[d] \\
+{H^0(X,\F')} \arrow[r, "\cong"']         & \F''(X)        
+\end{tikzcd}
+$$
+\item $H^q(X,\F)=0$ para toda $q>0$ si $\F$ es una gavilla fina.
+\item Si 
+$$\xymatrix{
+    0\ar[r] & \F' \ar[r] & \F \ar[r] & F''\ar[r] & 0
+    } $$
+    es exacta, entonces la siguiente sucesión es exacta 
+    $$
+    \begin{tikzcd}
+\cdots  \arrow[r] & {H^q(X,\F)} \arrow[r] & {H^q(X,\F'')} \arrow[r] & {H^{q+1}(X,\F')} \arrow[r] & {H^{q+1}(X,\F')} \arrow[r] & \cdots
+\end{tikzcd}
+    $$
+     \item El homorfismo identidad $\id:\F\rightarrow \F$ induce el morfismo identidad $\id_*: H^q(X,\F)\rightarrow H^q(X,\F)$.
+    \item Si el diagrama 
+    $$ 
+    \begin{tikzcd}
+\F \arrow[r] \arrow[rd] & \F' \arrow[d] \\
+                        & \F''         
+\end{tikzcd}
+    $$
+    conmuta, entonces para cada $q$ también lo hace el siguiente diagrama
+    $$
+    \begin{tikzcd}
+H^q(X,\F) \arrow[r] \arrow[rd] & H^q(X,\F')  \arrow[d] \\
+                        & H^q(X,\F'')        
+\end{tikzcd}
+    $$
+    \item Para cada homomorfismo de sucesiones exactas de gavillas 
+    $$
+    \begin{tikzcd}
+0 \arrow[r] & \F' \arrow[r] \arrow[d] & \F \arrow[r] \arrow[d] & \F'' \arrow[r] \arrow[d] & 0 \\
+0 \arrow[r] & \G' \arrow[r]           & \G \arrow[r]           & \G'' \arrow[r]           & 0
+\end{tikzcd}
+    $$
+    el siguiente diagrama conmuta
+    $$
+    \begin{tikzcd}
+{H^q(X,\F'')} \arrow[r] \arrow[d] & {H^{q+1}(X,\F')} \arrow[d] \\
+{H^q(X,\G'')} \arrow[r]           & {H^{q+1}(X,\G'')}         
+\end{tikzcd}
+    $$
+    \end{enumerate}
+\end{enumerate}
+El módulo $H^q(X,\F)$ es llamado $q$-ésimo módulo de la cohomología de $X$ relativo a la cohomología $\mathcal{M}$.
+
+En todo momento tomemos $\mathcal{U}=\{U_i\}$ una cubierta abierta de $X$. 
+una colección $(U_0,\ldots, U_q)$ de elementos de $\mathcal{U}$ tal que $U_0\cap\cdots\cap U_q\neq 0$ es llamado $q$-simplejo y denotado por $|\sigma|$. Denotamos, además, por $\sigma^i=(U_0,\ldots U_{i-1},U_{i+1},\ldots , U_q)$. 
+Tomemos $C^q(\mathcal{U},\F)$ para $q\geq 0$, el $R$-módulo que consiste en funciones que asignan a cada $q$-simplejo un elemento de $\F(|\sigma|)$ y $C^q(\mathcal{U},\F)=0$ para cada $q<0$. Los elementos de $C^q(\mathcal{U}, \F)$ son llamados $q$-cocadenas. Además, tenemos un homomorfismo cofrontera 
+$$d:C^q(\mathcal{U},\F)\rightarrow C^{q+1}(\mathcal{U},\F), $$
+con el cual obtenemos un  complejo de cadenas cuyo $q$-ésimo módulo de cohomología de $\check{C}$ech es denotado por $\check{H}^q(X,\F)$.
+
+Hemos visto por el RESULTADO REFERENCIA que $C^q(\mathcal{U},\F)=0$ para todo $q<0$ y por lo tanto $\check{H}^q(X,\F)=0$, lo cual prueba el inciso (a). 
+
+Además, el homomorfismo $\check{H}^q(\mathcal{U},\F)\rightarrow \check{H}^q(\mathcal{U},\F')$ para toda $q$ inducido por $\F\rightarrow \F'$ conmuta con los homorfismos de refinamiento 
+$$\check{H}^q(\mathcal{U},\F)\rightarrow \check{H}^q(\mathcal{V},\F)$$
+y así induce homomorfismos en 
+$$\check{H}^q(X,\F)\rightarrow \check{H}^q(X,\F') $$
+los cuales satisfacen (d) y (e).
+
+Para probar (b), tomemos $\eta_i:\F \rightarrow \F$ en la cubierta $\mathcal{U}$, es suficiente probar que $\check{H}^q(\U,\F)=0$. Sea $f\in C^p(\U,\F)$, tomemos $\sigma=(U_0,...,U_{p-1})$ un $(p-1)$- simplejo, entonces 
+$$f_i=\eta_i(f(U_i,U_0,\ldots,U_{p-1})) =\eta_i f(U_i,U_0,\ldots, U_{p-1})\in \F (U_i\cap U_0\cap\cdots \cap U_{p-1}).$$
+Como $\eta_i=0$ en $X-U_i$, entonces $\eta_i=0$ en $U-(U\cap U_i)$
+con soporte $\Supp(f_i)\subset U_i\cap U$. Así, podemos extender por cero a  $f_i$ a una sección continua de $\F$ sobre $U_0\cap\cdots \cap U_{p-1}$ de la siguiente forma: 
+\begin{itemize}
+    \item El abierto $U=U_0\cap\cdots \cap U_{p-1}$ tiene una cubierta abierta dada por $U_1=U-\Supp(f_i)$ y $U_2=U\cap U_i$.
+    \item Tenemos secciones $f_i\in \F(U_2)$, $0\in \F(U_1)$ tales que coinciden, es decir, $f_i=0\in\F(U_1\cap U_2)$.
+\end{itemize}
+entonces como $\F$ es gavilla existe una única sección, denotada $$F_{|\sigma|}(\eta_if)\in \F(U) $$, llamada \textit{extensión por cero} de $f_i$ a $U$, tal que 
+$$F_{|\sigma|}(\eta_if)|_{U\cap U_i}=f_i \in\F(U\cap U_i) $$
+Ahora, estas secciones, definen una $(q-1)$-cocadena denotada $g_i\in C^{q-1}(\U,\F)$. Tal que para cualquier $q$-simplejo $\sigma=(U_0,...,U_q )$: 
+\begin{eqnarray*}
+d g_i(\sigma) & = & \sum_{j=0}^q(-1)^jg_i(\sigma^j)|_\sigma\\
+& = & \sum_{j=0}^q(-1)^j F_{\sigma^j}(\eta_if)(U_i\cap U_j)|_\sigma\\
+& = & \eta_if(\sigma)-F_\sigma d\eta_if(U_i\cap U_0\cap \cdots \cap U_{q}).
+\end{eqnarray*}
+Así, $dg_i(\sigma)= \eta_if(\sigma)$ ya que $d\eta_if=0$ porque $f$ es un cociclo. Finalmente, concluimos que $dg_i= \eta_if$ para toda $i$. 
+
+Definimos ahora, $g=\sum_i g_i\in C^{q-1}(\U,\F)$, la suma es finita ya que para cada $i$ y cada $(q-1)$-simplejo $\sigma$ se tiene que $g_i(\sigma)=0$ fuera de $U_i$, así para cualquier $x\in X$ existe un número finito de abiertos $U_i$ que lo contienen, ya que $\U$ es localmente finita. Entonces, solo en esos $U_i$, $g_i\neq 0$.
+
+Finalmente, para todo $(q-1)$-simplejo $\sigma$, tenemos 
+\begin{eqnarray*}
+d g(\sigma) & = &  d(\sum_i g_i(\sigma)) \\
+& = & \sum_i dg_i(\sigma) \\
+& = & \sum_i \eta_i f(\sigma) \\
+& = & f(\sigma).
+\end{eqnarray*} 
+Así, todo $q$-ciclo $f$ con $q>0$ es una cofrontera y $\check{H}^q(\U,\F)=0$.
+
+\begin{thebibliography}{X}
+\bibitem{Kato} Kato, G. (2006).\textit{ The heart of cohomology}. Springer Science \& Business Media.
+
+\bibitem{Mir} Miranda, R.  (2003).  \textit{Riemann Curves and Algebraic curves.} Cambridge studies in advanced mathematics.
+
+\bibitem{Rot} Rotman, J. J. (2008). \textit{An introduction to homological algebra.} Springer Science \& Business Media.
+
+\bibitem{War} Warner, F. W. (2013). \textit{Foundations of differentiable manifolds and Lie groups}. Springer Science \& Business Media.
+
+\bibitem{Wei} Weibel, C., \& Butler, M. C. R. (1996). \textit{An introduction to homological algebra}. Bulletin of the London Mathematical Society.
+
+	\end{thebibliography}
+\end{document} 
